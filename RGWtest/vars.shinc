@@ -1,0 +1,290 @@
+#--------------------------------------------------------------------
+# START GLOBAL VARIABLES
+#
+
+# Ceph cluster node hostnames/IP addresses
+MONhostname="f04-h29-b05-5039ms.rdu2.scalelab.redhat.com"
+MONhostname2="f04-h29-b06-5039ms.rdu2.scalelab.redhat.com"
+RGWhostname="f10-h01-000-6049p.rdu2.scalelab.redhat.com"
+RGWhostname2="f10-h05-000-6049p.rdu2.scalelab.redhat.com"
+RGWhosts1="f10-h01-000-6049p.rdu2.scalelab.redhat.com f10-h05-000-6049p.rdu2.scalelab.redhat.com f10-h09-000-6049p.rdu2.scalelab.redhat.com f10-h13-000-6049p.rdu2.scalelab.redhat.com"
+RGWhosts2="f10-h17-000-6049p.rdu2.scalelab.redhat.com f10-h21-000-6049p.rdu2.scalelab.redhat.com f10-h25-000-6049p.rdu2.scalelab.redhat.com f11-h01-000-6049p.rdu2.scalelab.redhat.com"
+
+multisite=false         # enable/disable multisite monitoring
+syncPolling=false       # enable/disable sync monitoring
+dataLogPolling=false       # enable/disable data log list poll
+bsV2Polling=false       # enable/disable bluestore-V2 perf polling
+disabledeepscrubs=false # disable deep-scrubs during workload & part of post-poll
+pollinterval=300         # interval must be INT for use with multiplier
+pollmultiplier=2       # data log list polling = pollinterval * pollmultiplier
+postPolling=false       # enable/disable extended post job poll
+# postpoll settings
+#postpollend=$((SECONDS+108000))        # 30 hrs
+#postpollend=$((SECONDS+21600))         # 6 hrs
+postpollend=$((SECONDS+7200))           # 2 hrs
+#scrubstart=$((SECONDS+43200))          # 12 hrs
+scrubstart=$((SECONDS+7200))           # 2 hrs
+#scrubstart=$((SECONDS+3600))           # 1 hr
+
+#----------------------------------------------------------------------
+# Runtimes for various COSbench workloads
+# WARNING: if you change these you need to re-run 'writeXML.sh'
+# RUNTIME VALUES - used below in FILLvalues_arr and MEASUREvalues_arr
+#
+# NOTE: runtime is ignored for FILLxml workload
+MEASUREruntime="3600"             # 1hr Runtime (in sec)  
+AGEruntime="172800"               # 48hr Runtime (in sec)  
+UPGRADEruntime="36000"            # 10hr Runtime (in sec)  
+rgwUSER="johndoe:swift"           # username
+#rgwURL="172.16.0.131:5000"       # auth_url connection point
+rgwURL="localhost:5000"		      # each client will run its own haproxy
+fillWORKERS=1680       # LTA number of workers to use for filling the Cluster (ie. 5 Clients)
+measureWORKERS=1680     # LTA number of workers for running IOWorkload (ie. 5 Clients)
+
+#
+# Object sizes
+#objSIZES="c(64)KB"
+#objSIZES="h(4|4|34,64|64|33,65536|65536|33)KB"
+#objSIZES="h(1|1|50,64|64|15,8192|8192|15,65536|65536|15,1048576|1048576|5)KB"
+objSIZES="h(1|2|25,2|4|40,4|8|25,8|256|10)KB"
+
+# Determine cluster fill capacity
+# Number of Containers and Objects, by workload type
+numCONT=5
+numOBJ=75000000   # for 30% fill in LTA w/24 HDDs (7x OSD nodes)
+MEASUREmaxOBJ=$numOBJ
+UPGRADEmaxOBJ=$numOBJ
+AGEmaxOBJ=$(( (numOBJ * 2) ))  # multiply by two for AGING runs
+
+#########
+# MEASURE Workload specific variables
+# Ratios for operation types - MUST add up to 100%
+rdRatio=44
+wrRatio=36
+delRatio=5
+listRatio=15
+totalRatio=$(( (rdRatio + wrRatio + delRatio + listRatio) ))
+if [ $totalRatio -ne 100 ]; then
+    echo "var.shinc: Operation ratios (rdRatio, wrRatio, ...) must equal 100%"; exit
+fi
+# Conf portions for the Delete and Write operation statements
+#   - reserve the first 2 containers for Write and Delete ops
+wrCONF="containers=u(1,2);objects=u(1,RUNTESTmaxOBJ);sizes=${objSIZES}"
+delCONF="${wrCONF}"
+# Conf portions for the Read and List operation statements
+#   - start at 3 to reserve the first 2 containers for Write and Delete ops
+# NOTE: COSbench will FAIL if job attempts to READ a non-existing Object
+rdCONF="containers=u(3,${numCONT});objects=u(1,${numOBJ})"
+listCONF="${rdCONF}"
+
+#-----------------------------------------------------------------------
+# writeXML.sh variables
+# Names of COSbench workload files and values to insert into template files
+#
+# First up - fill/empty workloads
+FILLtemplate="XMLtemplates/TMPL_fill.xml"
+FILLxml="fill.xml"
+EMPTYtemplate="XMLtemplates/TMPL_empty.xml"
+EMPTYxml="empty.xml"
+# fillCluster: pre-existing keys in the template file
+# also used to populate EMPTYxml
+declare -a FILLkeys_arr=("FILLstorage_type"
+                       "FILLtimeout"
+                       "FILLretry"
+                       "FILLauth_type"
+                       "FILLconfig"
+                       "FILLworkers"
+                       "FILLsizes"
+                       "FILLnumCont"
+                       "FILLnumObj"
+                       )
+declare -a FILLvalues_arr=("swift"               # storage type
+                         "900000"              # timeout (15m)
+                         "3"                   # retries
+                         "swauth"              # auth_type
+                         # config: a bit messy since SED requires "/" be escaped
+                         "username=${rgwUSER};password=EMPTY;auth_url=http:\/\/${rgwURL}\/auth\/1.0"
+                         "${fillWORKERS}"   # number of workers
+                         "${objSIZES}"         # Object sizes
+                         "${numCONT}"          # number of Containers
+                         "${numOBJ}"           # number of Objects
+                         )
+
+#
+# Next up - MEASURE workload settings
+MEASUREtemplate="XMLtemplates/TMPL_measure.xml"
+MEASURExml="measure.xml"
+# measure: pre-existing keys in the MEASUREtemplate file
+declare -a MEASUREkeys_arr=("RUNTESTstorage_type"
+                       "RUNTESTtimeout"
+                       "RUNTESTretry"
+                       "RUNTESTauth_type"
+                       "RUNTESTconfig"
+                       "RUNTESTworkers"
+                       "RUNTESTsizes"
+                       "RUNTESTnumCont"
+                       "RUNTESTnumObj"
+                       "RUNTESTrdRatio"
+                       "RUNTESTwrRatio"
+                       "RUNTESTdelRatio"
+                       "RUNTESTlistRatio"
+                       "RUNTESTrdConf"
+                       "RUNTESTlistConf"
+                       "RUNTESTwrConf"
+                       "RUNTESTdelConf"
+                       )
+declare -a MEASUREvalues_arr=("swift"               # storage_type
+                         "900000"              # timeout (15m)
+                         "3"                   # retries
+                         "swauth"              # auth_type
+                         # config: a bit messy since SED requires "/" be escaped
+                         "username=${rgwUSER};password=EMPTY;auth_url=http:\/\/${rgwURL}\/auth\/1.0"
+                         "${measureWORKERS}"   # workers
+                         "${objSIZES}"         # Object sizes
+                         "${numCONT}"          # number of Containers
+                         "${numOBJ}"           # number of Objects
+                         "${rdRatio}"          # Read ratio
+                         "${wrRatio}"          # Write ratio
+                         "${delRatio}"         # Delete ratio
+                         "${listRatio}"        # List ratio
+                         "${rdCONF}"           # config for Read operations
+                         "${listCONF}"         # config for List operations
+                         "${wrCONF}"           # config for Write ops
+                         "${delCONF}"          # config for Delete ops
+                         )
+# Lastly - AGE and UPGRADE workloads
+AGExml="age.xml"
+UPGRADExml="upgrade.xml"
+ 
+#------------------------
+# resetRGW.sh variables
+longPAUSE="400s"
+multisite=`echo "${multisite,,}"`       # force lowercase
+if [[ $multisite == "true" ]]; then
+    pool_list=("site1.rgw.control" \
+          "site1.rgw.buckets.data" "site1.rgw.buckets.index" \
+          "site1.rgw.log" "site1.rgw.meta")
+else
+    pool_list=("default.rgw.control" \
+          "default.rgw.buckets.data" "default.rgw.buckets.index" \
+          "default.rgw.log" "default.rgw.meta" ".rgw.root")
+fi
+   
+numREPLICAS=3                          # how many replicas
+#preparePTYPE=rep                       # Must be rep (replicated) OR ec (erasure coded)
+preparePTYPE=ec                       # Must be rep (replicated) OR ec (erasure coded)
+if [ $preparePTYPE == "rep" ]; then
+    REPLICATION="rep"
+    k=0
+    m=0
+    pg_data=2048                       # determine this value by using PGCALC
+    pg_index=64                        # determine this value by using PGCALC
+    pg=64                              # determine this value by using PGCALC
+    fast_read=0
+elif [ $preparePTYPE == "ec" ]; then
+    REPLICATION="ec"
+    k=4
+    m=2
+    pg_data=4096                       # determine this value by using PGCALC
+    pg_index=256                       # determine this value by using PGCALC
+    pg=256                             # determine this value by using PGCALC
+    fast_read=0
+else
+    echo "Pool type needs to be defined as rep or ec in vars.shinc"; exit
+fi
+
+#------------------------
+# runIOworkload.sh vars
+
+# COSbench vars
+cosPATH="/root/0.4.2.c4"
+
+# ceph version (lowercase): Jewel, Luminous, Nautilus, ...
+CEPHVER=$(ceph --version | awk '{print $(NF-1) }' | sed 's/[A-Z]/\L&/g')
+
+# Timestamp logfiles
+ts="$(date +%Y%m%d-%H%M%S)"
+
+# Name of the program being run
+PROGNAME=$(basename -- $0)
+
+# LOGFILE - records steps
+RESULTSDIR="./RESULTS"
+TMPfile="/tmp/jobId.tmp"
+LOGFILE="${RESULTSDIR}/${PROGNAME}_${ts}.log"
+DATALOG="${RESULTSDIR}/${PROGNAME}_dataLog_${ts}.log"
+PGDUMPPRE="${RESULTSDIR}/${PROGNAME}_pgdump-pre_${ts}.log"
+PGDUMPPOST="${RESULTSDIR}/${PROGNAME}_pgdump-post_${ts}.log"
+POOLDETAIL="${RESULTSDIR}/${PROGNAME}_poolDetails_${ts}.log"
+OSDDIFF="${RESULTSDIR}/OSDdiff_${ts}.log"
+RGWDIFF="${RESULTSDIR}/RGWdiff_${ts}.log"
+MONDIFF="${RESULTSDIR}/MONdiff_${ts}.log"
+MGRDIFF="${RESULTSDIR}/MGRdiff_${ts}.log"
+
+# Logfile date format, customize it to your wishes
+#   - see man date for help
+DATE='date +%Y/%m/%d-%H:%M:%S'
+
+# Temp dir for holding OSD stats
+TMPdir="$RESULTSDIR/TMPDIR${PROGNAME}_${ts}"
+
+#------------------------
+# Determine runmode: either bare-metal or containerized
+#   defines values for execMON, execRGW and runmode global vars
+#   all Ceph cmds (ceph, radsogw-admin) are prefix'd with execMON or execRGW
+runmode="containerized"
+# verify if ceph is functioning: passes on bare-metal and containerized
+ret1=`ssh $MONhostname ceph health detail &>/dev/null ; echo $?`
+if [ $ret1 -eq 0 ] ; then
+    execMON="ssh $MONhostname "
+    execMON2="ssh $MONhostname2 "
+    execRGW="ssh $RGWhostname "
+    execRGW2="ssh $RGWhostname2 "
+    runmode="baremetal"
+fi
+# if MONhost has 'podman' cmd and running ceph-mon container, runmode is containerized
+fsid=`ceph status |grep id: |awk '{print$2}'`
+ret2=`ssh $MONhostname hash podman &>/dev/null ; echo $?`
+if [ $ret2 -eq 0 ]; then
+    #ret3=`ssh $MONhostname podman ps --filter "name=ceph-mon" &>/dev/null ; echo $?`
+    ret3=`ssh $MONhostname "podman ps |grep mon" &>/dev/null ; echo $?`
+    if [ $ret3 -eq 0 ]; then
+#	monpodname=`ssh $MONhostname podman ps|grep mon|awk '{print$NF}'`
+#        ret4=`ssh $MONhostname podman exec $monpodname ceph health detail &>/dev/null ; echo $?`
+
+# RAC - DISCUSS WITH TIM - THIS COMMAND giving ERROR in VIVEK CLUSTER
+# TIM - we have to copy the conf/key to the MON pod beforehand so the `ceph health detail` cmd will succeed. Else, we just let $ret3 determine containerized by the presence of a mon pod. I like the latter.
+
+#        if [ $ret4 -eq 0 ]; then # uncomment this RAC
+#            execMON="ssh $MONhostname podman exec $monpodname  "
+#	    rgwpodname=`ssh $RGWhostname podman ps|grep rgw|awk '{print$NF}'`
+#            execRGW="ssh $RGWhostname podman exec $rgwpodname  "
+#	    multisite=`echo "${multisite,,}"`       # force lowercase
+#	    if [[ $multisite == "true" ]]; then
+#	        monpodname2=`ssh $MONhostname2 podman ps|grep mon|awk '{print$NF}'`
+#                #execMON2="ssh $MONhostname2 podman exec -it $monpodname2 "
+#                execMON2="ssh $MONhostname2 "
+#	        rgwpodname2=`ssh $RGWhostname2 podman ps|grep rgw|awk '{print$NF}'`
+#                #execRGW2="ssh $RGWhostname2 podman exec -it $rgwpodname2 "
+#                execRGW2="ssh $RGWhostname2 podman exec -it $rgwpodname2 "
+#	    fi
+            runmode="containerized"
+#
+#        fi # uncomment RAC
+    fi
+fi
+echo "runmode is $runmode"        # DEBUG
+
+# DEBUG DEBUG DEBUG
+#runmode="baremetal"
+
+if [ $runmode == "invalid" ]; then
+    echo "vars.shinc: unable to determine runmode(bare-metal or containerized)"
+    echo "Aborting..."
+    exit 2
+fi
+
+CEPH_VERSION=`$execMON ceph --version`  # used in: resetRGW.sh, functions.shinc and poll.sh 
+
+# END GLOBAL VARIABLES
+#--------------------------------------------------------------------

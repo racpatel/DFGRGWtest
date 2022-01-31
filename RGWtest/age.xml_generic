@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<workload name="hybridSS" description="RGW testing">
+
+
+<!-- Initialization -->
+  <storage type="s3" config="timeout=900000;accesskey=5PMAYR4RCQBK9GZBX1OE;secretkey=GHdP9azRNGXt3cKWeKdORySgLapoeFsymreyru6A;endpoint=http://localhost:5000;path_style_access=true"/>
+  <auth type="none"/>
+
+  <workflow>
+
+<!-- Use operation mix & object sizes as defined in vars.shinc	 -->
+
+    <workstage name="MAIN">
+        <work name="hybrid" workers="1680" runtime="172800" >
+            <operation name="writeOP" type="write" ratio="36" config="containers=u(1,2);objects=u(1,150000000);sizes=h(1|2|25,2|4|40,4|8|25,8|256|10)KB" />
+            <operation name="deleteOP" type="delete" ratio="5" config="containers=u(1,2);objects=u(1,150000000);sizes=h(1|2|25,2|4|40,4|8|25,8|256|10)KB" />
+	    <operation name="readOP" type="read" ratio="44" config="containers=u(3,5);objects=u(1,75000000);hashCheck=true" />
+            <operation name="listOP" type="list" ratio="15" config="containers=u(3,5);objects=u(1,75000000);hashCheck=true" />
+        </work>
+    </workstage>
+
+  </workflow>
+
+</workload>

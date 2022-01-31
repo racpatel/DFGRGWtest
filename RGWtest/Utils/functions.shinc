@@ -1,0 +1,393 @@
+#--------------------------------------
+# FUNCTIONS
+function updatelog {
+# Echoes passed string to LOGFILE and stdout
+    logfn=$2
+    echo `$DATE`": $1" 2>&1 | tee -a $logfn
+}
+
+function print_Runtime {
+  logfile=$1
+
+  echo "Runtime Environment:" | tee -a $logfile
+  echo -n "> "; uname -a | tee -a $logfile
+  if [ -f /etc/redhat-release ]; then
+    echo -n "> "; cat /etc/redhat-release | tee -a $logfile
+  fi
+  echo -n "> "; $execMON ceph --version | tee -a $logfile
+  
+# write RUNMODE to LOGFILE
+updatelog "> runmode=$runmode" $logfile
+
+# Write key variable values to LOGFILE
+  echo "Key Variable Values:" | tee -a $logfile
+  updatelog "> pollinterval=${pollinterval}" $logfile
+  updatelog "> RESULTSDIR=${RESULTSDIR}" $logfile
+  echo "Cluster variable settings:" | tee -a $logfile
+  updatelog "> MONhostname=${MONhostname}" $logfile
+  updatelog "> RGWhostname=${RGWhostname}" $logfile
+  updatelog "---------------------------------" $logfile
+}
+
+function error_exit {
+# Function for exit due to fatal program error
+# Accepts 1 argument:
+#   string containing descriptive error message
+# Copied from - http://linuxcommand.org/wss0150.php
+    echo "${PROGNAME}: ${1:-"Unknown Error"} ABORTING..." 1>&2
+    exit 1
+}
+
+function chk_dependencies {
+  for cmd in "${DEPENDENCIES_arr[@]}"; do
+    command -v $cmd >/dev/null 2>&1 || \
+      error_exit "I require ${cmd} but it's not installed."
+  done
+}
+
+function get_time() {
+  date |awk '{print $2$3"."$4}'
+}
+
+# collection of 'get_' routines used by POLL.sh
+function get_rawUsed() {
+# NOTE: verify 'ceph df' fields, this may need to be other than $10
+  #rawUsed=`$execMON ceph df | head -n 3 | tail -n 1 | awk '{print $10}'`	# rhcs4
+#  rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $10}'`	# rhcs4
+  #rawUsed=`ceph df|grep -A1 RAW|tail -1|awk '{print$4}'`	# rhcs3
+# NOTE: parse 'ceph df' fields based on ceph version
+  case $CEPHVER in
+    luminous)
+      rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $4}'`
+      ;;
+    nautilus)
+      rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $10}'`
+      ;;
+    pacific)
+      rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $10}'`
+      ;;
+    *)
+      error_exit "unable to gather %RAW USED stats, exit..."
+      ;;
+  esac
+#rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $4}'`
+#rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $10}'`
+  
+}
+
+function get_free() {
+  freemem=`ssh $RGWhostname free -h` 
+}
+
+function get_pooldetail() {
+  pooldetails=`ceph osd pool ls detail --format json-pretty`
+}
+
+function get_osddf() {
+  osddf=`ceph osd df`
+}
+
+function get_df-detail() {
+  dfdetail=`ceph df detail`
+}
+
+function get_buckets_df() {
+  multisite=`echo "${multisite,,}"`       # force lowercase
+  if [[ $multisite == "true" ]]; then
+    #buckets_df=`$execMON ceph df |egrep 'ID|site'`
+    buckets_df=`ceph df |egrep 'ID|site'`
+    syncPolling=`echo "${syncPolling,,}"`       # force lowercase
+    if [[ $syncPolling == "true" ]]; then
+      #buckets_df2=`$execMON2 ceph df |egrep 'ID|site'`
+      buckets_df2=`ssh $MONhostname2 ceph df |egrep 'ID|site'`
+    fi
+  else
+    #buckets_df=`$execMON ceph df |egrep 'ID|def'`
+    buckets_df=`ceph df |egrep 'ID|def'`
+  fi
+}
+
+function get_pendingGC() {
+  # get this stat when running RHCS 3.x builds
+  if echo $CEPH_VERSION | grep -q "10.2." ; then
+      # Skip get_pendingGC for 2.5 versions
+      pendingGC="N/A"
+  else
+      #pendingGC=`$execRGW radosgw-admin gc list --include-all | wc -l`
+      pendingGC=`radosgw-admin gc list --include-all | wc -l`
+  fi
+}
+
+function get_pendingRESHARD() {
+  # get this stat when running RHCS 3.x builds
+  if echo $CEPH_VERSION | grep -q "10.2." ; then
+      # Skip get_pendingRESHARD for 2.5 versions
+      pendingRESHARD="N/A"
+  else
+      #pendingRESHARD=`$execRGW radosgw-admin reshard list --include-all | wc -l`
+      pendingRESHARD=`radosgw-admin reshard list --include-all | wc -l`
+      reshardList=`radosgw-admin reshard list`
+  fi
+}
+
+function get_tuning() {
+  echo CEPHVER=$CEPHVER
+  case $CEPHVER in
+    luminous)
+      osdtuning=$(ssh $RGWhostname 'ceph daemon `ls /var/run/ceph/ceph-osd.*.asok|tail -1` config show' | egrep 'osd_memory_target|bluefs_buff|debug_objclass|osd_delete_sleep|cache_trim_max_skip_pinned|bluestore_rocksdb_options|osd_crush_initial_weight|osd_deep_scrub_interval|omap_object_key_threshold|osd_max_backfills|osd_max_scrubs|osd_op_thread_timeout|osd_recovery_max_omap_entries_per_chunk|osd_recovery_threads|osd_remove_threads|osd_scrub_auto_repair|osd_scrub_begin_hour|osd_scrub_during_recovery|osd_scrub_end_hour|osd_scrub_max_interval|osd_scrub_sleep|rocksdb_cache_size|log_to_file')
+      rgwtuning=$(ssh $RGWhostname 'ceph daemon `ls /var/run/ceph/ceph-client.rgw*.asok|tail -1` config show' |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file')
+      ;;
+    nautilus)
+      osdtuning=$(ssh $RGWhostname 'ceph daemon `ls /var/run/ceph/ceph-osd.*.asok|tail -1` config show' | egrep 'osd_memory_target|bluefs_buff|debug_objclass|osd_delete_sleep|cache_trim_max_skip_pinned|bluestore_rocksdb_options|osd_crush_initial_weight|osd_deep_scrub_interval|omap_object_key_threshold|osd_max_backfills|osd_max_scrubs|osd_op_thread_timeout|osd_recovery_max_omap_entries_per_chunk|osd_recovery_threads|osd_remove_threads|osd_scrub_auto_repair|osd_scrub_begin_hour|osd_scrub_during_recovery|osd_scrub_end_hour|osd_scrub_max_interval|osd_scrub_sleep|rocksdb_cache_size|log_to_file')
+      rgwtuning=$(ssh $RGWhostname 'ceph daemon `ls /var/run/ceph/ceph-client.rgw*.asok|tail -1` config show' |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file')
+      ;;
+    pacific)
+      osdtuning=`ceph tell osd.1 config show | egrep 'osd_memory_target|bluefs_buff|debug_objclass|osd_delete_sleep|cache_trim_max_skip_pinned|bluestore_rocksdb_options|osd_crush_initial_weight|osd_deep_scrub_interval|omap_object_key_threshold|osd_max_backfills|osd_max_scrubs|osd_op_thread_timeout|osd_recovery_max_omap_entries_per_chunk|osd_recovery_threads|osd_remove_threads|osd_scrub_auto_repair|osd_scrub_begin_hour|osd_scrub_during_recovery|osd_scrub_end_hour|osd_scrub_max_interval|osd_scrub_sleep|rocksdb_cache_size|log_to_file|target_size_ratio'`
+      fsid=`ceph status |grep id: |awk '{print$2}'`
+      rgwtuning=$(ssh $RGWhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-client.rgw.rgws.*.asok config show |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|debug_ms|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file|rgw_thread_pool_size'")
+      rgwdiff=$(ssh $RGWhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-client.rgw.rgws.*.asok config diff")
+      mondiff=$(ssh $MONhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-mon*.asok config diff")
+      ;;
+    *)
+      error_exit "unable to gather daemon socket stats ... exit"
+      ;;
+  esac
+}
+
+function get_dataLog() {
+  dataLog=`for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 ; do  radosgw-admin datalog list --shard-id=$i --max-entries=2147483647 | jq length & done | awk '{sum+=$1};END{print sum}'`
+}
+
+function get_upTime() {
+  upTime=`ssh $RGWhostname uptime | awk -F'[a-z]:' '{ print $2}'`
+  multisite=`echo "${multisite,,}"`       # force lowercase
+  if [[ $multisite == "true" ]]; then
+    upTime2=`ssh $RGWhostname2 uptime | awk -F'[a-z]:' '{ print $2}'`
+  fi
+}
+
+function get_rgwMem() {
+  rgwMem=`ssh $RGWhostname ps -eo comm,pcpu,pmem,vsz,rss | grep -w 'radosgw '`
+  rgwMemUsed=`ssh $RGWhostname cat /sys/fs/cgroup/memory/memory.usage_in_bytes`
+  rgwMemLimit=`ssh $RGWhostname cat /sys/fs/cgroup/memory/memory.limit_in_bytes`
+}
+
+function get_bucketStats() {
+  #site1bucketsrgw=`ssh $RGWhostname "radosgw-admin bucket stats |egrep 'bucket\"|num_objects'"`
+  site1bucketsrgw=`radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+  multisite=`echo "${multisite,,}"`       # force lowercase
+  if [[ $multisite == "true" ]]; then
+    site2bucketsrgw=`ssh $MONhostname2 "radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'"`
+  fi
+}
+
+function get_syncStatus() {
+  syncStatus=`ssh $MONhostname2 radosgw-admin sync status`
+  bucketSyncStatus=`ssh $MONhostname2 'for i in 1 2 3 4 5 6 ; do radosgw-admin bucket sync status --bucket=mycontainers${i} ; done'`
+}
+
+function get_SyncStats() {
+  zone="site1"
+  ts=`date +%Y-%m-%d_%H-%M-%S`
+  echo "${ts} *******"
+  RES1=$(ceph -s)
+  tmp1=$(echo "${RES1}" | grep -m 1 client)
+  site1io="$(echo -e "${tmp1}" | sed -e 's/^[[:space:]]*//')"
+  syncPolling=`echo "${syncPolling,,}"`       # force lowercase
+  if [[ $syncPolling == "true" ]]; then
+    RES2=$(ssh $MONhostname2 "ceph -s")
+    tmp2=$(echo "${RES2}" | grep -m 1 client)
+    site2io="$(echo -e "${tmp2}" | sed -e 's/^[[:space:]]*//')"
+    # collect radosgw perf ctrs
+    for rgw in $RGWhosts2 ; do
+      case $CEPHVER in
+        luminous)
+          asokpath='$(ls /var/run/ceph/ceph-client.rgw*.asok)'
+          RES3=$(ssh $rgw "ceph daemon ${asokpath} perf dump data-sync-from-${zone}")
+          ;;
+        nautilus)
+          asokpath='$(ls /var/run/ceph/ceph-client.rgw*.asok)'
+          RES3=$(ssh $rgw "ceph daemon ${asokpath} perf dump data-sync-from-${zone}")
+          ;;
+        pacific)
+          fsid2=$(ssh $rgw "ceph status |grep id:" |awk '{print$2}')
+          RES3=$(ssh $rgw "cd /var/run/ceph/${fsid2} && ceph --admin-daemon ceph-client.rgw*.asok perf dump data-sync-from-${zone}")
+          ;;
+        *)
+          error_exit "unable to gather data-sync-from-${zone} stats, exit..."
+          ;;
+      esac
+      tmp3=$(echo "${RES3}" | grep -m 1 avgcount)
+      avgcnt="$(echo -e "${tmp3}" | sed -e 's/^[[:space:]]*//')"
+      tmp4=$(echo "${RES3}" | grep -m 1 sum)
+      sum="$(echo -e "${tmp4}" | sed -e 's/^[[:space:]]*//')"
+      tmp5=$(echo "${RES3}" | grep -m 1 fetch_errors)
+      fetch_errors="$(echo -e "${tmp5}" | sed -e 's/^[[:space:]]*//')"
+    done
+  fi
+}
+
+function get_clientStats() {
+  #site1client=`ssh $MONhostname ceph status |grep client:`
+  site1client=`ceph status |grep client:`
+  syncPolling=`echo "${syncPolling,,}"`       # force lowercase
+  if [[ $syncPolling == "true" ]]; then
+    site2client=`ssh $MONhostname2 ceph status |grep client:`
+  fi
+}
+
+function get_omapKeys() {
+  bucketID=`radosgw-admin bucket stats --bucket=mycontainers1 |grep id\": |cut -d\" -f4`
+  multisite=`echo "${multisite,,}"`       # force lowercase
+  if [[ $multisite == "true" ]]; then
+    index_log=$(for i in `rados -p site1.rgw.buckets.index ls |grep ${bucketID}`; do echo -en ${i}": \t" ; rados -p site1.rgw.buckets.index listomapkeys $i | wc -l; done)
+    data_log=$(for i in `rados -p site1.rgw.log ls | grep data_log`; do echo -en ${i}": \t" ; rados -p site1.rgw.log listomapkeys $i | wc -l; done)
+    meta_log=$(for i in `rados -p site1.rgw.log ls | grep meta_log`; do echo -en ${i}": \t" ; rados -p site1.rgw.log listomapkeys $i | wc -l; done)
+  else
+    index_log=$(for i in `rados -p default.rgw.buckets.index ls |grep ${bucketID}`; do echo -en ${i}": \t" ; rados -p default.rgw.buckets.index listomapkeys $i | wc -l; done)
+    data_log=$(for i in `rados -p default.rgw.log ls | grep data_log`; do echo -en ${i}": \t" ; rados -p default.rgw.log listomapkeys $i | wc -l; done)
+    meta_log=$(for i in `rados -p default.rgw.log ls | grep meta_log`; do echo -en ${i}": \t" ; rados -p default.rgw.log listomapkeys $i | wc -l; done)
+  fi
+}
+
+function get_osdMem() {
+# use ps v and capture %CPU and %MEM in one output, which we can then use to plot graph.
+# $ ps  -eo pid,cmd,args | grep ceph | awk '{print $1}'  | xargs ps v
+  osdMem=`ssh $RGWhostname ps -eo comm,pcpu,pmem,vsz,rss | grep -w 'ceph-osd '`
+  osdMem2=`ssh $RGWhostname2 ps -eo comm,pcpu,pmem,vsz,rss | grep -w 'ceph-osd '`
+}
+
+function write_Hostscripts() {
+  thecmd=$1
+
+  if [ $runmode == "containerized" ]; then
+     error_exit â€œ${FUNCNAME}: does not support runmode=containerizedâ€
+  fi
+
+# Remove spaces from $thecmd (part of hostscript file name)
+  no_whitespace="$(echo -e "${thecmd}" | tr -d '[:space:]')"
+# Store each osdHOSTname in an array, for later use
+  mapfile -t osdHOSTS_arr < <( ceph node ls osd | grep -o '".*"' | tr -d '"' )
+
+# Strip domain name from OSD hostnames
+  for i in "${!osdHOSTS_arr[@]}"; do
+      element="${osdHOSTS_arr[$i]}"
+      osdHOSTS_arr[$i]="${element/.*/}"
+  done
+
+# Create new Hostscript files, one for each OSD host
+  for h1 in "${osdHOSTS_arr[@]}"; do
+      s1="/tmp/${h1}_${no_whitespace}"
+      if [ -e $s1 ]; then
+       rm -f $s1 || error_exit "${FUNCNAME}: Unable to remove $s1."
+      fi
+      > $s1 || error_exit "${FUNCNAME}: Unable to create $s1"
+      echo "rm -f /tmp/osdstats" >> $s1
+      echo "echo $s1 'BEGIN: ' $(date) >> /tmp/osdstats" >> $s1
+  done
+
+# Write out the scriptfiles to be executed on each of the OSDs
+#   this loop takes a while... (ceph osd find is SLOW)
+  for osdNUM in $(ceph osd tree | awk '/up/ {print $1}'); do
+      host=$(ceph osd find $osdNUM |awk -F\" '$2 ~ /host/ {print $4}')
+      hs="/tmp/${host}_${no_whitespace}"
+      echo "echo >> /tmp/osdstats" >> $hs
+      echo "echo osd.${osdNUM} >> /tmp/osdstats" >> $hs
+      echo "ceph daemon osd.${osdNUM} ${thecmd} >> /tmp/osdstats" >> $hs
+  done
+
+# Close up the scriptfiles
+  for h2 in "${osdHOSTS_arr[@]}"; do
+      s2="/tmp/${h2}_${no_whitespace}"
+      echo "echo >> /tmp/osdstats" >> $s2
+      echo "echo $s2 'DONE: ' $(date) >> /tmp/osdstats" >> $s2
+  done
+# END write_Hostscripts
+}
+
+function get_OSDstats() {
+  statcmd=$1
+  logdir=$2
+  logfn=$3
+
+  if [ $runmode == "containerized" ]; then
+     error_exit â€œ${FUNCNAME}: does not support runmode=containerizedâ€
+  fi
+# Create logdir
+  if [ ! -d $logdir ]; then
+      mkdir -p $logdir || \
+        error_exit "${FUNCNAME}: Unable to create $logdir."
+  fi
+  tstamp="$(date +%Y%m%d-%H%M%S)"
+# Store each osdHOSTname in an array, for later use
+  mapfile -t osdHOSTS_arr < <( ceph node ls osd | grep -o '".*"' | tr -d '"' )
+
+# Strip domain name from OSD hostnames
+  for i in "${!osdHOSTS_arr[@]}"; do
+      element="${osdHOSTS_arr[$i]}"
+      osdHOSTS_arr[$i]="${element/.*/}"
+  done
+
+# Create the (empty) logfiles and log timestamp
+#   one for each host
+  for h1 in "${osdHOSTS_arr[@]}"; do
+##      f1="$logdir/$h1"
+      f1="$logdir/${tstamp}_${h1}"
+      > $f1 || error_exit "${FUNCNAME}: Unable to create $f1"
+  done
+  updatelog "${PROGNAME}:${FUNCNAME} - Created logfiles: $logdir" $logfn
+
+# Depending on $statcmd, get the requested statistics
+#
+# meminfo is only performed once per osdHOST
+  if [ "$statcmd" == "meminfo" ]; then
+      for h2 in "${osdHOSTS_arr[@]}"; do
+          f2="$logdir/${tstamp}_${h2}"
+##          f2="$logdir/$h2"
+          ssh $h2 cat /proc/meminfo >> $f2 &
+      done
+      wait         # wait for backgrd jobs to complete
+      for h3 in "${osdHOSTS_arr[@]}"; do
+        f3="$logdir/$h3"
+##        updatelog "${PROGNAME}:${FUNCNAME} - Closed: $f3" $f3
+      done
+      updatelog "${PROGNAME}:${FUNCNAME} - Closed logfiles: $logdir" $logfn
+  else
+#
+# All other statcmd's are performed once per osdNUM
+# To shorten execution time, scriptfiles which were already written by
+#   function write_Hostscripts are run in parallel
+# remove spaces from $statcmd (used as hostscript file name)
+    no_whitespace="$(echo -e "${statcmd}" | tr -d '[:space:]')"
+#
+# Execute the hostscripts (in parallel) on each of the OSD systems
+# then copy the logs back from each of the OSD systems
+# and append contents to each of the local logfiles
+    for h3 in "${osdHOSTS_arr[@]}"; do
+        hs="/tmp/${h3}_${no_whitespace}"
+        if [ ! -f $hs ]; then
+          error_exit "$LINENO: Hostscript not found : $hs"
+        fi
+        ssh "root@${h3}" "bash -s" < "$hs" &
+    done
+    wait         # wait for backgrd jobs to complete
+
+# Now copy the logs back from each of the OSD systems
+    for h4 in "${osdHOSTS_arr[@]}"; do
+##        f4="$logdir/$h4"
+        f4="$logdir/${tstamp}_${h4}"
+        scp -q "root@${h4}:/tmp/osdstats" /tmp/osdstats
+        cat /tmp/osdstats >> $f4
+        rm -f /tmp/osdstats /tmp/$h4
+##        updatelog "${PROGNAME}:${FUNCNAME} - SCPd and appended: $f4" $f4
+    done
+    updatelog "${PROGNAME}:${FUNCNAME} - SCPd logfiles: $logdir" $logfn
+  fi
+# END get_OSDstats
+}
+
+
+#
+#
+# END FUNCTIONS
+#--------------------------------------
