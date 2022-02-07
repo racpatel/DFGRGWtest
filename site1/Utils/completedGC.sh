@@ -23,7 +23,7 @@ source "$myPath/../Utils/functions.shinc"
 
 interval=$1          # how long to sleep between polling
 log=$2               # the logfile to write to
-DATE='date +%Y/%m/%d:%H:%M:%S'
+DATE='date +%Y/%m/%d-%H:%M:%S'
 
 # update log file with ceph %RAW USED 
 updatelog "** completedGC started" $log

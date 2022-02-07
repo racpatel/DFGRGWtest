@@ -30,7 +30,7 @@ interval=$1          # how long to sleep between polling
 log=$2               # the logfile to write to
 statcmd=$3
 statlog=$4
-DATE='date +%Y/%m/%d:%H:%M:%S'
+DATE='date +%Y/%m/%d-%H:%M:%S'
 
 # update log file  
 updatelog "** pollOSD started" $log
@@ -39,7 +39,7 @@ updatelog "** pollOSD started" $log
 # append %RAW stats to LOGFILE
 get_rawUsed
 # bail if cluster gets too full
-threshold="85.0"
+threshold="75.0"
 
 # keep polling until cluster reaches 'threshold' % fill mark
 while (( $(echo "${rawUsed} < ${threshold}" | bc -l) )); do
@@ -61,6 +61,11 @@ while (( $(echo "${rawUsed} < ${threshold}" | bc -l) )); do
     get_osdMem
     updatelog "${RGWhostname} ${osdMem}" $log
 
+    # multisite sync status
+    echo -n "Multisite: " >> $log        # prefix line with stats label
+    get_syncStatus
+    updatelog "${RGWhostname} ${syncStatus}" $log
+
     # insert polling seperator line
     updatelog "++++++++++++SLEEPING ${interval}++++++++++++++++++++++" $log
 
@@ -77,7 +82,7 @@ while (( $(echo "${rawUsed} < ${threshold}" | bc -l) )); do
 done
 
 echo -n "pollOSD.sh: " >> $log   # prefix line with label for parsing
-updatelog "** 85% fill mark hit: POLL ending" $log
+updatelog "** 75% fill mark hit: POLL ending" $log
 
 #echo " " | mail -s "pollOSD.sh fill mark hit - terminated" user@company.net
 

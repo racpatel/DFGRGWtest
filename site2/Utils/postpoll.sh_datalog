@@ -1,0 +1,206 @@
+#!/bin/bash
+#
+# POSTPOLL.sh
+#   Polls ceph, logs stats, gets data log list & writes to LOGFILE
+#
+
+# Bring in other script files
+myPath="${BASH_SOURCE%/*}"
+if [[ ! -d "$myPath" ]]; then
+    myPath="$PWD"
+fi
+
+# Variables
+source "$myPath/../vars.shinc"
+
+# Functions
+# defines: 'get_' routines
+source "$myPath/../Utils/functions.shinc"
+
+# check for passed arguments
+[ $# -ne 3 ] && error_exit "postpoll.sh failed - wrong number of args"
+[ -z "$1" ] && error_exit "postpoll.sh failed - empty first arg"
+[ -z "$2" ] && error_exit "postpoll.sh failed - empty second arg"
+[ -z "$3" ] && error_exit "postpoll.sh failed - empty third arg"
+
+interval=$1
+log=$2               # the logfile to write to
+datalog=$3               # the dataLog logfile to write to
+DATE='date +%Y/%m/%d-%H:%M:%S'
+
+# update log file  
+updatelog "** POST POLL started" $log
+#dataLogPolling=`echo "${dataLogPolling,,}"`       # force lowercase
+#if [[ $dataLogPolling == "true" ]]; then
+#    updatelog "** POST POLL started" $datalog
+#fi
+sample=1
+
+###########################################################
+# append GC status to LOGFILE
+#get_pendingGC
+#echo -n "GC: " >> $log   # prefix line with GC label for parsing
+get_rawUsed
+updatelog "%RAW USED ${rawUsed}; Pending GCs ${pendingGC}" $log
+threshold="75.0"
+
+# set flag to start sbrubs only once
+disabledeepscrubs=`echo "${disabledeepscrubs,,}"`       # force lowercase
+if [[ $disabledeepscrubs == "true" ]]; then
+    scrubbing=false
+fi
+
+# keep polling until cluster reaches 'threshold' % fill mark
+#while (( $(awk 'BEGIN {print ("'$rawUsed'" < "'$threshold'")}') )); do
+#while (( $(echo "${rawUsed} < ${threshold}" | bc -l) )); do
+
+# poll for fixed period, the first ${scrubstart} with deep-scrubs still disabled
+while [ $SECONDS -lt $postpollend ]; do
+    # Sleep for the poll interval before first sample
+    sleep "${interval}"
+
+    echo -e "\nSAMPLE (post poll): ${sample}   =============================================\n"
+    echo -e "\nSAMPLE (post poll): ${sample}   =============================================\n" >> $log
+
+    if [[ $disabledeepscrubs == "true" ]]; then
+        # start/enable PG deep-scrubs after desired duration
+        if [[ $SECONDS -gt $scrubstart && $scrubbing == false ]]; then
+	    # start manual deep-scrub of all PGs
+	    updatelog "start manual deep-scrubs" $log
+	    ssh $MONhostname 'for pool in site1.rgw.log site1.rgw.buckets.index ; do for pg in `ceph pg ls-by-pool $pool |grep , |cut -d" " -f1` ; do ceph pg deep-scrub $pg &> /dev/null ; done ; done'
+#	    ssh $MONhostname2 'for pool in site2.rgw.log site2.rgw.buckets.index ; do for pg in `ceph pg ls-by-pool $pool |grep , |cut -d" " -f1` ; do ceph pg deep-scrub $pg ; done ; done'
+
+	    # enable deep-scrubs
+	    updatelog "enabling deep-scrub flag" $log
+            if [[ $dataLogPolling == "true" ]]; then
+	        updatelog "enabling deep-scrub flag" $datalog
+	    fi
+            ssh $MONhostname ceph osd unset nodeep-scrub
+#	    ssh $MONhostname2 ceph osd unset nodeep-scrub
+            scrubbing=true
+        fi
+    fi
+
+    # monitor for large omap objs 
+#    site1omapCount=`ceph status |grep omap |awk '{print$1}'`
+    site1omapCount=`ceph health detail |grep 'large obj'`
+    updatelog "Large omap objs (site1): $site1omapCount" $log
+    multisite=`echo "${multisite,,}"`	# force lowercase
+    if [[ $multisite == "true" ]]; then 
+#        site2omapCount=`ssh f18-h14-000-r640 ceph status |grep omap |awk '{print$1}'`
+        site2omapCount=`ssh f18-h14-000-r640 ceph health detail |grep 'large obj'`
+        updatelog "Large omap objs (site2): $site2omapCount" $log
+    fi
+
+    # RESHARD activity
+    echo -n "RESHARD: " >> $log
+    get_pendingRESHARD
+    updatelog "RESHARDING Queue length ${pendingRESHARD}" $log
+    
+    # RGW system Load Averages from both sites
+    echo "LA: " >> $log        # prefix line with stats label
+    get_upTime
+    updatelog "${RGWhostname} ${upTime}" $log
+    if [[ $multisite == "true" ]]; then 
+      updatelog "${RGWhostname2} ${upTime2}" $log
+    fi
+
+    # RGW radosgw PROCESS and MEM stats
+    echo -e "\nRGW stats:          proc   %cpu %mem  vsz    rss     memused       memlimit" >> $log        # stats titles
+    for rgw in $RGWhosts2 ; do
+        rgwMem=`ssh $rgw ps -eo comm,pcpu,pmem,vsz,rss | grep -w 'radosgw '` &> /dev/null
+        rgwMemUsed=`ssh $rgw cat /sys/fs/cgroup/memory/memory.usage_in_bytes` &> /dev/null
+        rgwMemLimit=`ssh $rgw cat /sys/fs/cgroup/memory/memory.limit_in_bytes` &> /dev/null
+        echo $rgw"   "$rgwMem"   "$rgwMemUsed"   "$rgwMemLimit >> $log
+    done
+
+#    get_rgwMem
+#    updatelog "${RGWhostname} ${rgwMem} ${rgwMemUsed}" $log
+
+    # ceph-osd PROCESS and MEM stats
+    echo -n "OSD: " >> $log        # prefix line with stats label
+    get_osdMem
+    updatelog "${RGWhostname} ${osdMem}" $log
+
+# get bucket stats
+    get_bucketStats
+    #echo -e "\nSite1 buckets (swift):" >> $log
+    #echo -e "\nSite1 buckets (swift):"
+    #updatelog "${site1bucketsswift}" $log
+    echo -e "\nSite1 buckets (rgw):" >> $log
+    echo -e "\nSite1 buckets (rgw):"
+    updatelog "${site1bucketsrgw}" $log
+
+    if [[ $multisite == "true" ]]; then
+        #echo -e "\nSite2 buckets (swift):" >> $log 
+        #echo -e "\nSite2 buckets (swift):"
+        #updatelog "${site2bucketsswift}" $log
+        echo -e "\nSite2 buckets (rgw):" >> $log
+        updatelog "${site2bucketsrgw}" $log
+        get_syncStatus
+        echo -e "\nSite2 sync status:" >> $log
+        echo -e "\nSite2 sync status:" 
+        updatelog "${syncStatus}" $log
+        echo -e "\nSite2 buckets sync status:" >> $log
+        echo -e "\nSite2 buckets sync status:"
+        updatelog "${bucketSyncStatus}" $log
+    fi
+
+    if [[ $syncPolling == "true" ]]; then
+        # multisite sync status
+        echo "" >> $log
+        site2sync=$(ssh f18-h14-000-r640 /root/syncCntrs.sh)
+        updatelog "site2 sync counters:  ${site2sync}" $log
+        get_SyncStats
+        echo -en "\nCeph Client I/O\nsite1: " >> $log
+        updatelog "site1:  ${site1io}" $log
+        echo -n "site2: " >> $log
+        updatelog "site2:  ${site2io}" $log
+    fi
+
+    echo "Cluster status" >> $log
+    ceph status >> $log
+
+    get_df-detail
+    updatelog "ceph df detail ${dfdetail}" $log
+
+
+    # Record the %RAW USED and pending GC count
+# NOTE: this may need to be $7 rather than $4 <<<<<<<<
+    get_rawUsed
+
+    # Record specific pool sizes
+    get_buckets_df
+    echo "Site1 buckets df"
+    echo "Site1 buckets df" >> $log
+    updatelog "${buckets_df}" $log
+    if [[ $multisite == "true" ]]; then
+        echo -e "\nSite2 buckets df"
+        echo -e "\nSite2 buckets df" >> $log
+        updatelog "${buckets_df2}" $log
+    fi
+
+    get_free
+    echo -e "\nOSD/RGW free:" >> $log
+    updatelog "${freemem}" $log
+
+    get_osddf
+    echo -e "\nCeph osd df:" >> $log
+    updatelog "${osddf}" $log
+
+    echo -e "\nLC list:" >> $log
+    radosgw-admin lc list >> $log
+
+#    get_pendingGC
+#    echo -en "\nGC: " >> $log
+#    updatelog "%RAW USED ${rawUsed}; Pending GCs ${pendingGC}" $log
+
+    sample=$(($sample+1))
+done
+
+echo -n "POST POLL.sh: " >> $log   # prefix line with label for parsing
+updatelog "** POST POLL ending" $log
+
+#echo " " | mail -s "POLL fill mark hit - terminated" user@company.net
+
+# DONE
