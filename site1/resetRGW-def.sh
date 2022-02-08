@@ -73,7 +73,7 @@ if [ $runmode == "containerized" ]; then
 fi
 
 echo "Stopping RGWs, and echoing status"
-ansible -m shell -a 'systemctl stop ceph-radosgw.target' rgws
+ansible -o -m shell -a 'systemctl stop ceph-radosgw.target' rgws
 sleep 5
 ansible -o -m shell -a 'systemctl status ceph-radosgw.target |grep Act' rgws
 
@@ -91,21 +91,26 @@ create_pools $REPLICATION
 echo "sleeping for 30 seconds..."; sleep 30
 
 echo "Starting RGWs, and echoing status"
-ansible -m shell -a 'systemctl start ceph-radosgw.target' rgws
+ansible -o -m shell -a 'systemctl start ceph-radosgw.target' rgws
 sleep 5
 ansible -o -m shell -a 'systemctl status ceph-radosgw.target |grep Act' rgws
 
+echo "disabling PG autoscaler"
+for i in `rados lspools` ; do echo -ne $i"\t" ; ceph osd pool set $i pg_autoscale_mode off ; done
+
 echo "Creating User - which generates a new Password"
-$execRGW 'radosgw-admin user create --uid=johndoe --display-name="John Doe" --email=john@example.com' &&
-$execRGW 'radosgw-admin subuser create --uid=johndoe --subuser=johndoe:swift --access=full' 
+$execRGW 'time radosgw-admin user create --uid=johndoe --display-name="John Doe" --email=john@example.com' &&
+$execRGW 'time radosgw-admin subuser create --uid=johndoe --subuser=johndoe:swift --access=full' 
 
 # Edit the Password into the XML workload files
-echo "inserting new password into XML files $FILLxml, $AGExml, $UPGRADExml, $MEASURExml"
+#echo "inserting new password into XML files $FILLxml, $AGExml, $UPGRADExml, $MEASURExml"
+echo "inserting new password into XML files"
 key=$($execRGW 'radosgw-admin user info --uid=johndoe | grep secret_key' | tail -1 | awk '{print $2}' | sed 's/"//g')
-sed  -i "s/password=.*;/password=$key;/g" ${FILLxml}
-sed  -i "s/password=.*;/password=$key;/g" ${AGExml}
-sed  -i "s/password=.*;/password=$key;/g" ${MEASURExml}
-sed  -i "s/password=.*;/password=$key;/g" ${UPGRADExml}
+sed  -i "s/password=.*;/password=$key;/g" *.xml
+#sed  -i "s/password=.*;/password=$key;/g" ${FILLxml}
+#sed  -i "s/password=.*;/password=$key;/g" ${AGExml}
+#sed  -i "s/password=.*;/password=$key;/g" ${MEASURExml}
+#sed  -i "s/password=.*;/password=$key;/g" ${UPGRADExml}
 
 if [ $runmode == "containerized" ]; then
     nt_end=$(ssh $RGWhostname 'bash -s' < Utils/thr_time.sh)
