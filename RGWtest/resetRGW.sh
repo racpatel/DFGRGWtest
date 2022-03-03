@@ -37,14 +37,17 @@ function create_pools {
   for pl in ${pool_list[@]}; do
       if [ $pl == "default.rgw.buckets.data" ]; then
           $execMON ceph osd pool create $pl $pg_data $cmdtail
+          $execMON ceph osd pool set $pl pg_num_min $pg_data
           if [ "$1" == "rep" ]; then
               $execMON ceph osd pool set $pl size "${numREPLICAS}"
           fi
       elif [ $pl == "default.rgw.buckets.index" ]; then
           $execMON ceph osd pool create $pl $pg_index replicated
+          $execMON ceph osd pool set $pl pg_num_min $pg_index
           $execMON ceph osd pool set $pl size "${numREPLICAS}"
       else
           $execMON ceph osd pool create $pl $pg replicated
+          $execMON ceph osd pool set $pl pg_num_min $pg
           $execMON ceph osd pool set $pl size "${numREPLICAS}"
       fi
   done
@@ -117,10 +120,27 @@ if [ $runmode == "containerized" ]; then
     echo -e $nt_end
 fi
 
-ceph config set global log_to_file true
-ceph config set global mon_cluster_log_to_file true
+$execMON ceph config set global log_to_file true
+$execMON ceph config set global mon_cluster_log_to_file true
 
 echo "log_to_file and mon_cluster_log_to_file is set" 
+
+$execMON ceph config set global rgw_max_concurrent_requests 2048
+$execMON ceph config set global rgw_thread_pool_size 1024
+
+echo "rgw_max_concurrent_requests, rgw_thread_pool_size is set"
+
+$execMON ceph config set mon mon_config_key_max_entry_size 1048576
+$execMON ceph config set osd osd_memory_target_autotune true
+
+echo "mon_config_key_max_entry_size, osd_memory_target_autotune is set"
+
+echo "*******************Manual step alert**********************"
+echo "Identify swap device with lsblk"
+echo "Execute swapoff for swap device : Ex: ansible osds -m shell -a \'swapoff -v /dev/md1\'"
+echo "Edit /etc/fstab and comment swap entry"
+echo "**********************************************************"
+
 
 echo "$PROGNAME: Done"
 

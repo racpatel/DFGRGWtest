@@ -223,7 +223,7 @@ fi
 if [ $runmode == "invalid" ]; then
     echo "vars.shinc: unable to determine runmode(bare-metal or containerized)"
     echo "Aborting..."
-    exit 2
+#    exit 2
 fi
 
 CEPH_VERSION=`$execMON ceph --version`  # used in: resetRGW.sh and poll.sh 

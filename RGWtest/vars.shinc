@@ -3,12 +3,12 @@
 #
 
 # Ceph cluster node hostnames/IP addresses
-MONhostname="f04-h29-b05-5039ms.rdu2.scalelab.redhat.com"
-MONhostname2="f04-h29-b06-5039ms.rdu2.scalelab.redhat.com"
+MONhostname="f13-h26-b04-5039ms.rdu2.scalelab.redhat.com"
+MONhostname2="f13-h26-b07-5039ms.rdu2.scalelab.redhat.com"
 RGWhostname="f10-h01-000-6049p.rdu2.scalelab.redhat.com"
 RGWhostname2="f10-h05-000-6049p.rdu2.scalelab.redhat.com"
-RGWhosts1="f10-h01-000-6049p.rdu2.scalelab.redhat.com f10-h05-000-6049p.rdu2.scalelab.redhat.com f10-h09-000-6049p.rdu2.scalelab.redhat.com f10-h13-000-6049p.rdu2.scalelab.redhat.com"
-RGWhosts2="f10-h17-000-6049p.rdu2.scalelab.redhat.com f10-h21-000-6049p.rdu2.scalelab.redhat.com f10-h25-000-6049p.rdu2.scalelab.redhat.com f11-h01-000-6049p.rdu2.scalelab.redhat.com"
+RGWhosts1="f10-h01-000-6049p.rdu2.scalelab.redhat.com f10-h05-000-6049p.rdu2.scalelab.redhat.com f10-h09-000-6049p.rdu2.scalelab.redhat.com f10-h13-000-6049p.rdu2.scalelab.redhat.com f10-h17-000-6049p.rdu2.scalelab.redhat.com f10-h21-000-6049p.rdu2.scalelab.redhat.com f10-h25-000-6049p.rdu2.scalelab.redhat.com f11-h01-000-6049p.rdu2.scalelab.redhat.com f11-h05-000-6049p.rdu2.scalelab.redhat.com f11-h09-000-6049p.rdu2.scalelab.redhat.com f11-h13-000-6049p.rdu2.scalelab.redhat.com f11-h17-000-6049p.rdu2.scalelab.redhat.com"
+RGWhosts2=""
 
 multisite=false         # enable/disable multisite monitoring
 syncPolling=false       # enable/disable sync monitoring
@@ -36,10 +36,9 @@ MEASUREruntime="3600"             # 1hr Runtime (in sec)
 AGEruntime="172800"               # 48hr Runtime (in sec)  
 UPGRADEruntime="36000"            # 10hr Runtime (in sec)  
 rgwUSER="johndoe:swift"           # username
-#rgwURL="172.16.0.131:5000"       # auth_url connection point
-rgwURL="localhost:5000"		      # each client will run its own haproxy
-fillWORKERS=1680       # LTA number of workers to use for filling the Cluster (ie. 5 Clients)
-measureWORKERS=1680     # LTA number of workers for running IOWorkload (ie. 5 Clients)
+rgwURL="localhost:5000"		  # each client will run its own haproxy
+fillWORKERS=1988       # LTA number of workers to use for filling the Cluster (ie. 5 Clients)
+measureWORKERS=1988     # LTA number of workers for running IOWorkload (ie. 5 Clients)
 
 #
 # Object sizes
@@ -185,8 +184,8 @@ elif [ $preparePTYPE == "ec" ]; then
     REPLICATION="ec"
     k=4
     m=2
-    pg_data=4096                       # determine this value by using PGCALC
-    pg_index=256                       # determine this value by using PGCALC
+    pg_data=8192                       # determine this value by using PGCALC
+    pg_index=512                       # determine this value by using PGCALC
     pg=256                             # determine this value by using PGCALC
     fast_read=0
 else

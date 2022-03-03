@@ -1,0 +1,3186 @@
+2022/02/23-11:21:10: runIOworkload.sh - Created logfile: ./RESULTS/runIOworkload.sh_20220223-112109.log
+Runtime Environment:
+Linux f10-h29-b02-5039ms.rdu2.scalelab.redhat.com 4.18.0-348.el8.x86_64 #1 SMP Mon Oct 4 12:17:22 EDT 2021 x86_64 x86_64 x86_64 GNU/Linux
+Red Hat Enterprise Linux release 8.5 (Ootpa)
+ceph version 16.2.7-57.el8cp (a42515fd9a72aa3c6b30fad6daefa7903be5e2cd) pacific (stable)
+2022/02/23-11:21:11: > runmode=containerized
+Key Variable Values:
+2022/02/23-11:21:11: > pollinterval=300
+2022/02/23-11:21:11: > RESULTSDIR=./RESULTS
+Cluster variable settings:
+2022/02/23-11:21:11: > MONhostname=f13-h26-b04-5039ms.rdu2.scalelab.redhat.com
+2022/02/23-11:21:11: > RGWhostname=f10-h01-000-6049p.rdu2.scalelab.redhat.com
+2022/02/23-11:21:11: ---------------------------------
+2022/02/23-11:21:11: BEGIN /root/git_repo/DFGRGWtest/RGWtest/fill.xml contents:
+<?xml version="1.0" encoding="UTF-8" ?>
+<workload name="fillCluster" description="RGW testing">
+
+<!-- Initialization -->
+    <storage type="s3" config="timeout=900000;accesskey=MCHN4XI1D6JL855S8ESR;secretkey=hIzqIoR9sExCV1NNcrBkb204mkxTkuMFLMBsh2dC;endpoint=http://localhost:5000;path_style_access=true"/>
+  <auth type="none"/>
+
+
+  <workflow>
+
+<!-- Initialization -->
+    <workstage name="init_containers">
+        <work type="init" workers="1" config="containers=r(1,5)"/>
+    </workstage>
+
+<!-- Prepare using container counts, object counts and object sizes from vars.shinc -->
+    <workstage name="preparing_cluster">
+        <work type="prepare" workers="1988" config="containers=r(1,5);objects=r(1,75000000);sizes=h(1|2|25,2|4|40,4|8|25,8|256|10)KB"/>
+    </workstage>
+
+  </workflow>
+
+</workload>
+2022/02/23-11:21:11: END /root/git_repo/DFGRGWtest/RGWtest/fill.xml
+2022/02/23-11:21:11: 
+CLASS     SIZE    AVAIL    USED  RAW USED  %RAW USED
+TOTAL  567 TiB  524 TiB  44 TiB    44 TiB       7.70
+POOL                       ID   PGS   STORED  OBJECTS     USED  %USED  MAX AVAIL
+GC: 2022/02/23-11:21:12: Pending GC's == 1
+2022/02/23-11:21:12: START: poll backgrd process
+2022/02/23-11:21:13: ** POLL started
+
+ceph balancer status
+{
+    "active": true,
+    "last_optimize_duration": "0:00:00.117282",
+    "last_optimize_started": "Wed Feb 23 11:20:38 2022",
+    "mode": "upmap",
+    "optimize_result": "Unable to find further optimization, or pool(s) pg_num is decreasing, or distribution is already perfect",
+    "plans": []
+}
+2022/02/23-11:21:14: POLL backgrd processID 967288
+2022/02/23-11:21:14: START: cosbench launched
+2022/02/23-11:21:14: OSD Settings:      "bluefs_buffered_io": "true",
+    "bluestore_cache_trim_max_skip_pinned": "1000",
+    "bluestore_rocksdb_options": "compression=kNoCompression,max_write_buffer_number=4,min_write_buffer_number_to_merge=1,recycle_log_file_num=4,write_buffer_size=268435456,writable_file_max_buffer_size=0,compaction_readahead_size=2097152,max_background_compactions=2,max_total_wal_size=1073741824",
+    "bluestore_rocksdb_options_annex": "",
+    "debug_objclass": "0/5",
+    "log_to_file": "true",
+    "mon_cluster_log_to_file": "true",
+    "osd_crush_initial_weight": "-1.000000",
+    "osd_deep_scrub_interval": "604800.000000",
+    "osd_deep_scrub_large_omap_object_key_threshold": "200000",
+    "osd_delete_sleep": "0.000000",
+    "osd_delete_sleep_hdd": "5.000000",
+    "osd_delete_sleep_hybrid": "1.000000",
+    "osd_delete_sleep_ssd": "1.000000",
+    "osd_max_backfills": "1",
+    "osd_max_scrubs": "1",
+    "osd_memory_target": "4294967296",
+    "osd_memory_target_autotune": "true",
+    "osd_memory_target_cgroup_limit_ratio": "0.800000",
+    "osd_op_thread_timeout": "15",
+    "osd_recovery_max_omap_entries_per_chunk": "8096",
+    "osd_scrub_auto_repair": "false",
+    "osd_scrub_auto_repair_num_errors": "5",
+    "osd_scrub_begin_hour": "0",
+    "osd_scrub_during_recovery": "false",
+    "osd_scrub_end_hour": "0",
+    "osd_scrub_max_interval": "604800.000000",
+    "osd_scrub_sleep": "0.000000",
+    "rocksdb_cache_size": "536870912",
+2022/02/23-11:21:14: RGW Settings:  
+2022/02/23-11:21:15: Accepted with ID: w9
+2022/02/23-11:21:15: COSbench jobID is: w9 - Started
+
+OSD swapon -s ...
+f11-h13-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f11-h17-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f11-h09-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f11-h05-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f11-h01-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f10-h13-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f10-h09-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f10-h01-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f10-h05-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f10-h17-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f10-h25-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+f10-h21-000-6049p.rdu2.scalelab.redhat.com | CHANGED | rc=0 | (stdout) 
+
+2022/02/23-11:21:18: %RAW USED 7.70; Pending GCs 
+
+--------------------------------------------------------
+
+2022/02/23-11:21:19: RESHARD Queue Length 1
+2022/02/23-11:21:19: RESHARD List []
+
+LA: 2022/02/23-11:21:19:   1.68, 0.72, 0.47
+
+RGW stats:          proc   %cpu %mem  vsz    rss     memused       memlimit
+f10-h01-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5301856 86552   15982301184   9223372036854771712
+f10-h05-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5301852 86972   15464452096   9223372036854771712
+f10-h09-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5302880 91860   16028463104   9223372036854771712
+f10-h13-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5302872 89900   16220721152   9223372036854771712
+f10-h17-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5302880 89652   16171864064   9223372036854771712
+f10-h21-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5301712 86336   15828713472   9223372036854771712
+f10-h25-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5300680 86832   16337309696   9223372036854771712
+f11-h01-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5302728 87312   16779530240   9223372036854771712
+f11-h05-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5301712 86424   15945928704   9223372036854771712
+f11-h09-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5455004 116148   15157346304   9223372036854771712
+f11-h13-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5498684 144668   16416743424   9223372036854771712
+f11-h17-000-6049p.rdu2.scalelab.redhat.com   radosgw 0.3 0.0 5491824 161016   16024125440   9223372036854771712
+
+OSD: 
+2022/02/23-11:21:25: f10-h01-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 4210168 289540
+ceph-osd         0.3  0.0 4705648 288008
+ceph-osd         0.3  0.1 3425644 496084
+ceph-osd         0.2  0.0 1529072 252452
+ceph-osd         0.3  0.0 1360236 248272
+ceph-osd         0.3  0.0 1873264 262032
+ceph-osd         0.3  0.0 4279660 291876
+ceph-osd         0.3  0.0 1551732 390856
+ceph-osd         0.2  0.0 1878384 250408
+ceph-osd         0.3  0.0 1544560 362512
+ceph-osd         0.3  0.0 1709564 353748
+ceph-osd         0.3  0.0 2471420 265284
+ceph-osd         0.3  0.0 3062128 281340
+ceph-osd         0.3  0.1 3950964 412460
+ceph-osd         0.3  0.0 1853948 270516
+ceph-osd         0.3  0.0 1924336 319256
+ceph-osd         0.3  0.0 2301296 262652
+ceph-osd         0.3  0.0 1768952 249320
+ceph-osd         0.3  0.0 1406456 245804
+ceph-osd         0.2  0.0 2712944 273932
+ceph-osd         0.3  0.0 2326892 272180
+ceph-osd         0.2  0.0 1921392 256364
+ceph-osd         0.3  0.0 2171248 267288
+ceph-osd         0.2  0.0 2845040 288764
+2022/02/23-11:21:25: f10-h05-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.2  0.0 3534552 296140
+ceph-osd         0.3  0.0 1938404 329616
+ceph-osd         0.2  0.0 2688236 282932
+ceph-osd         0.3  0.0 1885740 264404
+ceph-osd         0.3  0.0 1427920 253492
+ceph-osd         0.2  0.0 1279072 242340
+ceph-osd         0.3  0.0 1638956 261308
+ceph-osd         0.3  0.0 2085916 363344
+ceph-osd         0.3  0.0 1623264 260376
+ceph-osd         0.3  0.0 2510184 269424
+ceph-osd         0.2  0.0 1769840 261004
+ceph-osd         0.3  0.0 1852788 385168
+ceph-osd         0.3  0.0 1760624 268232
+ceph-osd         0.3  0.0 1607028 254528
+ceph-osd         0.3  0.0 2752884 272808
+ceph-osd         0.2  0.0 1622384 252264
+ceph-osd         0.3  0.0 1638768 266616
+ceph-osd         0.3  0.0 2380208 278308
+ceph-osd         0.3  0.0 1679728 320220
+ceph-osd         0.3  0.0 3379708 283076
+ceph-osd         0.3  0.0 4373872 295156
+ceph-osd         0.3  0.0 1599856 298000
+ceph-osd         0.3  0.1 3778932 414672
+ceph-osd         0.2  0.0 1466736 257936
+2022/02/23-11:21:25: f10-h09-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 2906852 289848
+ceph-osd         0.3  0.0 1268672 244208
+ceph-osd         0.3  0.0 2403564 283524
+ceph-osd         0.2  0.0 1880424 268104
+ceph-osd         0.3  0.0 1629648 341980
+ceph-osd         0.3  0.0 1852320 370864
+ceph-osd         0.3  0.0 2171384 257336
+ceph-osd         0.3  0.0 1520600 261172
+ceph-osd         0.3  0.0 2390540 336208
+ceph-osd         0.3  0.0 2262184 278752
+ceph-osd         0.3  0.0 2334064 290156
+ceph-osd         0.3  0.0 1976688 263356
+ceph-osd         0.3  0.0 2922864 283996
+ceph-osd         0.3  0.1 1521008 422332
+ceph-osd         0.2  0.0 1442164 251852
+ceph-osd         0.3  0.0 4048240 296260
+ceph-osd         0.3  0.1 3907952 429988
+ceph-osd         0.2  0.0 1669492 268052
+ceph-osd         0.3  0.0 5104120 312264
+ceph-osd         0.3  0.0 3196408 285632
+ceph-osd         0.3  0.1 3542584 402868
+ceph-osd         0.3  0.0 1651192 350916
+ceph-osd         0.2  0.0 1832312 267016
+ceph-osd         0.2  0.0 1809776 265264
+2022/02/23-11:21:26: f10-h13-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 2070144 271952
+ceph-osd         0.3  0.0 2072472 269276
+ceph-osd         0.3  0.0 1851576 365280
+ceph-osd         0.2  0.0 2611644 281592
+ceph-osd         0.3  0.0 1631992 256548
+ceph-osd         0.3  0.0 5713952 371744
+ceph-osd         0.3  0.1 1819132 434112
+ceph-osd         0.2  0.0 1693656 246672
+ceph-osd         0.3  0.0 1435152 359208
+ceph-osd         0.3  0.0 1872168 269600
+ceph-osd         0.3  0.0 1579380 251884
+ceph-osd         0.3  0.0 1839472 278020
+ceph-osd         0.3  0.0 1936884 393840
+ceph-osd         0.3  0.0 1313136 242928
+ceph-osd         0.3  0.0 2785652 291472
+ceph-osd         0.3  0.0 1923444 258592
+ceph-osd         0.3  0.0 2724212 286176
+ceph-osd         0.2  0.0 1585520 256024
+ceph-osd         0.3  0.0 1550704 261012
+ceph-osd         0.3  0.0 2873712 285992
+ceph-osd         0.3  0.0 2430324 385328
+ceph-osd         0.4  0.1 1737204 413408
+ceph-osd         0.3  0.0 2869620 280776
+ceph-osd         0.3  0.0 1630712 370568
+2022/02/23-11:21:26: f10-h17-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 1589764 266184
+ceph-osd         0.3  0.0 1423300 349748
+ceph-osd         0.2  0.0 1480932 258868
+ceph-osd         0.3  0.0 1266208 247220
+ceph-osd         0.3  0.1 2342236 404052
+ceph-osd         0.3  0.0 2105380 326368
+ceph-osd         0.3  0.0 1181176 242916
+ceph-osd         0.2  0.0 1458136 249100
+ceph-osd         0.3  0.0 1702416 285840
+ceph-osd         0.3  0.0 3656732 298296
+ceph-osd         0.2  0.0 4415856 282152
+ceph-osd         0.3  0.0 2849136 285788
+ceph-osd         0.3  0.0 2838896 285996
+ceph-osd         0.3  0.0 1646964 262768
+ceph-osd         0.3  0.0 2633072 282340
+ceph-osd         0.3  0.0 2849132 368064
+ceph-osd         0.3  0.0 2525692 284844
+ceph-osd         0.3  0.0 1721708 342892
+ceph-osd         0.3  0.1 1931764 454836
+ceph-osd         0.3  0.0 5904756 317884
+ceph-osd         0.3  0.0 2152820 270760
+ceph-osd         0.3  0.0 3959152 299552
+ceph-osd         0.4  0.0 1535340 357700
+ceph-osd         0.3  0.0 1439084 248684
+2022/02/23-11:21:26: f10-h21-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 3661516 300204
+ceph-osd         0.2  0.0 2022332 267316
+ceph-osd         0.3  0.0 2538536 283620
+ceph-osd         0.3  0.0 3050024 281444
+ceph-osd         0.3  0.0 3393328 293196
+ceph-osd         0.3  0.0 2734172 286768
+ceph-osd         0.3  0.1 1792560 397360
+ceph-osd         0.3  0.1 3041300 408580
+ceph-osd         0.2  0.0 1382752 257708
+ceph-osd         0.2  0.0 1370468 248472
+ceph-osd         0.3  0.1 1774956 470104
+ceph-osd         0.3  0.1 3190128 456088
+ceph-osd         0.3  0.0 1838448 272068
+ceph-osd         0.2  0.0 2078196 270432
+ceph-osd         0.3  0.0 1499504 263424
+ceph-osd         0.3  0.0 2187640 288084
+ceph-osd         0.3  0.0 1735028 254716
+ceph-osd         0.3  0.0 1281392 253216
+ceph-osd         0.3  0.0 1642868 379040
+ceph-osd         0.3  0.0 3663220 303232
+ceph-osd         0.2  0.0 1659252 269832
+ceph-osd         0.3  0.0 1817964 271444
+ceph-osd         0.3  0.0 2399604 269124
+ceph-osd         0.2  0.0 1743212 265640
+2022/02/23-11:21:26: f10-h25-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.1 1565032 436368
+ceph-osd         0.2  0.0 2920816 282520
+ceph-osd         0.3  0.0 1239540 250904
+ceph-osd         0.2  0.0 1940844 272096
+ceph-osd         0.3  0.1 3316216 429572
+ceph-osd         0.3  0.0 1674600 271676
+ceph-osd         0.3  0.0 3680620 294236
+ceph-osd         0.3  0.0 3507564 291508
+ceph-osd         0.3  0.0 1591656 351324
+ceph-osd         0.3  0.0 1860088 339424
+ceph-osd         0.3  0.0 3339632 393036
+ceph-osd         0.3  0.1 4718064 434664
+ceph-osd         0.3  0.0 1737068 268924
+ceph-osd         0.3  0.0 1602924 265052
+ceph-osd         0.3  0.0 1480052 328936
+ceph-osd         0.2  0.0 1304940 242312
+ceph-osd         0.3  0.0 1400168 379892
+ceph-osd         0.3  0.0 2089324 277780
+ceph-osd         0.3  0.0 1284456 242888
+ceph-osd         0.3  0.0 4960624 299672
+ceph-osd         0.3  0.0 1696108 261144
+ceph-osd         0.3  0.0 3922288 296816
+ceph-osd         0.3  0.0 3007852 287884
+ceph-osd         0.2  0.0 1305968 253052
+2022/02/23-11:21:26: f11-h01-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 4638340 309836
+ceph-osd         0.3  0.0 2833300 283516
+ceph-osd         0.3  0.0 1945788 280564
+ceph-osd         0.3  0.0 2755056 305864
+ceph-osd         0.3  0.1 1476848 442948
+ceph-osd         0.3  0.0 1446000 326380
+ceph-osd         0.2  0.0 2567612 293872
+ceph-osd         0.3  0.0 1589144 265740
+ceph-osd         0.3  0.0 1452432 278872
+ceph-osd         0.3  0.0 1365148 258956
+ceph-osd         0.3  0.0 3832316 282052
+ceph-osd         0.3  0.1 2277748 444672
+ceph-osd         0.3  0.0 5445112 386352
+ceph-osd         0.3  0.0 4431216 302820
+ceph-osd         0.3  0.0 1445232 245876
+ceph-osd         0.3  0.0 2532724 276484
+ceph-osd         0.3  0.0 2595324 295916
+ceph-osd         0.3  0.0 4182380 299696
+ceph-osd         0.3  0.1 2496880 456460
+ceph-osd         0.3  0.0 1419636 252512
+ceph-osd         0.3  0.1 1595760 422240
+ceph-osd         0.3  0.0 2614640 286492
+ceph-osd         0.3  0.1 2489712 454972
+ceph-osd         0.3  0.0 1714544 262700
+2022/02/23-11:21:27: f11-h05-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 1353380 262132
+ceph-osd         0.3  0.0 2577928 290204
+ceph-osd         0.3  0.0 1545400 270556
+ceph-osd         0.3  0.0 1840628 392072
+ceph-osd         0.3  0.0 2565468 285488
+ceph-osd         0.2  0.0 1843232 276252
+ceph-osd         0.2  0.0 1247732 245444
+ceph-osd         0.3  0.0 1850328 269864
+ceph-osd         0.2  0.0 1404572 275852
+ceph-osd         0.2  0.0 2445604 290796
+ceph-osd         0.2  0.0 1739256 263028
+ceph-osd         0.3  0.0 1965424 343580
+ceph-osd         0.3  0.0 1458544 272628
+ceph-osd         0.3  0.0 1773052 267404
+ceph-osd         0.3  0.0 4190580 297676
+ceph-osd         0.2  0.0 2150904 282112
+ceph-osd         0.3  0.0 2048368 364568
+ceph-osd         0.3  0.0 1434996 274356
+ceph-osd         0.3  0.0 1925624 341720
+ceph-osd         0.3  0.1 3742060 421516
+ceph-osd         0.3  0.0 2110832 278188
+ceph-osd         0.3  0.0 1764716 338976
+ceph-osd         0.3  0.0 4646396 305976
+ceph-osd         0.3  0.1 2105708 430188
+2022/02/23-11:21:27: f11-h09-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 2670328 288664
+ceph-osd         0.3  0.0 1902088 353592
+ceph-osd         0.2  0.0 1251456 267460
+ceph-osd         0.3  0.0 1287820 244804
+ceph-osd         0.3  0.0 1519268 263752
+ceph-osd         0.3  0.0 3349712 301552
+ceph-osd         0.2  0.0 4268772 305468
+ceph-osd         0.3  0.0 1212620 252288
+ceph-osd         0.3  0.0 1523324 264156
+ceph-osd         0.2  0.0 1499504 248684
+ceph-osd         0.3  0.0 1468784 267604
+ceph-osd         0.3  0.0 1608184 285968
+ceph-osd         0.3  0.0 1802668 270896
+ceph-osd         0.3  0.0 2413936 287184
+ceph-osd         0.3  0.0 1486192 262600
+ceph-osd         0.3  0.0 1929648 274932
+ceph-osd         0.2  0.0 2043248 276344
+ceph-osd         0.2  0.0 1910128 255640
+ceph-osd         0.3  0.0 2508144 326432
+ceph-osd         0.3  0.0 1966452 341056
+ceph-osd         0.2  0.0 5488124 315220
+ceph-osd         0.2  0.0 2503020 283800
+ceph-osd         0.3  0.0 2939248 286400
+ceph-osd         0.3  0.0 3340660 367268
+2022/02/23-11:21:27: f11-h13-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 1553056 329488
+ceph-osd         0.3  0.0 1534916 265948
+ceph-osd         0.3  0.0 1902632 286900
+ceph-osd         0.3  0.0 1435176 259308
+ceph-osd         0.3  0.1 2092492 408232
+ceph-osd         0.3  0.0 1613916 278844
+ceph-osd         0.3  0.0 2276916 373120
+ceph-osd         0.3  0.1 3848216 395644
+ceph-osd         0.3  0.0 1305956 249340
+ceph-osd         0.3  0.0 3261800 284228
+ceph-osd         0.2  0.0 1823084 267568
+ceph-osd         0.3  0.0 1693040 336856
+ceph-osd         0.3  0.0 2330992 274296
+ceph-osd         0.3  0.0 2619756 283684
+ceph-osd         0.3  0.0 2101612 329216
+ceph-osd         0.3  0.0 1790196 286476
+ceph-osd         0.3  0.1 2727280 496116
+ceph-osd         0.3  0.0 1932656 276932
+ceph-osd         0.2  0.0 1571324 262692
+ceph-osd         0.3  0.0 1978740 267160
+ceph-osd         0.3  0.0 1371500 258540
+ceph-osd         0.3  0.1 4716908 422028
+ceph-osd         0.3  0.0 1931640 268216
+ceph-osd         0.3  0.0 2168312 348684
+2022/02/23-11:21:27: f11-h17-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.0 3027620 283356
+ceph-osd         0.2  0.0 1259456 255400
+ceph-osd         0.3  0.0 2093092 283448
+ceph-osd         0.3  0.0 1748520 256140
+ceph-osd         0.3  0.0 1260336 332456
+ceph-osd         0.3  0.0 1485024 327320
+ceph-osd         0.3  0.1 1713716 503988
+ceph-osd         0.3  0.0 1994716 265184
+ceph-osd         0.3  0.0 3144100 293980
+ceph-osd         0.3  0.0 1777004 270000
+ceph-osd         0.2  0.0 1636716 268848
+ceph-osd         0.2  0.0 2368876 298144
+ceph-osd         0.3  0.1 5663228 404432
+ceph-osd         0.3  0.0 2802036 287276
+ceph-osd         0.3  0.0 1569132 298952
+ceph-osd         0.3  0.0 1315184 256756
+ceph-osd         0.3  0.0 1297912 301264
+ceph-osd         0.3  0.0 1509748 265696
+ceph-osd         0.3  0.0 4320628 325292
+ceph-osd         0.3  0.0 2927984 293564
+ceph-osd         0.3  0.0 1277428 253132
+ceph-osd         0.2  0.0 1805680 255096
+ceph-osd         0.3  0.0 2225660 290432
+ceph-osd         0.4  0.0 4216176 309624
+
+Site2 buckets (rgw):
+2022/02/23-11:21:59:         "bucket": "mycontainers1",
+        "num_shards": 11,
+                "num_objects": 239817
+        "bucket": "mycontainers3",
+        "num_shards": 11,
+        "bucket": "mycontainers4",
+        "num_shards": 11,
+        "bucket": "mycontainers2",
+        "num_shards": 11,
+        "bucket": "mycontainers5",
+        "num_shards": 11,
+
+Cluster status
+  cluster:
+    id:     dbaa9de4-900a-11ec-9bec-ac1f6b2d5d2a
+    health: HEALTH_OK
+ 
+  services:
+    mon: 3 daemons, quorum f13-h26-b04-5039ms.rdu2.scalelab.redhat.com,f13-h26-b08-5039ms,f13-h26-b07-5039ms (age 5d)
+    mgr: f13-h26-b04-5039ms.rdu2.scalelab.redhat.com.sfcijj(active, since 5d), standbys: f13-h26-b07-5039ms.htnyxh, f13-h26-b08-5039ms.wtoans
+    osd: 288 osds: 288 up (since 5d), 288 in (since 5d)
+    rgw: 12 daemons active (12 hosts, 1 zones)
+ 
+  data:
+    pools:   7 pools, 9729 pgs
+    objects: 440.64k objects, 6.2 GiB
+    usage:   44 TiB used, 524 TiB / 567 TiB avail
+    pgs:     9729 active+clean
+ 
+  io:
+    client:   62 MiB/s rd, 216 MiB/s wr, 63.78k op/s rd, 157.89k op/s wr
+ 
+2022/02/23-11:21:59: ceph df detail --- RAW STORAGE ---
+CLASS     SIZE    AVAIL    USED  RAW USED  %RAW USED
+hdd    567 TiB  524 TiB  44 TiB    44 TiB       7.70
+TOTAL  567 TiB  524 TiB  44 TiB    44 TiB       7.70
+ 
+--- POOLS ---
+POOL                       ID   PGS   STORED   (DATA)  (OMAP)  OBJECTS     USED   (DATA)  (OMAP)  %USED  MAX AVAIL  QUOTA OBJECTS  QUOTA BYTES    DIRTY  USED COMPR  UNDER COMPR
+device_health_metrics       1     1      0 B      0 B     0 B      315      0 B      0 B     0 B      0    165 TiB            N/A          N/A      315         0 B          0 B
+default.rgw.control        17   256      0 B      0 B     0 B        8      0 B      0 B     0 B      0    165 TiB            N/A          N/A        8         0 B          0 B
+default.rgw.buckets.data   18  8192   11 GiB   11 GiB     0 B  440.06k   17 GiB   17 GiB     0 B      0    330 TiB            N/A          N/A  440.06k         0 B          0 B
+default.rgw.buckets.index  19   512      0 B      0 B     0 B       55      0 B      0 B     0 B      0    165 TiB            N/A          N/A       55         0 B          0 B
+default.rgw.log            20   256  3.6 KiB  3.6 KiB     0 B      177  408 KiB  408 KiB     0 B      0    165 TiB            N/A          N/A      177         0 B          0 B
+default.rgw.meta           21   256  3.2 KiB  3.2 KiB     0 B       15  168 KiB  168 KiB     0 B      0    165 TiB            N/A          N/A       15         0 B          0 B
+.rgw.root                  22   256  1.3 KiB  1.3 KiB     0 B        4   48 KiB   48 KiB     0 B      0    165 TiB            N/A          N/A        4         0 B          0 B
+
+Site2 pool PG counts:
+pool 1 'device_health_metrics' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 1 pgp_num 1 autoscale_mode on last_change 2252 flags hashpspool stripe_width 0 pg_num_min 1 application mgr_devicehealth,rgw
+pool 17 'default.rgw.control' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2253 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 18 'default.rgw.buckets.data' erasure profile myprofile size 6 min_size 5 crush_rule 1 object_hash rjenkins pg_num 8192 pgp_num 8192 autoscale_mode on last_change 2278 lfor 0/0/2276 flags hashpspool stripe_width 16384 pg_num_min 8192 application rgw
+pool 19 'default.rgw.buckets.index' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 512 pgp_num 512 autoscale_mode on last_change 2255 flags hashpspool stripe_width 0 pg_num_min 512 application rgw
+pool 20 'default.rgw.log' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2256 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 21 'default.rgw.meta' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2257 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 22 '.rgw.root' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2258 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+
+
+Site2 buckets df
+2022/02/23-11:22:00: POOL                       ID   PGS   STORED  OBJECTS     USED  %USED  MAX AVAIL
+default.rgw.control        17   256      0 B        8      0 B      0    165 TiB
+default.rgw.buckets.data   18  8192   11 GiB  440.06k   17 GiB      0    330 TiB
+default.rgw.buckets.index  19   512      0 B       55      0 B      0    165 TiB
+default.rgw.log            20   256  3.6 KiB      177  408 KiB      0    165 TiB
+default.rgw.meta           21   256  3.2 KiB       15  168 KiB      0    165 TiB
+
+OSD/RGW free:
+2022/02/23-11:22:00: f10-h01-000-6049p.rdu2.scalelab.redhat.com                total        used        free      shared  buff/cache   available
+Mem:          376Gi        14Gi       350Gi       4.2Gi        12Gi       355Gi
+Swap:            0B          0B          0B
+
+Ceph osd df:
+2022/02/23-11:22:00: ID   CLASS  WEIGHT   REWEIGHT  SIZE     RAW USE  DATA     OMAP  META     AVAIL    %USE  VAR   PGS  STATUS
+264    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  180      up
+265    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  181      up
+266    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  341 MiB  1.8 TiB  7.70  1.00  179      up
+267    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  180      up
+268    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  157 MiB  1.8 TiB  7.70  1.00  195      up
+269    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  143 MiB  1.8 TiB  7.70  1.00  178      up
+270    hdd  1.97049   1.00000  2.0 TiB  155 GiB  156 MiB   0 B  146 MiB  1.8 TiB  7.70  1.00  187      up
+271    hdd  1.97049   1.00000  2.0 TiB  155 GiB  155 MiB   0 B  272 MiB  1.8 TiB  7.70  1.00  182      up
+272    hdd  1.97049   1.00000  2.0 TiB  155 GiB  157 MiB   0 B  146 MiB  1.8 TiB  7.70  1.00  186      up
+273    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  401 MiB  1.8 TiB  7.70  1.00  186      up
+274    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  242 MiB  1.8 TiB  7.70  1.00  182      up
+275    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  165 MiB  1.8 TiB  7.70  1.00  195      up
+276    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  155 MiB  1.8 TiB  7.70  1.00  190      up
+277    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  266 MiB  1.8 TiB  7.70  1.00  193      up
+278    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  294 MiB  1.8 TiB  7.70  1.00  195      up
+279    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  200 MiB  1.8 TiB  7.70  1.00  181      up
+280    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  185      up
+281    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  187      up
+282    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  150 MiB  1.8 TiB  7.70  1.00  184      up
+283    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  198      up
+284    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  162 MiB  1.8 TiB  7.70  1.00  187      up
+285    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  169 MiB  1.8 TiB  7.70  1.00  188      up
+286    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  162 MiB  1.8 TiB  7.70  1.00  180      up
+287    hdd  1.97049   1.00000  2.0 TiB  155 GiB  169 MiB   0 B  157 MiB  1.8 TiB  7.70  1.00  194      up
+  5    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  207 MiB  1.8 TiB  7.70  1.00  191      up
+ 16    hdd  1.97049   1.00000  2.0 TiB  155 GiB  156 MiB   0 B  261 MiB  1.8 TiB  7.70  1.00  186      up
+ 27    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  191      up
+ 38    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  189      up
+ 48    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  197      up
+ 58    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  193      up
+ 67    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  149 MiB  1.8 TiB  7.70  1.00  181      up
+ 77    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  192 MiB  1.8 TiB  7.70  1.00  185      up
+ 87    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  269 MiB  1.8 TiB  7.70  1.00  192      up
+ 99    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  157 MiB  1.8 TiB  7.70  1.00  187      up
+109    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  155 MiB  1.8 TiB  7.70  1.00  195      up
+119    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  208 MiB  1.8 TiB  7.70  1.00  191      up
+129    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  186      up
+139    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  184      up
+149    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  277 MiB  1.8 TiB  7.70  1.00  183      up
+158    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  181      up
+168    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  251 MiB  1.8 TiB  7.70  1.00  187      up
+179    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  189      up
+189    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  177      up
+199    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  280 MiB  1.8 TiB  7.70  1.00  180      up
+209    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  273 MiB  1.8 TiB  7.70  1.00  186      up
+219    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  295 MiB  1.8 TiB  7.70  1.00  191      up
+228    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  164 MiB  1.8 TiB  7.70  1.00  183      up
+239    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  165 MiB  1.8 TiB  7.70  1.00  188      up
+  8    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  219 MiB  1.8 TiB  7.70  1.00  185      up
+ 18    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  212 MiB  1.8 TiB  7.70  1.00  187      up
+ 28    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  159 MiB  1.8 TiB  7.70  1.00  189      up
+ 37    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  272 MiB  1.8 TiB  7.70  1.00  186      up
+ 47    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  286 MiB  1.8 TiB  7.70  1.00  185      up
+ 57    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  188      up
+ 69    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  144 MiB  1.8 TiB  7.70  1.00  187      up
+ 79    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  264 MiB  1.8 TiB  7.70  1.00  183      up
+ 89    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  189      up
+ 98    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  149 MiB  1.8 TiB  7.70  1.00  185      up
+108    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  193      up
+118    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  196      up
+128    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  159 MiB  1.8 TiB  7.70  1.00  187      up
+137    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  171 MiB  1.8 TiB  7.70  1.00  185      up
+147    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  220 MiB  1.8 TiB  7.70  1.00  181      up
+157    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  247 MiB  1.8 TiB  7.70  1.00  184      up
+167    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  190      up
+177    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  179      up
+187    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  170 MiB  1.8 TiB  7.70  1.00  198      up
+196    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  282 MiB  1.8 TiB  7.70  1.00  183      up
+205    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  179      up
+215    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  189      up
+227    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  303 MiB  1.8 TiB  7.70  1.00  184      up
+237    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  289 MiB  1.8 TiB  7.70  1.00  189      up
+  2    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  287 MiB  1.8 TiB  7.70  1.00  187      up
+ 11    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  190      up
+ 21    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  150 MiB  1.8 TiB  7.70  1.00  178      up
+ 31    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  195      up
+ 40    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  180      up
+ 50    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  181      up
+ 60    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  248 MiB  1.8 TiB  7.70  1.00  187      up
+ 70    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  510 MiB  1.8 TiB  7.70  1.00  190      up
+ 80    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  197      up
+ 90    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  258 MiB  1.8 TiB  7.70  1.00  183      up
+100    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  153 MiB  1.8 TiB  7.70  1.00  186      up
+110    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  242 MiB  1.8 TiB  7.70  1.00  189      up
+120    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  186      up
+130    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  163 MiB  1.8 TiB  7.70  1.00  176      up
+140    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  221 MiB  1.8 TiB  7.70  1.00  193      up
+150    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  310 MiB  1.8 TiB  7.70  1.00  187      up
+160    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  185      up
+170    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  265 MiB  1.8 TiB  7.70  1.00  179      up
+180    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  159 MiB  1.8 TiB  7.70  1.00  178      up
+190    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  163 MiB  1.8 TiB  7.70  1.00  188      up
+200    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  268 MiB  1.8 TiB  7.70  1.00  186      up
+210    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  192      up
+220    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  159 MiB  1.8 TiB  7.70  1.00  189      up
+230    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  182      up
+  4    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  226 MiB  1.8 TiB  7.70  1.00  192      up
+ 14    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  282 MiB  1.8 TiB  7.70  1.00  184      up
+ 25    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  221 MiB  1.8 TiB  7.70  1.00  182      up
+ 35    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  164 MiB  1.8 TiB  7.70  1.00  195      up
+ 46    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  322 MiB  1.8 TiB  7.70  1.00  183      up
+ 56    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  149 MiB  1.8 TiB  7.70  1.00  184      up
+ 66    hdd  1.97049   1.00000  2.0 TiB  155 GiB  157 MiB   0 B  143 MiB  1.8 TiB  7.70  1.00  186      up
+ 76    hdd  1.97049   1.00000  2.0 TiB  155 GiB  169 MiB   0 B  297 MiB  1.8 TiB  7.70  1.00  189      up
+ 86    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  234 MiB  1.8 TiB  7.70  1.00  187      up
+ 96    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  167 MiB  1.8 TiB  7.70  1.00  189      up
+106    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  155 MiB  1.8 TiB  7.70  1.00  197      up
+116    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  244 MiB  1.8 TiB  7.70  1.00  180      up
+126    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  272 MiB  1.8 TiB  7.70  1.00  191      up
+136    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  162 MiB  1.8 TiB  7.70  1.00  182      up
+146    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  222 MiB  1.8 TiB  7.70  1.00  186      up
+156    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  169 MiB  1.8 TiB  7.70  1.00  193      up
+166    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  183      up
+176    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  183 MiB  1.8 TiB  7.70  1.00  191      up
+186    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  192      up
+197    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  194      up
+207    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  187      up
+217    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  185      up
+226    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  164 MiB  1.8 TiB  7.70  1.00  193      up
+235    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  191      up
+  6    hdd  1.97049   1.00000  2.0 TiB  155 GiB  157 MiB   0 B  263 MiB  1.8 TiB  7.70  1.00  191      up
+ 15    hdd  1.97049   1.00000  2.0 TiB  155 GiB  156 MiB   0 B  142 MiB  1.8 TiB  7.70  1.00  180      up
+ 26    hdd  1.97049   1.00000  2.0 TiB  155 GiB  169 MiB   0 B  297 MiB  1.8 TiB  7.70  1.00  195      up
+ 36    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  181      up
+ 45    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  169 MiB  1.8 TiB  7.70  1.00  188      up
+ 55    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  264 MiB  1.8 TiB  7.70  1.00  187      up
+ 65    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  172 MiB  1.8 TiB  7.70  1.00  188      up
+ 75    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  272 MiB  1.8 TiB  7.70  1.00  186      up
+ 84    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  188      up
+ 94    hdd  1.97049   1.00000  2.0 TiB  155 GiB  157 MiB   0 B  143 MiB  1.8 TiB  7.70  1.00  193      up
+104    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  157 MiB  1.8 TiB  7.70  1.00  194      up
+114    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  188      up
+125    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  150 MiB  1.8 TiB  7.70  1.00  186      up
+134    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  145 MiB  1.8 TiB  7.70  1.00  186      up
+144    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  150 MiB  1.8 TiB  7.70  1.00  192      up
+155    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  366 MiB  1.8 TiB  7.70  1.00  194      up
+164    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  261 MiB  1.8 TiB  7.70  1.00  187      up
+175    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  184      up
+185    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  188      up
+195    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  335 MiB  1.8 TiB  7.70  1.00  191      up
+206    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  433 MiB  1.8 TiB  7.70  1.00  189      up
+216    hdd  1.97049   1.00000  2.0 TiB  155 GiB  156 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  180      up
+225    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  186      up
+236    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  180      up
+240    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  311 MiB  1.8 TiB  7.70  1.00  182      up
+241    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  196      up
+242    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  194      up
+243    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  165 MiB  1.8 TiB  7.70  1.00  187      up
+244    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  286 MiB  1.8 TiB  7.70  1.00  187      up
+245    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  197      up
+246    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  163 MiB  1.8 TiB  7.70  1.00  196      up
+247    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  195      up
+248    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  238 MiB  1.8 TiB  7.70  1.00  180      up
+249    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  211 MiB  1.8 TiB  7.70  1.00  188      up
+250    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  259 MiB  1.8 TiB  7.70  1.00  183      up
+251    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  264 MiB  1.8 TiB  7.70  1.00  182      up
+252    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  159 MiB  1.8 TiB  7.70  1.00  180      up
+253    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  188      up
+254    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  218 MiB  1.8 TiB  7.70  1.00  191      up
+255    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  180      up
+256    hdd  1.97049   1.00000  2.0 TiB  155 GiB  157 MiB   0 B  272 MiB  1.8 TiB  7.70  1.00  188      up
+257    hdd  1.97049   1.00000  2.0 TiB  155 GiB  157 MiB   0 B  148 MiB  1.8 TiB  7.70  1.00  194      up
+258    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  143 MiB  1.8 TiB  7.70  1.00  181      up
+259    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  157 MiB  1.8 TiB  7.70  1.00  183      up
+260    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  185      up
+261    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  157 MiB  1.8 TiB  7.70  1.00  182      up
+262    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  181      up
+263    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  155 MiB  1.8 TiB  7.70  1.00  202      up
+  1    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  194      up
+ 12    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  288 MiB  1.8 TiB  7.70  1.00  181      up
+ 22    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  159 MiB  1.8 TiB  7.70  1.00  191      up
+ 32    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  194      up
+ 42    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  311 MiB  1.8 TiB  7.70  1.00  194      up
+ 52    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  181      up
+ 62    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  302 MiB  1.8 TiB  7.70  1.00  188      up
+ 73    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  155 MiB  1.8 TiB  7.70  1.00  181      up
+ 83    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  299 MiB  1.8 TiB  7.70  1.00  186      up
+ 93    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  190      up
+103    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  190      up
+113    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  267 MiB  1.8 TiB  7.70  1.00  193      up
+123    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  326 MiB  1.8 TiB  7.70  1.00  183      up
+133    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  222 MiB  1.8 TiB  7.70  1.00  173      up
+143    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  295 MiB  1.8 TiB  7.70  1.00  195      up
+153    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  156 MiB  1.8 TiB  7.70  1.00  176      up
+163    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  179 MiB  1.8 TiB  7.70  1.00  182      up
+173    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  182      up
+183    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  151 MiB  1.8 TiB  7.70  1.00  178      up
+193    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  293 MiB  1.8 TiB  7.70  1.00  175      up
+203    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  228 MiB  1.8 TiB  7.70  1.00  191      up
+212    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  191      up
+222    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  177      up
+231    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  165 MiB  1.8 TiB  7.70  1.00  188      up
+  3    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  232 MiB  1.8 TiB  7.70  1.00  190      up
+ 13    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  272 MiB  1.8 TiB  7.70  1.00  189      up
+ 23    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  192      up
+ 33    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  270 MiB  1.8 TiB  7.70  1.00  183      up
+ 43    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  211 MiB  1.8 TiB  7.70  1.00  181      up
+ 53    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  260 MiB  1.8 TiB  7.70  1.00  184      up
+ 63    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  157 MiB  1.8 TiB  7.70  1.00  188      up
+ 72    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  222 MiB  1.8 TiB  7.70  1.00  185      up
+ 82    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  165 MiB  1.8 TiB  7.70  1.00  184      up
+ 92    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  295 MiB  1.8 TiB  7.70  1.00  187      up
+102    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  188      up
+112    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  179      up
+122    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  272 MiB  1.8 TiB  7.70  1.00  191      up
+132    hdd  1.97049   1.00000  2.0 TiB  155 GiB  169 MiB   0 B  171 MiB  1.8 TiB  7.70  1.00  188      up
+142    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  193      up
+152    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  153 MiB  1.8 TiB  7.70  1.00  177      up
+162    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  181      up
+172    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  286 MiB  1.8 TiB  7.70  1.00  186      up
+182    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  186      up
+192    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  149 MiB  1.8 TiB  7.70  1.00  179      up
+202    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  215 MiB  1.8 TiB  7.70  1.00  199      up
+213    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  278 MiB  1.8 TiB  7.70  1.00  190      up
+223    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  189      up
+233    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  190      up
+  9    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  189      up
+ 19    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  178      up
+ 29    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  159 MiB  1.8 TiB  7.70  1.00  189      up
+ 39    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  156 MiB  1.8 TiB  7.70  1.00  198      up
+ 49    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  186      up
+ 59    hdd  1.97049   1.00000  2.0 TiB  155 GiB  157 MiB   0 B  175 MiB  1.8 TiB  7.70  1.00  179      up
+ 68    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  213 MiB  1.8 TiB  7.70  1.00  189      up
+ 78    hdd  1.97049   1.00000  2.0 TiB  155 GiB  169 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  189      up
+ 88    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  180      up
+ 97    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  211 MiB  1.8 TiB  7.70  1.00  187      up
+107    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  169 MiB  1.8 TiB  7.70  1.00  194      up
+117    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  232 MiB  1.8 TiB  7.70  1.00  183      up
+127    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  279 MiB  1.8 TiB  7.70  1.00  186      up
+138    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  178      up
+148    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  163 MiB  1.8 TiB  7.70  1.00  192      up
+159    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  194      up
+169    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  186      up
+178    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  158 MiB  1.8 TiB  7.70  1.00  188      up
+188    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  192      up
+198    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  187      up
+208    hdd  1.97049   1.00000  2.0 TiB  155 GiB  162 MiB   0 B  284 MiB  1.8 TiB  7.70  1.00  179      up
+218    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  185      up
+229    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  149 MiB  1.8 TiB  7.70  1.00  180      up
+238    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  153 MiB  1.8 TiB  7.70  1.00  178      up
+  0    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  213 MiB  1.8 TiB  7.70  1.00  192      up
+ 10    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  188      up
+ 20    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  191      up
+ 30    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  181      up
+ 41    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  167 MiB  1.8 TiB  7.70  1.00  184      up
+ 51    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  155 MiB  1.8 TiB  7.70  1.00  196      up
+ 61    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  193      up
+ 71    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  266 MiB  1.8 TiB  7.70  1.00  182      up
+ 81    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  146 MiB  1.8 TiB  7.70  1.00  181      up
+ 91    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  204 MiB  1.8 TiB  7.70  1.00  187      up
+101    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  154 MiB  1.8 TiB  7.70  1.00  181      up
+111    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  162 MiB  1.8 TiB  7.70  1.00  184      up
+121    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  257 MiB  1.8 TiB  7.70  1.00  184      up
+131    hdd  1.97049   1.00000  2.0 TiB  155 GiB  159 MiB   0 B  156 MiB  1.8 TiB  7.70  1.00  194      up
+141    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  242 MiB  1.8 TiB  7.70  1.00  192      up
+151    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  238 MiB  1.8 TiB  7.70  1.00  192      up
+161    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  173 MiB  1.8 TiB  7.70  1.00  186      up
+171    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  161 MiB  1.8 TiB  7.70  1.00  185      up
+181    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  162 MiB  1.8 TiB  7.70  1.00  185      up
+191    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  222 MiB  1.8 TiB  7.70  1.00  183      up
+201    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  149 MiB  1.8 TiB  7.70  1.00  184      up
+211    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  211 MiB  1.8 TiB  7.70  1.00  185      up
+221    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  297 MiB  1.8 TiB  7.70  1.00  184      up
+232    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  338 MiB  1.8 TiB  7.70  1.00  193      up
+  7    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  160 MiB  1.8 TiB  7.70  1.00  184      up
+ 17    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  144 MiB  1.8 TiB  7.70  1.00  179      up
+ 24    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  184      up
+ 34    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  206 MiB  1.8 TiB  7.70  1.00  190      up
+ 44    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  167 MiB  1.8 TiB  7.70  1.00  191      up
+ 54    hdd  1.97049   1.00000  2.0 TiB  155 GiB  171 MiB   0 B  304 MiB  1.8 TiB  7.70  1.00  193      up
+ 64    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  150 MiB  1.8 TiB  7.70  1.00  189      up
+ 74    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  155 MiB  1.8 TiB  7.70  1.00  177      up
+ 85    hdd  1.97049   1.00000  2.0 TiB  155 GiB  165 MiB   0 B  286 MiB  1.8 TiB  7.70  1.00  190      up
+ 95    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  185      up
+105    hdd  1.97049   1.00000  2.0 TiB  155 GiB  163 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  183      up
+115    hdd  1.97049   1.00000  2.0 TiB  155 GiB  161 MiB   0 B  163 MiB  1.8 TiB  7.70  1.00  198      up
+124    hdd  1.97049   1.00000  2.0 TiB  155 GiB  160 MiB   0 B  152 MiB  1.8 TiB  7.70  1.00  181      up
+135    hdd  1.97049   1.00000  2.0 TiB  155 GiB  158 MiB   0 B  145 MiB  1.8 TiB  7.70  1.00  176      up
+145    hdd  1.97049   1.00000  2.0 TiB  155 GiB  156 MiB   0 B  217 MiB  1.8 TiB  7.70  1.00  184      up
+154    hdd  1.97049   1.00000  2.0 TiB  155 GiB  155 MiB   0 B  204 MiB  1.8 TiB  7.70  1.00  179      up
+165    hdd  1.97049   1.00000  2.0 TiB  155 GiB  156 MiB   0 B  361 MiB  1.8 TiB  7.70  1.00  182      up
+174    hdd  1.97049   1.00000  2.0 TiB  155 GiB  170 MiB   0 B  167 MiB  1.8 TiB  7.70  1.00  190      up
+184    hdd  1.97049   1.00000  2.0 TiB  155 GiB  166 MiB   0 B  168 MiB  1.8 TiB  7.70  1.00  180      up
+194    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  166 MiB  1.8 TiB  7.70  1.00  178      up
+204    hdd  1.97049   1.00000  2.0 TiB  155 GiB  156 MiB   0 B  267 MiB  1.8 TiB  7.70  1.00  185      up
+214    hdd  1.97049   1.00000  2.0 TiB  155 GiB  167 MiB   0 B  345 MiB  1.8 TiB  7.70  1.00  193      up
+224    hdd  1.97049   1.00000  2.0 TiB  155 GiB  168 MiB   0 B  170 MiB  1.8 TiB  7.70  1.00  183      up
+234    hdd  1.97049   1.00000  2.0 TiB  155 GiB  164 MiB   0 B  174 MiB  1.8 TiB  7.70  1.00  192      up
+                        TOTAL  567 TiB   44 TiB   46 GiB   0 B   56 GiB  524 TiB  7.70                   
+MIN/MAX VAR: 1.00/1.00  STDDEV: 0
+2022/02/23-11:23:05: \n osd_memory_targets: osd.1: 4294967296
+osd.2: 4294967296
+osd.3: 4294967296
+osd.4: 4294967296
+osd.5: 4294967296
+osd.6: 4294967296
+osd.7: 4294967296
+osd.8: 4294967296
+osd.9: 4294967296
+osd.10: 4294967296
+osd.11: 4294967296
+osd.12: 4294967296
+osd.13: 4294967296
+osd.14: 4294967296
+osd.15: 4294967296
+osd.16: 4294967296
+osd.17: 4294967296
+osd.18: 4294967296
+osd.19: 4294967296
+osd.20: 4294967296
+osd.21: 4294967296
+osd.22: 4294967296
+osd.23: 4294967296
+osd.24: 4294967296
+osd.25: 4294967296
+osd.26: 4294967296
+osd.27: 4294967296
+osd.28: 4294967296
+osd.29: 4294967296
+osd.30: 4294967296
+osd.31: 4294967296
+osd.32: 4294967296
+osd.33: 4294967296
+osd.34: 4294967296
+osd.35: 4294967296
+osd.36: 4294967296
+osd.37: 4294967296
+osd.38: 4294967296
+osd.39: 4294967296
+osd.40: 4294967296
+osd.41: 4294967296
+osd.42: 4294967296
+osd.43: 4294967296
+osd.44: 4294967296
+osd.45: 4294967296
+osd.46: 4294967296
+osd.47: 4294967296
+osd.48: 4294967296
+osd.49: 4294967296
+osd.50: 4294967296
+osd.51: 4294967296
+osd.52: 4294967296
+osd.53: 4294967296
+osd.54: 4294967296
+osd.55: 4294967296
+osd.56: 4294967296
+osd.57: 4294967296
+osd.58: 4294967296
+osd.59: 4294967296
+osd.60: 4294967296
+osd.61: 4294967296
+osd.62: 4294967296
+osd.63: 4294967296
+osd.64: 4294967296
+osd.65: 4294967296
+osd.66: 4294967296
+osd.67: 4294967296
+osd.68: 4294967296
+osd.69: 4294967296
+osd.70: 4294967296
+osd.71: 4294967296
+osd.72: 4294967296
+osd.73: 4294967296
+osd.74: 4294967296
+osd.75: 4294967296
+osd.76: 4294967296
+osd.77: 4294967296
+osd.78: 4294967296
+osd.79: 4294967296
+osd.80: 4294967296
+osd.81: 4294967296
+osd.82: 4294967296
+osd.83: 4294967296
+osd.84: 4294967296
+osd.85: 4294967296
+osd.86: 4294967296
+osd.87: 4294967296
+osd.88: 4294967296
+osd.89: 4294967296
+osd.90: 4294967296
+osd.91: 4294967296
+osd.92: 4294967296
+osd.93: 4294967296
+osd.94: 4294967296
+osd.95: 4294967296
+osd.96: 4294967296
+osd.97: 4294967296
+osd.98: 4294967296
+osd.99: 4294967296
+osd.100: 4294967296
+osd.101: 4294967296
+osd.102: 4294967296
+osd.103: 4294967296
+osd.104: 4294967296
+osd.105: 4294967296
+osd.106: 4294967296
+osd.107: 4294967296
+osd.108: 4294967296
+osd.109: 4294967296
+osd.110: 4294967296
+osd.111: 4294967296
+osd.112: 4294967296
+osd.113: 4294967296
+osd.114: 4294967296
+osd.115: 4294967296
+osd.116: 4294967296
+osd.117: 4294967296
+osd.118: 4294967296
+osd.119: 4294967296
+osd.120: 4294967296
+osd.121: 4294967296
+osd.122: 4294967296
+osd.123: 4294967296
+osd.124: 4294967296
+osd.125: 4294967296
+osd.126: 4294967296
+osd.127: 4294967296
+osd.128: 4294967296
+osd.129: 4294967296
+osd.130: 4294967296
+osd.131: 4294967296
+osd.132: 4294967296
+osd.133: 4294967296
+osd.134: 4294967296
+osd.135: 4294967296
+osd.136: 4294967296
+osd.137: 4294967296
+osd.138: 4294967296
+osd.139: 4294967296
+osd.140: 4294967296
+osd.141: 4294967296
+osd.142: 4294967296
+osd.143: 4294967296
+osd.144: 4294967296
+osd.145: 4294967296
+osd.146: 4294967296
+osd.147: 4294967296
+osd.148: 4294967296
+osd.149: 4294967296
+osd.150: 4294967296
+osd.151: 4294967296
+osd.152: 4294967296
+osd.153: 4294967296
+osd.154: 4294967296
+osd.155: 4294967296
+osd.156: 4294967296
+osd.157: 4294967296
+osd.158: 4294967296
+osd.159: 4294967296
+osd.160: 4294967296
+osd.161: 4294967296
+osd.162: 4294967296
+osd.163: 4294967296
+osd.164: 4294967296
+osd.165: 4294967296
+osd.166: 4294967296
+osd.167: 4294967296
+osd.168: 4294967296
+osd.169: 4294967296
+osd.170: 4294967296
+osd.171: 4294967296
+osd.172: 4294967296
+osd.173: 4294967296
+osd.174: 4294967296
+osd.175: 4294967296
+osd.176: 4294967296
+osd.177: 4294967296
+osd.178: 4294967296
+osd.179: 4294967296
+osd.180: 4294967296
+osd.181: 4294967296
+osd.182: 4294967296
+osd.183: 4294967296
+osd.184: 4294967296
+osd.185: 4294967296
+osd.186: 4294967296
+osd.187: 4294967296
+osd.188: 4294967296
+osd.189: 4294967296
+osd.190: 4294967296
+osd.191: 4294967296
+osd.192: 4294967296
+osd.193: 4294967296
+osd.194: 4294967296
+osd.195: 4294967296
+osd.196: 4294967296
+osd.197: 4294967296
+osd.198: 4294967296
+osd.199: 4294967296
+osd.200: 4294967296
+osd.201: 4294967296
+osd.202: 4294967296
+osd.203: 4294967296
+osd.204: 4294967296
+osd.205: 4294967296
+osd.206: 4294967296
+osd.207: 4294967296
+osd.208: 4294967296
+osd.209: 4294967296
+osd.210: 4294967296
+osd.211: 4294967296
+osd.212: 4294967296
+osd.213: 4294967296
+osd.214: 4294967296
+osd.215: 4294967296
+osd.216: 4294967296
+osd.217: 4294967296
+osd.218: 4294967296
+osd.219: 4294967296
+osd.220: 4294967296
+osd.221: 4294967296
+osd.222: 4294967296
+osd.223: 4294967296
+osd.224: 4294967296
+osd.225: 4294967296
+osd.226: 4294967296
+osd.227: 4294967296
+osd.228: 4294967296
+osd.229: 4294967296
+osd.230: 4294967296
+osd.231: 4294967296
+osd.232: 4294967296
+osd.233: 4294967296
+osd.234: 4294967296
+osd.235: 4294967296
+osd.236: 4294967296
+osd.237: 4294967296
+osd.238: 4294967296
+osd.239: 4294967296
+osd.240: 4294967296
+osd.241: 4294967296
+osd.242: 4294967296
+osd.243: 4294967296
+osd.244: 4294967296
+osd.245: 4294967296
+osd.246: 4294967296
+osd.247: 4294967296
+osd.248: 4294967296
+osd.249: 4294967296
+osd.250: 4294967296
+osd.251: 4294967296
+osd.252: 4294967296
+osd.253: 4294967296
+osd.254: 4294967296
+osd.255: 4294967296
+osd.256: 4294967296
+osd.257: 4294967296
+osd.258: 4294967296
+osd.259: 4294967296
+osd.260: 4294967296
+osd.261: 4294967296
+osd.262: 4294967296
+osd.263: 4294967296
+osd.264: 4294967296
+osd.265: 4294967296
+osd.266: 4294967296
+osd.267: 4294967296
+osd.268: 4294967296
+osd.269: 4294967296
+osd.270: 4294967296
+osd.271: 4294967296
+osd.272: 4294967296
+osd.273: 4294967296
+osd.274: 4294967296
+osd.275: 4294967296
+osd.276: 4294967296
+osd.277: 4294967296
+osd.278: 4294967296
+osd.279: 4294967296
+osd.280: 4294967296
+osd.281: 4294967296
+osd.282: 4294967296
+osd.283: 4294967296
+osd.284: 4294967296
+osd.285: 4294967296
+osd.286: 4294967296
+osd.287: 4294967296
+osd.288: 4294967296
+
+PG Autoscale:
+POOL                         SIZE  TARGET SIZE  RATE  RAW CAPACITY   RATIO  TARGET RATIO  EFFECTIVE RATIO  BIAS  PG_NUM  NEW PG_NUM  AUTOSCALE  
+device_health_metrics          0                 3.0        567.4T  0.0000                                  1.0       1              on         
+default.rgw.control            0                 3.0        567.4T  0.0000                                  1.0     256              on         
+default.rgw.buckets.data   35453M                1.5        567.4T  0.0001                                  1.0    8192              on         
+default.rgw.buckets.index  19329k                3.0        567.4T  0.0000                                  1.0     512              on         
+default.rgw.log             3702                 3.0        567.4T  0.0000                                  1.0     256              on         
+default.rgw.meta            3327                 3.0        567.4T  0.0000                                  1.0     256              on         
+.rgw.root                   1323                 3.0        567.4T  0.0000                                  1.0     256              on         
+
+RGW netstat & qlen/qactive ...
+f10-h01-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.220:8080      0.0.0.0:*               LISTEN      2394800/radosgw     
+f10-h05-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.178:8080      0.0.0.0:*               LISTEN      2835936/radosgw     
+        "qlen": 212,
+        "qactive": 212,
+f10-h09-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.213:8080      0.0.0.0:*               LISTEN      2865882/radosgw     
+        "qlen": 115,
+        "qactive": 115,
+f10-h13-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.109:8080      0.0.0.0:*               LISTEN      2888012/radosgw     
+        "qlen": 137,
+        "qactive": 137,
+f10-h17-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.9:8080        0.0.0.0:*               LISTEN      2850199/radosgw     
+f10-h21-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.38.57:8080       0.0.0.0:*               LISTEN      2845780/radosgw     
+        "qlen": 179,
+        "qactive": 179,
+f10-h25-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.180:8080      0.0.0.0:*               LISTEN      2822104/radosgw     
+        "qlen": 277,
+        "qactive": 277,
+f11-h01-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        1      0 172.17.39.208:8080      0.0.0.0:*               LISTEN      2897026/radosgw     
+f11-h05-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.190:8080      0.0.0.0:*               LISTEN      2824107/radosgw     
+f11-h09-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.38.145:8080      0.0.0.0:*               LISTEN      2857708/radosgw     
+f11-h13-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.186:8080      0.0.0.0:*               LISTEN      2760117/radosgw     
+f11-h17-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.13:8080       0.0.0.0:*               LISTEN      2840922/radosgw     
+
+--------------------------------------------------------
+
+2022/02/23-11:28:19: RESHARD Queue Length 10
+2022/02/23-11:28:19: RESHARD List [
+    {
+        "time": "2022-02-23T11:28:12.385278Z",
+        "tenant": "",
+        "bucket_name": "mycontainers1",
+        "bucket_id": "9f6c9988-45fd-4aee-9736-97544ae986a2.42010.1",
+        "old_num_shards": 11,
+        "tentative_new_num_shards": 109
+    }
+]
+
+LA: 2022/02/23-11:28:19:   9.02, 7.01, 3.62
+
+RGW stats:          proc   %cpu %mem  vsz    rss     memused       memlimit
+f10-h01-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.6 0.0 5531336 277332   71196372992   9223372036854771712
+f10-h05-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.6 0.0 5714940 309928   75016273920   9223372036854771712
+f10-h09-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.4 0.0 5585096 290944   73716768768   9223372036854771712
+f10-h13-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.6 0.0 5676060 334652   73586708480   9223372036854771712
+f10-h17-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.5 0.0 5442376 209164   72143548416   9223372036854771712
+f10-h21-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.9 0.0 5734632 288548   78191951872   9223372036854771712
+f10-h25-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.1 0.0 5751180 344000   68023701504   9223372036854771712
+f11-h01-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.6 0.0 5631740 302264   74493386752   9223372036854771712
+f11-h05-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.6 0.0 5601504 274828   76388827136   9223372036854771712
+f11-h09-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.7 0.0 5530752 274968   71041970176   9223372036854771712
+f11-h13-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.5 0.0 5493940 237684   71091998720   9223372036854771712
+f11-h17-000-6049p.rdu2.scalelab.redhat.com   radosgw 10.8 0.0 5599504 279820   76206202880   9223372036854771712
+
+OSD: 
+2022/02/23-11:28:26: f10-h01-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 4832760 1026036
+ceph-osd         0.3  0.2 5328240 1017104
+ceph-osd         0.3  0.2 3884396 1116872
+ceph-osd         0.3  0.2 2474224 1017624
+ceph-osd         0.3  0.2 2464108 1107752
+ceph-osd         0.3  0.2 2504048 1008084
+ceph-osd         0.3  0.2 4902252 1010956
+ceph-osd         0.3  0.2 2377076 1061248
+ceph-osd         0.3  0.2 2509168 1059596
+ceph-osd         0.3  0.3 2552192 1470392
+ceph-osd         0.3  0.2 2397692 1041568
+ceph-osd         0.3  0.2 3094012 1098680
+ceph-osd         0.4  0.2 3684720 1104688
+ceph-osd         0.3  0.2 4508020 1165964
+ceph-osd         0.3  0.3 2517500 1382636
+ceph-osd         0.3  0.2 2489584 1042128
+ceph-osd         0.3  0.2 2923888 1008928
+ceph-osd         0.3  0.2 2464248 1099592
+ceph-osd         0.3  0.2 2471416 1005280
+ceph-osd         0.3  0.2 3335536 1125356
+ceph-osd         0.3  0.2 2949484 1112644
+ceph-osd         0.3  0.2 2552176 1104444
+ceph-osd         0.3  0.2 2793840 1008336
+ceph-osd         0.3  0.2 3467632 1140332
+2022/02/23-11:28:26: f10-h05-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 4157144 1123144
+ceph-osd         0.3  0.2 2495460 1148548
+ceph-osd         0.3  0.2 3310828 1075704
+ceph-osd         0.3  0.2 2483756 1013936
+ceph-osd         0.4  0.3 2472400 1350424
+ceph-osd         0.3  0.2 2419808 1009048
+ceph-osd         0.4  0.3 2567724 1292656
+ceph-osd         0.3  0.2 2683932 1082580
+ceph-osd         0.3  0.2 2477280 1115280
+ceph-osd         0.3  0.2 3132776 1016084
+ceph-osd         0.4  0.3 2564464 1251620
+ceph-osd         0.3  0.2 2418036 1051920
+ceph-osd         0.3  0.3 2456944 1379956
+ceph-osd         0.3  0.2 2478452 997512
+ceph-osd         0.3  0.2 3375476 1085640
+ceph-osd         0.3  0.2 2473328 1084492
+ceph-osd         0.3  0.2 2483568 1116120
+ceph-osd         0.3  0.2 3002800 1130988
+ceph-osd         0.3  0.2 2419056 1109692
+ceph-osd         0.3  0.2 4002300 1117056
+ceph-osd         0.3  0.2 4996464 1043656
+ceph-osd         0.3  0.2 2425200 1027448
+ceph-osd         0.3  0.2 4335988 1171288
+ceph-osd         0.3  0.2 2477424 1009772
+2022/02/23-11:28:26: f10-h09-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 3529444 1107860
+ceph-osd         0.3  0.2 2463680 1109240
+ceph-osd         0.3  0.2 3026156 1133484
+ceph-osd         0.3  0.2 2511208 1120576
+ceph-osd         0.3  0.2 2370000 1045432
+ceph-osd         0.3  0.2 2409376 1045980
+ceph-osd         0.3  0.2 2802168 1049380
+ceph-osd         0.3  0.2 2475992 1030500
+ceph-osd         0.3  0.2 2947596 1135300
+ceph-osd         0.3  0.2 2884776 1122416
+ceph-osd         0.3  0.3 2989424 1379028
+ceph-osd         0.3  0.2 2607472 1005308
+ceph-osd         0.3  0.2 3545456 1117024
+ceph-osd         0.3  0.2 2240880 1065272
+ceph-osd         0.3  0.3 2445684 1382660
+ceph-osd         0.3  0.2 4679024 1127464
+ceph-osd         0.3  0.2 4432240 1118444
+ceph-osd         0.4  0.3 2455924 1383656
+ceph-osd         0.3  0.2 5726712 1054676
+ceph-osd         0.3  0.2 3819000 1028588
+ceph-osd         0.3  0.2 4099640 1054032
+ceph-osd         0.3  0.2 2377208 1057764
+ceph-osd         0.3  0.2 2495864 1135416
+ceph-osd         0.3  0.2 2486640 1072996
+2022/02/23-11:28:26: f10-h13-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 2700928 1086848
+ceph-osd         0.3  0.2 2695064 1123080
+ceph-osd         0.3  0.2 2416824 1118384
+ceph-osd         0.3  0.2 3234236 1020996
+ceph-osd         0.3  0.2 2471672 1015428
+ceph-osd         0.3  0.2 6271008 1163012
+ceph-osd         0.3  0.2 2286076 1075496
+ceph-osd         0.3  0.2 2469848 1010984
+ceph-osd         0.3  0.2 2399760 1037968
+ceph-osd         0.3  0.2 2494760 1021768
+ceph-osd         0.3  0.2 2462068 1103536
+ceph-osd         0.3  0.3 2568560 1289004
+ceph-osd         0.3  0.2 2502132 1057624
+ceph-osd         0.3  0.2 2465136 1004320
+ceph-osd         0.3  0.2 3408244 1147020
+ceph-osd         0.3  0.2 2554228 1109596
+ceph-osd         0.3  0.2 3346804 1020584
+ceph-osd         0.3  0.2 2472304 1116472
+ceph-osd         0.3  0.2 2486640 1033172
+ceph-osd         0.3  0.2 3496304 1013988
+ceph-osd         0.3  0.2 2987380 1168860
+ceph-osd         0.6  0.3 2844708 1295272
+ceph-osd         0.3  0.2 3492212 1138604
+ceph-osd         0.3  0.2 2415096 1047240
+2022/02/23-11:28:26: f10-h17-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 2476548 1132024
+ceph-osd         0.3  0.2 2418628 1031300
+ceph-osd         0.3  0.3 2469092 1361408
+ceph-osd         0.3  0.2 2469408 1013368
+ceph-osd         0.3  0.2 2866524 1077100
+ceph-osd         0.3  0.2 2703396 1103364
+ceph-osd         0.3  0.2 2464248 1099580
+ceph-osd         0.3  0.2 2467800 1115016
+ceph-osd         0.3  0.2 2444816 1114140
+ceph-osd         0.3  0.2 4279324 1124236
+ceph-osd         0.3  0.2 5038448 1102884
+ceph-osd         0.3  0.2 3471728 1093832
+ceph-osd         0.4  0.2 3461488 1027768
+ceph-osd         0.3  0.2 2478452 1106292
+ceph-osd         0.3  0.2 3255664 1124836
+ceph-osd         0.3  0.2 3373420 1066648
+ceph-osd         0.3  0.2 3148284 1116400
+ceph-osd         0.3  0.2 2368876 1149796
+ceph-osd         0.3  0.2 2390516 1096560
+ceph-osd         0.3  0.2 6535540 1066168
+ceph-osd         0.3  0.2 2783604 1018800
+ceph-osd         0.3  0.3 4622704 1387392
+ceph-osd         0.4  0.2 2424172 1090300
+ceph-osd         0.3  0.2 2476396 1077236
+2022/02/23-11:28:26: f10-h21-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 4284108 1129492
+ceph-osd         0.3  0.2 2653116 1026904
+ceph-osd         0.3  0.2 3161128 1019700
+ceph-osd         0.3  0.2 3672616 1047660
+ceph-osd         0.3  0.2 4015920 1081396
+ceph-osd         0.3  0.2 3356764 1029476
+ceph-osd         0.4  0.3 2564664 1500152
+ceph-osd         0.3  0.2 3565588 1177496
+ceph-osd         0.3  0.2 2481504 1015296
+ceph-osd         0.3  0.2 2469220 993696
+ceph-osd         0.3  0.3 2264428 1211484
+ceph-osd         0.4  0.3 3747184 1554840
+ceph-osd         0.4  0.2 2484592 1025744
+ceph-osd         0.3  0.2 2708980 1103084
+ceph-osd         0.3  0.2 2482544 1018924
+ceph-osd         0.3  0.3 2851192 1356080
+ceph-osd         0.3  0.2 2441588 1033152
+ceph-osd         0.3  0.2 2476400 1120160
+ceph-osd         0.3  0.2 2432372 1091744
+ceph-osd         0.3  0.3 4318580 1394964
+ceph-osd         0.3  0.2 2479476 1128532
+ceph-osd         0.4  0.3 2481516 1396184
+ceph-osd         0.3  0.2 3022196 1122360
+ceph-osd         0.3  0.2 2485612 1122512
+2022/02/23-11:28:27: f10-h25-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 2238824 1064428
+ceph-osd         0.3  0.2 3576176 1114776
+ceph-osd         0.3  0.2 2475508 1089028
+ceph-osd         0.3  0.2 2571628 1129844
+ceph-osd         0.3  0.2 3807736 1167868
+ceph-osd         0.3  0.2 2471272 1130636
+ceph-osd         0.4  0.2 4303212 1111120
+ceph-osd         0.3  0.2 4130156 1126664
+ceph-osd         0.3  0.2 2420072 1032576
+ceph-osd         0.3  0.2 2458104 1048448
+ceph-osd         0.3  0.2 3896688 1048868
+ceph-osd         0.3  0.2 5209584 1065496
+ceph-osd         0.3  0.2 2481516 1028704
+ceph-osd         0.3  0.2 2482540 1022236
+ceph-osd         0.3  0.2 2407796 1125216
+ceph-osd         0.3  0.2 2461036 1006160
+ceph-osd         0.3  0.2 2370920 1131196
+ceph-osd         0.3  0.2 2720108 1047104
+ceph-osd         0.3  0.2 2463080 995460
+ceph-osd         0.3  0.2 5583216 1127940
+ceph-osd         0.3  0.2 2507116 1110544
+ceph-osd         0.3  0.2 4544880 1020364
+ceph-osd         0.3  0.2 3630444 1024200
+ceph-osd         0.3  0.2 2477424 1119752
+2022/02/23-11:28:27: f11-h01-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 5260932 1129108
+ceph-osd         0.3  0.2 3455892 1126376
+ceph-osd         0.3  0.3 2609340 1390540
+ceph-osd         0.4  0.3 3410416 1307968
+ceph-osd         0.3  0.2 2234608 1071720
+ceph-osd         0.3  0.2 2410608 1041704
+ceph-osd         0.3  0.3 3222972 1408688
+ceph-osd         0.3  0.2 2476952 1011468
+ceph-osd         0.3  0.2 2425232 1019736
+ceph-osd         0.3  0.2 2475164 1039376
+ceph-osd         0.3  0.2 4454908 1022752
+ceph-osd         0.3  0.2 2842996 1079480
+ceph-osd         0.3  0.2 6002168 1162692
+ceph-osd         0.3  0.2 5053808 1128700
+ceph-osd         0.3  0.2 2454896 1092752
+ceph-osd         0.3  0.2 3155316 1022540
+ceph-osd         0.3  0.2 3217916 1143832
+ceph-osd         0.3  0.2 4813164 1144512
+ceph-osd         0.3  0.2 2955632 1162196
+ceph-osd         0.3  0.2 2475380 1034904
+ceph-osd         0.3  0.2 2394480 1179664
+ceph-osd         0.3  0.2 3237232 1030412
+ceph-osd         0.3  0.2 2948464 1097584
+ceph-osd         0.3  0.2 2468208 1053052
+2022/02/23-11:28:27: f11-h05-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 2477732 1040284
+ceph-osd         0.3  0.2 3200520 1033232
+ceph-osd         0.4  0.3 2476216 1377388
+ceph-osd         0.3  0.2 2438644 1165180
+ceph-osd         0.3  0.2 3196252 1127768
+ceph-osd         0.3  0.2 2486304 1122312
+ceph-osd         0.3  0.2 2473460 1017688
+ceph-osd         0.3  0.2 2472920 1011536
+ceph-osd         0.4  0.3 2558804 1282880
+ceph-osd         0.3  0.2 3068196 1135432
+ceph-osd         0.3  0.2 2471416 1013188
+ceph-osd         0.3  0.2 2563440 1135748
+ceph-osd         0.4  0.3 2480880 1382260
+ceph-osd         0.3  0.2 2476540 1128968
+ceph-osd         0.3  0.2 4813172 1136156
+ceph-osd         0.3  0.2 2781688 1115956
+ceph-osd         0.3  0.2 2605424 1144612
+ceph-osd         0.3  0.3 2516340 1288856
+ceph-osd         0.3  0.2 2490872 1098496
+ceph-osd         0.3  0.2 4266348 1101984
+ceph-osd         0.3  0.2 2741616 1109252
+ceph-osd         0.3  0.2 2420076 1044512
+ceph-osd         0.3  0.2 5268988 1099636
+ceph-osd         0.3  0.2 2662764 1134140
+2022/02/23-11:28:27: f11-h09-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 3325688 1107408
+ceph-osd         0.3  0.2 2434568 1054892
+ceph-osd         0.3  0.3 2557312 1265608
+ceph-osd         0.3  0.2 2463372 1006632
+ceph-osd         0.3  0.2 2470564 1116772
+ceph-osd         0.3  0.2 3972304 1130476
+ceph-osd         0.3  0.2 4891364 1033504
+ceph-osd         0.3  0.2 2464972 1013836
+ceph-osd         0.3  0.2 2475644 1071908
+ceph-osd         0.3  0.2 2470256 1013480
+ceph-osd         0.3  0.2 2480496 1075672
+ceph-osd         0.3  0.3 2568992 1287356
+ceph-osd         0.3  0.2 2470316 1070644
+ceph-osd         0.3  0.2 3036528 1034444
+ceph-osd         0.3  0.2 2475376 1011884
+ceph-osd         0.3  0.2 2560432 1128920
+ceph-osd         0.3  0.2 2674032 1127488
+ceph-osd         0.3  0.2 2540912 1009956
+ceph-osd         0.3  0.2 3106160 1044856
+ceph-osd         0.3  0.2 2531700 1038768
+ceph-osd         0.3  0.2 6110716 1150692
+ceph-osd         0.3  0.2 3125612 1034372
+ceph-osd         0.3  0.2 3561840 1114404
+ceph-osd         0.3  0.2 3897716 1163276
+2022/02/23-11:28:27: f11-h13-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 2455200 1153340
+ceph-osd         0.3  0.2 2470852 1129200
+ceph-osd         0.3  0.2 2570280 1034912
+ceph-osd         0.3  0.2 2477608 1029376
+ceph-osd         0.3  0.2 2624972 1087520
+ceph-osd         0.3  0.2 2485340 1133792
+ceph-osd         0.3  0.2 2874932 1163856
+ceph-osd         0.3  0.2 4405272 1173804
+ceph-osd         0.3  0.2 2464100 1112252
+ceph-osd         0.4  0.2 3884392 1023096
+ceph-osd         0.3  0.2 2486636 1022796
+ceph-osd         0.3  0.2 2421104 1148336
+ceph-osd         0.3  0.2 2953584 1113676
+ceph-osd         0.3  0.2 3242348 1125744
+ceph-osd         0.3  0.2 2666860 1138852
+ceph-osd         0.3  0.3 2560244 1276680
+ceph-osd         0.3  0.3 3186032 1227508
+ceph-osd         0.3  0.2 2522480 1038760
+ceph-osd         0.3  0.2 2472444 1087556
+ceph-osd         0.3  0.2 2609524 1082484
+ceph-osd         0.3  0.2 2467180 1129808
+ceph-osd         0.3  0.3 5241196 1192804
+ceph-osd         0.3  0.2 2521464 1047664
+ceph-osd         0.3  0.2 2766328 1154892
+2022/02/23-11:28:28: f11-h17-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.2 3650212 1036908
+ceph-osd         0.3  0.2 2471872 1112808
+ceph-osd         0.3  0.2 2723876 1027288
+ceph-osd         0.3  0.2 2464296 1018308
+ceph-osd         0.3  0.2 2364208 1050544
+ceph-osd         0.3  0.2 2442464 1044476
+ceph-osd         0.3  0.2 2215476 1122948
+ceph-osd         0.3  0.2 2625500 1029952
+ceph-osd         0.3  0.2 3766692 1138240
+ceph-osd         0.3  0.2 2478444 1044852
+ceph-osd         0.3  0.2 2478444 1029664
+ceph-osd         0.4  0.3 3032428 1284640
+ceph-osd         0.4  0.3 6220284 1477796
+ceph-osd         0.3  0.2 3424628 1088492
+ceph-osd         0.3  0.2 2441580 1129200
+ceph-osd         0.3  0.2 2465136 1030288
+ceph-osd         0.3  0.2 2390520 1096748
+ceph-osd         0.3  0.2 2477428 1125728
+ceph-osd         0.3  0.3 4975988 1421064
+ceph-osd         0.3  0.2 3550576 1138664
+ceph-osd         0.3  0.2 2466292 1115680
+ceph-osd         0.3  0.2 2469232 1014004
+ceph-osd         0.4  0.3 2889212 1306612
+ceph-osd         0.4  0.2 4871536 1125388
+
+Site2 buckets (rgw):
+2022/02/23-11:28:48:         "bucket": "mycontainers1",
+        "num_shards": 11,
+                "num_objects": 5801330
+        "bucket": "mycontainers3",
+        "num_shards": 11,
+        "bucket": "mycontainers4",
+        "num_shards": 11,
+        "bucket": "mycontainers2",
+        "num_shards": 11,
+        "bucket": "mycontainers5",
+        "num_shards": 11,
+
+Cluster status
+  cluster:
+    id:     dbaa9de4-900a-11ec-9bec-ac1f6b2d5d2a
+    health: HEALTH_OK
+ 
+  services:
+    mon: 3 daemons, quorum f13-h26-b04-5039ms.rdu2.scalelab.redhat.com,f13-h26-b08-5039ms,f13-h26-b07-5039ms (age 5d)
+    mgr: f13-h26-b04-5039ms.rdu2.scalelab.redhat.com.sfcijj(active, since 5d), standbys: f13-h26-b07-5039ms.htnyxh, f13-h26-b08-5039ms.wtoans
+    osd: 288 osds: 288 up (since 5d), 288 in (since 5d)
+    rgw: 12 daemons active (12 hosts, 1 zones)
+ 
+  data:
+    pools:   7 pools, 9729 pgs
+    objects: 5.96M objects, 83 GiB
+    usage:   44 TiB used, 524 TiB / 567 TiB avail
+    pgs:     9729 active+clean
+ 
+  io:
+    client:   59 MiB/s rd, 209 MiB/s wr, 60.44k op/s rd, 153.03k op/s wr
+ 
+2022/02/23-11:28:48: ceph df detail --- RAW STORAGE ---
+CLASS     SIZE    AVAIL    USED  RAW USED  %RAW USED
+hdd    567 TiB  524 TiB  44 TiB    44 TiB       7.74
+TOTAL  567 TiB  524 TiB  44 TiB    44 TiB       7.74
+ 
+--- POOLS ---
+POOL                       ID   PGS   STORED   (DATA)   (OMAP)  OBJECTS     USED   (DATA)   (OMAP)  %USED  MAX AVAIL  QUOTA OBJECTS  QUOTA BYTES  DIRTY  USED COMPR  UNDER COMPR
+device_health_metrics       1     1  5.0 MiB      0 B  5.0 MiB      315   15 MiB      0 B   15 MiB      0    165 TiB            N/A          N/A    315         0 B          0 B
+default.rgw.control        17   256      0 B      0 B      0 B        8      0 B      0 B      0 B      0    165 TiB            N/A          N/A      8         0 B          0 B
+default.rgw.buckets.data   18  8192  153 GiB  153 GiB      0 B    5.96M  230 GiB  230 GiB      0 B   0.05    330 TiB            N/A          N/A  5.96M         0 B          0 B
+default.rgw.buckets.index  19   512  1.1 GiB      0 B  1.1 GiB       55  3.3 GiB      0 B  3.3 GiB      0    165 TiB            N/A          N/A     55         0 B          0 B
+default.rgw.log            20   256  4.0 KiB  3.6 KiB    405 B      177  409 KiB  408 KiB  1.2 KiB      0    165 TiB            N/A          N/A    177         0 B          0 B
+default.rgw.meta           21   256  832 KiB  3.2 KiB  829 KiB       15  2.6 MiB  168 KiB  2.4 MiB      0    165 TiB            N/A          N/A     15         0 B          0 B
+.rgw.root                  22   256  1.3 KiB  1.3 KiB      0 B        4   48 KiB   48 KiB      0 B      0    165 TiB            N/A          N/A      4         0 B          0 B
+
+Site2 pool PG counts:
+pool 1 'device_health_metrics' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 1 pgp_num 1 autoscale_mode on last_change 2252 flags hashpspool stripe_width 0 pg_num_min 1 application mgr_devicehealth,rgw
+pool 17 'default.rgw.control' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2253 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 18 'default.rgw.buckets.data' erasure profile myprofile size 6 min_size 5 crush_rule 1 object_hash rjenkins pg_num 8192 pgp_num 8192 autoscale_mode on last_change 2278 lfor 0/0/2276 flags hashpspool stripe_width 16384 pg_num_min 8192 application rgw
+pool 19 'default.rgw.buckets.index' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 512 pgp_num 512 autoscale_mode on last_change 2255 flags hashpspool stripe_width 0 pg_num_min 512 application rgw
+pool 20 'default.rgw.log' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2256 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 21 'default.rgw.meta' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2257 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 22 '.rgw.root' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2258 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+
+
+Site2 buckets df
+2022/02/23-11:28:49: POOL                       ID   PGS   STORED  OBJECTS     USED  %USED  MAX AVAIL
+default.rgw.control        17   256      0 B        8      0 B      0    165 TiB
+default.rgw.buckets.data   18  8192  153 GiB    5.96M  230 GiB   0.05    330 TiB
+default.rgw.buckets.index  19   512  1.1 GiB       55  3.3 GiB      0    165 TiB
+default.rgw.log            20   256  4.0 KiB      177  409 KiB      0    165 TiB
+default.rgw.meta           21   256  832 KiB       15  2.6 MiB      0    165 TiB
+
+OSD/RGW free:
+2022/02/23-11:28:49: f10-h01-000-6049p.rdu2.scalelab.redhat.com                total        used        free      shared  buff/cache   available
+Mem:          376Gi        31Gi       299Gi       4.1Gi        45Gi       338Gi
+Swap:            0B          0B          0B
+
+Ceph osd df:
+2022/02/23-11:28:49: ID   CLASS  WEIGHT   REWEIGHT  SIZE     RAW USE  DATA     OMAP     META      AVAIL    %USE  VAR   PGS  STATUS
+264    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB    2 KiB   367 MiB  1.8 TiB  7.74  1.00  180      up
+265    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB      0 B   372 MiB  1.8 TiB  7.74  1.00  181      up
+266    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB    2 KiB   620 MiB  1.8 TiB  7.74  1.00  179      up
+267    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB      0 B   362 MiB  1.8 TiB  7.74  1.00  180      up
+268    hdd  1.97049   1.00000  2.0 TiB  156 GiB  941 MiB      0 B   427 MiB  1.8 TiB  7.74  1.00  195      up
+269    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB      0 B   358 MiB  1.8 TiB  7.74  1.00  178      up
+270    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB    2 KiB   356 MiB  1.8 TiB  7.74  1.00  187      up
+271    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB      0 B   471 MiB  1.8 TiB  7.74  1.00  182      up
+272    hdd  1.97049   1.00000  2.0 TiB  156 GiB  918 MiB    1 KiB   398 MiB  1.8 TiB  7.74  1.00  186      up
+273    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB   97 MiB   1.1 GiB  1.8 TiB  7.74  1.00  186      up
+274    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB      0 B   442 MiB  1.8 TiB  7.74  1.00  182      up
+275    hdd  1.97049   1.00000  2.0 TiB  156 GiB  925 MiB      0 B   416 MiB  1.8 TiB  7.74  1.00  195      up
+276    hdd  1.97049   1.00000  2.0 TiB  156 GiB  928 MiB      0 B   418 MiB  1.8 TiB  7.74  1.00  190      up
+277    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB      0 B   519 MiB  1.8 TiB  7.74  1.00  193      up
+278    hdd  1.97049   1.00000  2.0 TiB  156 GiB  938 MiB  102 MiB   987 MiB  1.8 TiB  7.74  1.00  195      up
+279    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB    1 KiB   405 MiB  1.8 TiB  7.74  1.00  181      up
+280    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB      0 B   359 MiB  1.8 TiB  7.74  1.00  185      up
+281    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB    1 KiB   415 MiB  1.8 TiB  7.74  1.00  187      up
+282    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB    2 KiB   361 MiB  1.8 TiB  7.74  1.00  184      up
+283    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB      0 B   431 MiB  1.8 TiB  7.74  1.00  198      up
+284    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB      0 B   420 MiB  1.8 TiB  7.74  1.00  187      up
+285    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB      0 B   418 MiB  1.8 TiB  7.74  1.00  188      up
+286    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB    2 KiB   358 MiB  1.8 TiB  7.74  1.00  180      up
+287    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB    1 KiB   436 MiB  1.8 TiB  7.74  1.00  194      up
+  5    hdd  1.97049   1.00000  2.0 TiB  156 GiB  919 MiB      0 B   453 MiB  1.8 TiB  7.74  1.00  191      up
+ 16    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB  104 MiB   935 MiB  1.8 TiB  7.74  1.00  186      up
+ 27    hdd  1.97049   1.00000  2.0 TiB  156 GiB  919 MiB      0 B   402 MiB  1.8 TiB  7.74  1.00  191      up
+ 38    hdd  1.97049   1.00000  2.0 TiB  156 GiB  929 MiB    2 KiB   415 MiB  1.8 TiB  7.74  1.00  189      up
+ 48    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB      0 B   427 MiB  1.8 TiB  7.74  1.00  197      up
+ 58    hdd  1.97049   1.00000  2.0 TiB  156 GiB  928 MiB    1 KiB   423 MiB  1.8 TiB  7.74  1.00  193      up
+ 67    hdd  1.97049   1.00000  2.0 TiB  156 GiB  904 MiB      0 B   386 MiB  1.8 TiB  7.74  1.00  181      up
+ 77    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB      0 B   396 MiB  1.8 TiB  7.74  1.00  185      up
+ 87    hdd  1.97049   1.00000  2.0 TiB  156 GiB  940 MiB    3 KiB   516 MiB  1.8 TiB  7.74  1.00  192      up
+ 99    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB      0 B   365 MiB  1.8 TiB  7.74  1.00  187      up
+109    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB    2 KiB   422 MiB  1.8 TiB  7.74  1.00  195      up
+119    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB      0 B   474 MiB  1.8 TiB  7.74  1.00  191      up
+129    hdd  1.97049   1.00000  2.0 TiB  156 GiB  917 MiB      0 B   397 MiB  1.8 TiB  7.74  1.00  186      up
+139    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB      0 B   368 MiB  1.8 TiB  7.74  1.00  184      up
+149    hdd  1.97049   1.00000  2.0 TiB  156 GiB  927 MiB  103 MiB   995 MiB  1.8 TiB  7.74  1.00  183      up
+158    hdd  1.97049   1.00000  2.0 TiB  156 GiB  898 MiB      0 B   366 MiB  1.8 TiB  7.74  1.00  181      up
+168    hdd  1.97049   1.00000  2.0 TiB  156 GiB  910 MiB    2 KiB   464 MiB  1.8 TiB  7.74  1.00  187      up
+179    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB      0 B   427 MiB  1.8 TiB  7.74  1.00  189      up
+189    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB      0 B   366 MiB  1.8 TiB  7.74  1.00  177      up
+199    hdd  1.97049   1.00000  2.0 TiB  156 GiB  888 MiB  104 MiB   914 MiB  1.8 TiB  7.74  1.00  180      up
+209    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB      0 B   442 MiB  1.8 TiB  7.74  1.00  186      up
+219    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB  102 MiB   985 MiB  1.8 TiB  7.74  1.00  191      up
+228    hdd  1.97049   1.00000  2.0 TiB  156 GiB  885 MiB    1 KiB   358 MiB  1.8 TiB  7.74  1.00  183      up
+239    hdd  1.97049   1.00000  2.0 TiB  156 GiB  924 MiB    1 KiB   407 MiB  1.8 TiB  7.74  1.00  188      up
+  8    hdd  1.97049   1.00000  2.0 TiB  156 GiB  899 MiB    2 KiB   440 MiB  1.8 TiB  7.74  1.00  185      up
+ 18    hdd  1.97049   1.00000  2.0 TiB  156 GiB  931 MiB      0 B   466 MiB  1.8 TiB  7.74  1.00  187      up
+ 28    hdd  1.97049   1.00000  2.0 TiB  156 GiB  934 MiB    3 KiB   439 MiB  1.8 TiB  7.74  1.00  189      up
+ 37    hdd  1.97049   1.00000  2.0 TiB  156 GiB  913 MiB      0 B   495 MiB  1.8 TiB  7.74  1.00  186      up
+ 47    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB  102 MiB   980 MiB  1.8 TiB  7.74  1.00  185      up
+ 57    hdd  1.97049   1.00000  2.0 TiB  156 GiB  901 MiB    1 KiB   382 MiB  1.8 TiB  7.74  1.00  188      up
+ 69    hdd  1.97049   1.00000  2.0 TiB  156 GiB  899 MiB      0 B   375 MiB  1.8 TiB  7.74  1.00  187      up
+ 79    hdd  1.97049   1.00000  2.0 TiB  156 GiB  891 MiB      0 B   447 MiB  1.8 TiB  7.74  1.00  183      up
+ 89    hdd  1.97049   1.00000  2.0 TiB  156 GiB  943 MiB      0 B   442 MiB  1.8 TiB  7.74  1.00  189      up
+ 98    hdd  1.97049   1.00000  2.0 TiB  156 GiB  916 MiB    2 KiB   402 MiB  1.8 TiB  7.74  1.00  185      up
+108    hdd  1.97049   1.00000  2.0 TiB  156 GiB  923 MiB      0 B   416 MiB  1.8 TiB  7.74  1.00  193      up
+118    hdd  1.97049   1.00000  2.0 TiB  156 GiB  941 MiB    2 KiB   441 MiB  1.8 TiB  7.74  1.00  196      up
+128    hdd  1.97049   1.00000  2.0 TiB  156 GiB  943 MiB      0 B   440 MiB  1.8 TiB  7.74  1.00  187      up
+137    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB    2 KiB   431 MiB  1.8 TiB  7.74  1.00  185      up
+147    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB      0 B   426 MiB  1.8 TiB  7.74  1.00  181      up
+157    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB      0 B   444 MiB  1.8 TiB  7.74  1.00  184      up
+167    hdd  1.97049   1.00000  2.0 TiB  156 GiB  908 MiB    1 KiB   387 MiB  1.8 TiB  7.74  1.00  190      up
+177    hdd  1.97049   1.00000  2.0 TiB  156 GiB  900 MiB      0 B   372 MiB  1.8 TiB  7.74  1.00  179      up
+187    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB    2 KiB   432 MiB  1.8 TiB  7.74  1.00  198      up
+196    hdd  1.97049   1.00000  2.0 TiB  156 GiB  926 MiB  102 MiB   968 MiB  1.8 TiB  7.74  1.00  183      up
+205    hdd  1.97049   1.00000  2.0 TiB  156 GiB  890 MiB      0 B   361 MiB  1.8 TiB  7.74  1.00  179      up
+215    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB      0 B   425 MiB  1.8 TiB  7.74  1.00  189      up
+227    hdd  1.97049   1.00000  2.0 TiB  156 GiB  890 MiB    1 KiB   525 MiB  1.8 TiB  7.74  1.00  184      up
+237    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB  102 MiB   983 MiB  1.8 TiB  7.74  1.00  189      up
+  2    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB  104 MiB   920 MiB  1.8 TiB  7.74  1.00  187      up
+ 11    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB    1 KiB   434 MiB  1.8 TiB  7.74  1.00  190      up
+ 21    hdd  1.97049   1.00000  2.0 TiB  156 GiB  900 MiB      0 B   376 MiB  1.8 TiB  7.74  1.00  178      up
+ 31    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB    1 KiB   415 MiB  1.8 TiB  7.74  1.00  195      up
+ 40    hdd  1.97049   1.00000  2.0 TiB  156 GiB  891 MiB      0 B   358 MiB  1.8 TiB  7.74  1.00  180      up
+ 50    hdd  1.97049   1.00000  2.0 TiB  156 GiB  884 MiB      0 B   354 MiB  1.8 TiB  7.74  1.00  181      up
+ 60    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB    2 KiB   496 MiB  1.8 TiB  7.74  1.00  187      up
+ 70    hdd  1.97049   1.00000  2.0 TiB  156 GiB  902 MiB  258 MiB   744 MiB  1.8 TiB  7.74  1.00  190      up
+ 80    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB      0 B   425 MiB  1.8 TiB  7.74  1.00  197      up
+ 90    hdd  1.97049   1.00000  2.0 TiB  156 GiB  891 MiB    2 KiB   448 MiB  1.8 TiB  7.74  1.00  183      up
+100    hdd  1.97049   1.00000  2.0 TiB  156 GiB  920 MiB    1 KiB   408 MiB  1.8 TiB  7.74  1.00  186      up
+110    hdd  1.97049   1.00000  2.0 TiB  156 GiB  918 MiB    2 KiB   475 MiB  1.8 TiB  7.74  1.00  189      up
+120    hdd  1.97049   1.00000  2.0 TiB  156 GiB  888 MiB      0 B   367 MiB  1.8 TiB  7.74  1.00  186      up
+130    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB      0 B   367 MiB  1.8 TiB  7.74  1.00  176      up
+140    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB    1 KiB   465 MiB  1.8 TiB  7.74  1.00  193      up
+150    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB      0 B   508 MiB  1.8 TiB  7.74  1.00  187      up
+160    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB      0 B   371 MiB  1.8 TiB  7.74  1.00  185      up
+170    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB    2 KiB   440 MiB  1.8 TiB  7.74  1.00  179      up
+180    hdd  1.97049   1.00000  2.0 TiB  156 GiB  885 MiB      0 B   362 MiB  1.8 TiB  7.74  1.00  178      up
+190    hdd  1.97049   1.00000  2.0 TiB  156 GiB  928 MiB      0 B   425 MiB  1.8 TiB  7.74  1.00  188      up
+200    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB      0 B   443 MiB  1.8 TiB  7.74  1.00  186      up
+210    hdd  1.97049   1.00000  2.0 TiB  156 GiB  942 MiB      0 B   434 MiB  1.8 TiB  7.74  1.00  192      up
+220    hdd  1.97049   1.00000  2.0 TiB  156 GiB  931 MiB    1 KiB   425 MiB  1.8 TiB  7.74  1.00  189      up
+230    hdd  1.97049   1.00000  2.0 TiB  156 GiB  899 MiB      0 B   375 MiB  1.8 TiB  7.74  1.00  182      up
+  4    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB      0 B   480 MiB  1.8 TiB  7.74  1.00  192      up
+ 14    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB      0 B   467 MiB  1.8 TiB  7.74  1.00  184      up
+ 25    hdd  1.97049   1.00000  2.0 TiB  156 GiB  905 MiB      0 B   442 MiB  1.8 TiB  7.74  1.00  182      up
+ 35    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB    1 KiB   429 MiB  1.8 TiB  7.74  1.00  195      up
+ 46    hdd  1.97049   1.00000  2.0 TiB  156 GiB  901 MiB      0 B   574 MiB  1.8 TiB  7.74  1.00  183      up
+ 56    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB      0 B   378 MiB  1.8 TiB  7.74  1.00  184      up
+ 66    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB    2 KiB   364 MiB  1.8 TiB  7.74  1.00  186      up
+ 76    hdd  1.97049   1.00000  2.0 TiB  156 GiB  941 MiB  102 MiB  1003 MiB  1.8 TiB  7.74  1.00  189      up
+ 86    hdd  1.97049   1.00000  2.0 TiB  156 GiB  915 MiB      0 B   473 MiB  1.8 TiB  7.74  1.00  187      up
+ 96    hdd  1.97049   1.00000  2.0 TiB  156 GiB  919 MiB      0 B   401 MiB  1.8 TiB  7.74  1.00  189      up
+106    hdd  1.97049   1.00000  2.0 TiB  156 GiB  944 MiB    2 KiB   434 MiB  1.8 TiB  7.74  1.00  197      up
+116    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB      0 B   431 MiB  1.8 TiB  7.74  1.00  180      up
+126    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB  102 MiB   989 MiB  1.8 TiB  7.74  1.00  191      up
+136    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB      0 B   360 MiB  1.8 TiB  7.74  1.00  182      up
+146    hdd  1.97049   1.00000  2.0 TiB  156 GiB  917 MiB      0 B   442 MiB  1.8 TiB  7.74  1.00  186      up
+156    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB    2 KiB   421 MiB  1.8 TiB  7.74  1.00  193      up
+166    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB      0 B   425 MiB  1.8 TiB  7.74  1.00  183      up
+176    hdd  1.97049   1.00000  2.0 TiB  156 GiB  922 MiB      0 B   418 MiB  1.8 TiB  7.74  1.00  191      up
+186    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB      0 B   415 MiB  1.8 TiB  7.74  1.00  192      up
+197    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB    2 KiB   426 MiB  1.8 TiB  7.74  1.00  194      up
+207    hdd  1.97049   1.00000  2.0 TiB  156 GiB  926 MiB    2 KiB   415 MiB  1.8 TiB  7.74  1.00  187      up
+217    hdd  1.97049   1.00000  2.0 TiB  156 GiB  901 MiB      0 B   372 MiB  1.8 TiB  7.74  1.00  185      up
+226    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB    2 KiB   434 MiB  1.8 TiB  7.74  1.00  193      up
+235    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB  5.0 MiB   435 MiB  1.8 TiB  7.74  1.00  191      up
+  6    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB  102 MiB   989 MiB  1.8 TiB  7.74  1.00  191      up
+ 15    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB      0 B   367 MiB  1.8 TiB  7.74  1.00  180      up
+ 26    hdd  1.97049   1.00000  2.0 TiB  156 GiB  925 MiB  102 MiB   966 MiB  1.8 TiB  7.74  1.00  195      up
+ 36    hdd  1.97049   1.00000  2.0 TiB  156 GiB  904 MiB    2 KiB   374 MiB  1.8 TiB  7.74  1.00  181      up
+ 45    hdd  1.97049   1.00000  2.0 TiB  156 GiB  938 MiB    2 KiB   429 MiB  1.8 TiB  7.74  1.00  188      up
+ 55    hdd  1.97049   1.00000  2.0 TiB  156 GiB  898 MiB      0 B   457 MiB  1.8 TiB  7.74  1.00  187      up
+ 65    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB      0 B   424 MiB  1.8 TiB  7.74  1.00  188      up
+ 75    hdd  1.97049   1.00000  2.0 TiB  156 GiB  941 MiB  101 MiB  1005 MiB  1.8 TiB  7.74  1.00  186      up
+ 84    hdd  1.97049   1.00000  2.0 TiB  156 GiB  942 MiB      0 B   438 MiB  1.8 TiB  7.74  1.00  188      up
+ 94    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB      0 B   425 MiB  1.8 TiB  7.74  1.00  193      up
+104    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB      0 B   424 MiB  1.8 TiB  7.74  1.00  194      up
+114    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB      0 B   371 MiB  1.8 TiB  7.74  1.00  188      up
+125    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB      0 B   362 MiB  1.8 TiB  7.74  1.00  186      up
+134    hdd  1.97049   1.00000  2.0 TiB  156 GiB  902 MiB    1 KiB   377 MiB  1.8 TiB  7.74  1.00  186      up
+144    hdd  1.97049   1.00000  2.0 TiB  156 GiB  918 MiB      0 B   397 MiB  1.8 TiB  7.74  1.00  192      up
+155    hdd  1.97049   1.00000  2.0 TiB  156 GiB  938 MiB   97 MiB   1.1 GiB  1.8 TiB  7.74  1.00  194      up
+164    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB      0 B   524 MiB  1.8 TiB  7.74  1.00  187      up
+175    hdd  1.97049   1.00000  2.0 TiB  156 GiB  890 MiB      0 B   357 MiB  1.8 TiB  7.74  1.00  184      up
+185    hdd  1.97049   1.00000  2.0 TiB  156 GiB  883 MiB    1 KiB   351 MiB  1.8 TiB  7.74  1.00  188      up
+195    hdd  1.97049   1.00000  2.0 TiB  156 GiB  929 MiB      0 B   636 MiB  1.8 TiB  7.74  1.00  191      up
+206    hdd  1.97049   1.00000  2.0 TiB  156 GiB  945 MiB   95 MiB   1.1 GiB  1.8 TiB  7.74  1.00  189      up
+216    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB    2 KiB   367 MiB  1.8 TiB  7.74  1.00  180      up
+225    hdd  1.97049   1.00000  2.0 TiB  156 GiB  927 MiB    1 KiB   409 MiB  1.8 TiB  7.74  1.00  186      up
+236    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB    2 KiB   362 MiB  1.8 TiB  7.74  1.00  180      up
+240    hdd  1.97049   1.00000  2.0 TiB  156 GiB  882 MiB      0 B   513 MiB  1.8 TiB  7.74  1.00  182      up
+241    hdd  1.97049   1.00000  2.0 TiB  156 GiB  934 MiB    2 KiB   421 MiB  1.8 TiB  7.74  1.00  196      up
+242    hdd  1.97049   1.00000  2.0 TiB  156 GiB  921 MiB    2 KiB   404 MiB  1.8 TiB  7.74  1.00  194      up
+243    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB      0 B   432 MiB  1.8 TiB  7.74  1.00  187      up
+244    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB      0 B   525 MiB  1.8 TiB  7.74  1.00  187      up
+245    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB    1 KiB   438 MiB  1.8 TiB  7.74  1.00  197      up
+246    hdd  1.97049   1.00000  2.0 TiB  156 GiB  924 MiB      0 B   399 MiB  1.8 TiB  7.74  1.00  196      up
+247    hdd  1.97049   1.00000  2.0 TiB  156 GiB  927 MiB      0 B   424 MiB  1.8 TiB  7.74  1.00  195      up
+248    hdd  1.97049   1.00000  2.0 TiB  156 GiB  886 MiB      0 B   431 MiB  1.8 TiB  7.74  1.00  180      up
+249    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB    2 KiB   418 MiB  1.8 TiB  7.74  1.00  188      up
+250    hdd  1.97049   1.00000  2.0 TiB  156 GiB  890 MiB      0 B   449 MiB  1.8 TiB  7.74  1.00  183      up
+251    hdd  1.97049   1.00000  2.0 TiB  156 GiB  884 MiB      0 B   448 MiB  1.8 TiB  7.74  1.00  182      up
+252    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB      0 B   359 MiB  1.8 TiB  7.74  1.00  180      up
+253    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB    2 KiB   365 MiB  1.8 TiB  7.74  1.00  188      up
+254    hdd  1.97049   1.00000  2.0 TiB  156 GiB  925 MiB      0 B   471 MiB  1.8 TiB  7.74  1.00  191      up
+255    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB    1 KiB   360 MiB  1.8 TiB  7.74  1.00  180      up
+256    hdd  1.97049   1.00000  2.0 TiB  156 GiB  924 MiB      0 B   507 MiB  1.8 TiB  7.74  1.00  188      up
+257    hdd  1.97049   1.00000  2.0 TiB  156 GiB  904 MiB    2 KiB   386 MiB  1.8 TiB  7.74  1.00  194      up
+258    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB    2 KiB   364 MiB  1.8 TiB  7.74  1.00  181      up
+259    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB      0 B   426 MiB  1.8 TiB  7.74  1.00  183      up
+260    hdd  1.97049   1.00000  2.0 TiB  156 GiB  931 MiB    2 KiB   417 MiB  1.8 TiB  7.74  1.00  185      up
+261    hdd  1.97049   1.00000  2.0 TiB  156 GiB  888 MiB    1 KiB   364 MiB  1.8 TiB  7.74  1.00  182      up
+262    hdd  1.97049   1.00000  2.0 TiB  156 GiB  888 MiB    2 KiB   358 MiB  1.8 TiB  7.74  1.00  181      up
+263    hdd  1.97049   1.00000  2.0 TiB  156 GiB  938 MiB      0 B   437 MiB  1.8 TiB  7.74  1.00  202      up
+  1    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB      0 B   425 MiB  1.8 TiB  7.74  1.00  194      up
+ 12    hdd  1.97049   1.00000  2.0 TiB  156 GiB  898 MiB  104 MiB   935 MiB  1.8 TiB  7.74  1.00  181      up
+ 22    hdd  1.97049   1.00000  2.0 TiB  156 GiB  928 MiB    3 KiB   425 MiB  1.8 TiB  7.74  1.00  191      up
+ 32    hdd  1.97049   1.00000  2.0 TiB  156 GiB  946 MiB    2 KiB   446 MiB  1.8 TiB  7.74  1.00  194      up
+ 42    hdd  1.97049   1.00000  2.0 TiB  156 GiB  922 MiB    1 KiB   571 MiB  1.8 TiB  7.74  1.00  194      up
+ 52    hdd  1.97049   1.00000  2.0 TiB  156 GiB  906 MiB      0 B   382 MiB  1.8 TiB  7.74  1.00  181      up
+ 62    hdd  1.97049   1.00000  2.0 TiB  156 GiB  945 MiB      0 B   552 MiB  1.8 TiB  7.74  1.00  188      up
+ 73    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB    2 KiB   377 MiB  1.8 TiB  7.74  1.00  181      up
+ 83    hdd  1.97049   1.00000  2.0 TiB  156 GiB  902 MiB      0 B   544 MiB  1.8 TiB  7.74  1.00  186      up
+ 93    hdd  1.97049   1.00000  2.0 TiB  156 GiB  909 MiB    1 KiB   394 MiB  1.8 TiB  7.74  1.00  190      up
+103    hdd  1.97049   1.00000  2.0 TiB  156 GiB  940 MiB      0 B   439 MiB  1.8 TiB  7.74  1.00  190      up
+113    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB  102 MiB   992 MiB  1.8 TiB  7.74  1.00  193      up
+123    hdd  1.97049   1.00000  2.0 TiB  156 GiB  888 MiB      0 B   552 MiB  1.8 TiB  7.74  1.00  183      up
+133    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB    2 KiB   401 MiB  1.8 TiB  7.74  1.00  173      up
+143    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB  102 MiB   982 MiB  1.8 TiB  7.74  1.00  195      up
+153    hdd  1.97049   1.00000  2.0 TiB  156 GiB  882 MiB    2 KiB   345 MiB  1.8 TiB  7.74  1.00  176      up
+163    hdd  1.97049   1.00000  2.0 TiB  156 GiB  886 MiB      0 B   374 MiB  1.8 TiB  7.74  1.00  182      up
+173    hdd  1.97049   1.00000  2.0 TiB  156 GiB  905 MiB      0 B   378 MiB  1.8 TiB  7.74  1.00  182      up
+183    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB    1 KiB   370 MiB  1.8 TiB  7.74  1.00  178      up
+193    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB      0 B   490 MiB  1.8 TiB  7.74  1.00  175      up
+203    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB    1 KiB   496 MiB  1.8 TiB  7.74  1.00  191      up
+212    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB    2 KiB   419 MiB  1.8 TiB  7.74  1.00  191      up
+222    hdd  1.97049   1.00000  2.0 TiB  156 GiB  890 MiB      0 B   355 MiB  1.8 TiB  7.74  1.00  177      up
+231    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB  5.0 MiB   429 MiB  1.8 TiB  7.74  1.00  188      up
+  3    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB      0 B   503 MiB  1.8 TiB  7.74  1.00  190      up
+ 13    hdd  1.97049   1.00000  2.0 TiB  156 GiB  929 MiB    2 KiB   507 MiB  1.8 TiB  7.74  1.00  189      up
+ 23    hdd  1.97049   1.00000  2.0 TiB  156 GiB  938 MiB      0 B   428 MiB  1.8 TiB  7.74  1.00  192      up
+ 33    hdd  1.97049   1.00000  2.0 TiB  156 GiB  900 MiB  104 MiB   940 MiB  1.8 TiB  7.74  1.00  183      up
+ 43    hdd  1.97049   1.00000  2.0 TiB  156 GiB  914 MiB      0 B   443 MiB  1.8 TiB  7.74  1.00  181      up
+ 53    hdd  1.97049   1.00000  2.0 TiB  156 GiB  892 MiB      0 B   456 MiB  1.8 TiB  7.74  1.00  184      up
+ 63    hdd  1.97049   1.00000  2.0 TiB  156 GiB  931 MiB      0 B   418 MiB  1.8 TiB  7.74  1.00  188      up
+ 72    hdd  1.97049   1.00000  2.0 TiB  156 GiB  891 MiB    2 KiB   414 MiB  1.8 TiB  7.74  1.00  185      up
+ 82    hdd  1.97049   1.00000  2.0 TiB  156 GiB  918 MiB      0 B   404 MiB  1.8 TiB  7.74  1.00  184      up
+ 92    hdd  1.97049   1.00000  2.0 TiB  156 GiB  916 MiB      0 B   517 MiB  1.8 TiB  7.74  1.00  187      up
+102    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB      0 B   369 MiB  1.8 TiB  7.74  1.00  188      up
+112    hdd  1.97049   1.00000  2.0 TiB  156 GiB  899 MiB      0 B   376 MiB  1.8 TiB  7.74  1.00  179      up
+122    hdd  1.97049   1.00000  2.0 TiB  156 GiB  934 MiB  102 MiB  1003 MiB  1.8 TiB  7.74  1.00  191      up
+132    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB    2 KiB   430 MiB  1.8 TiB  7.74  1.00  188      up
+142    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB      0 B   421 MiB  1.8 TiB  7.74  1.00  193      up
+152    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB      0 B   373 MiB  1.8 TiB  7.74  1.00  177      up
+162    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB      0 B   368 MiB  1.8 TiB  7.74  1.00  181      up
+172    hdd  1.97049   1.00000  2.0 TiB  156 GiB  891 MiB  104 MiB   918 MiB  1.8 TiB  7.74  1.00  186      up
+182    hdd  1.97049   1.00000  2.0 TiB  156 GiB  929 MiB    2 KiB   422 MiB  1.8 TiB  7.74  1.00  186      up
+192    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB      0 B   368 MiB  1.8 TiB  7.74  1.00  179      up
+202    hdd  1.97049   1.00000  2.0 TiB  156 GiB  929 MiB      0 B   463 MiB  1.8 TiB  7.74  1.00  199      up
+213    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB  102 MiB  1001 MiB  1.8 TiB  7.74  1.00  190      up
+223    hdd  1.97049   1.00000  2.0 TiB  156 GiB  943 MiB    1 KiB   436 MiB  1.8 TiB  7.74  1.00  189      up
+233    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB    2 KiB   427 MiB  1.8 TiB  7.74  1.00  190      up
+  9    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB      0 B   420 MiB  1.8 TiB  7.74  1.00  189      up
+ 19    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB      0 B   356 MiB  1.8 TiB  7.74  1.00  178      up
+ 29    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB      0 B   435 MiB  1.8 TiB  7.74  1.00  189      up
+ 39    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB      0 B   433 MiB  1.8 TiB  7.74  1.00  198      up
+ 49    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB    1 KiB   369 MiB  1.8 TiB  7.74  1.00  186      up
+ 59    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB    2 KiB   394 MiB  1.8 TiB  7.74  1.00  179      up
+ 68    hdd  1.97049   1.00000  2.0 TiB  156 GiB  888 MiB    2 KiB   413 MiB  1.8 TiB  7.74  1.00  189      up
+ 78    hdd  1.97049   1.00000  2.0 TiB  156 GiB  943 MiB      0 B   439 MiB  1.8 TiB  7.74  1.00  189      up
+ 88    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB    1 KiB   362 MiB  1.8 TiB  7.74  1.00  180      up
+ 97    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB    1 KiB   479 MiB  1.8 TiB  7.74  1.00  187      up
+107    hdd  1.97049   1.00000  2.0 TiB  156 GiB  926 MiB    2 KiB   1.1 GiB  1.8 TiB  7.74  1.00  194      up
+117    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB    1 KiB   430 MiB  1.8 TiB  7.74  1.00  183      up
+127    hdd  1.97049   1.00000  2.0 TiB  156 GiB  886 MiB  105 MiB   903 MiB  1.8 TiB  7.74  1.00  186      up
+138    hdd  1.97049   1.00000  2.0 TiB  156 GiB  891 MiB    2 KiB   370 MiB  1.8 TiB  7.74  1.00  178      up
+148    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB      0 B   417 MiB  1.8 TiB  7.74  1.00  192      up
+159    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB    2 KiB   434 MiB  1.8 TiB  7.74  1.00  194      up
+169    hdd  1.97049   1.00000  2.0 TiB  156 GiB  885 MiB      0 B   364 MiB  1.8 TiB  7.74  1.00  186      up
+178    hdd  1.97049   1.00000  2.0 TiB  156 GiB  890 MiB    1 KiB   358 MiB  1.8 TiB  7.74  1.00  188      up
+188    hdd  1.97049   1.00000  2.0 TiB  156 GiB  911 MiB      0 B   395 MiB  1.8 TiB  7.74  1.00  192      up
+198    hdd  1.97049   1.00000  2.0 TiB  156 GiB  909 MiB      0 B   392 MiB  1.8 TiB  7.74  1.00  187      up
+208    hdd  1.97049   1.00000  2.0 TiB  156 GiB  888 MiB  104 MiB   909 MiB  1.8 TiB  7.74  1.00  179      up
+218    hdd  1.97049   1.00000  2.0 TiB  156 GiB  907 MiB    2 KiB   387 MiB  1.8 TiB  7.74  1.00  185      up
+229    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB    2 KiB   369 MiB  1.8 TiB  7.74  1.00  180      up
+238    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB      0 B   363 MiB  1.8 TiB  7.74  1.00  178      up
+  0    hdd  1.97049   1.00000  2.0 TiB  156 GiB  940 MiB      0 B   483 MiB  1.8 TiB  7.74  1.00  192      up
+ 10    hdd  1.97049   1.00000  2.0 TiB  156 GiB  945 MiB    2 KiB   440 MiB  1.8 TiB  7.74  1.00  188      up
+ 20    hdd  1.97049   1.00000  2.0 TiB  156 GiB  934 MiB      0 B   429 MiB  1.8 TiB  7.74  1.00  191      up
+ 30    hdd  1.97049   1.00000  2.0 TiB  156 GiB  902 MiB      0 B   371 MiB  1.8 TiB  7.74  1.00  181      up
+ 41    hdd  1.97049   1.00000  2.0 TiB  156 GiB  922 MiB      0 B   404 MiB  1.8 TiB  7.74  1.00  184      up
+ 51    hdd  1.97049   1.00000  2.0 TiB  156 GiB  920 MiB      0 B   408 MiB  1.8 TiB  7.74  1.00  196      up
+ 61    hdd  1.97049   1.00000  2.0 TiB  156 GiB  942 MiB    2 KiB   444 MiB  1.8 TiB  7.74  1.00  193      up
+ 71    hdd  1.97049   1.00000  2.0 TiB  156 GiB  939 MiB      0 B   533 MiB  1.8 TiB  7.74  1.00  182      up
+ 81    hdd  1.97049   1.00000  2.0 TiB  156 GiB  910 MiB      0 B   394 MiB  1.8 TiB  7.74  1.00  181      up
+ 91    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB      0 B   474 MiB  1.8 TiB  7.74  1.00  187      up
+101    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB  5.0 MiB   379 MiB  1.8 TiB  7.74  1.00  181      up
+111    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB    2 KiB   373 MiB  1.8 TiB  7.74  1.00  184      up
+121    hdd  1.97049   1.00000  2.0 TiB  156 GiB  901 MiB      0 B   472 MiB  1.8 TiB  7.74  1.00  184      up
+131    hdd  1.97049   1.00000  2.0 TiB  156 GiB  934 MiB      0 B   438 MiB  1.8 TiB  7.74  1.00  194      up
+141    hdd  1.97049   1.00000  2.0 TiB  156 GiB  936 MiB      0 B   497 MiB  1.8 TiB  7.74  1.00  192      up
+151    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB    2 KiB   495 MiB  1.8 TiB  7.74  1.00  192      up
+161    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB    2 KiB   427 MiB  1.8 TiB  7.74  1.00  186      up
+171    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB      0 B   368 MiB  1.8 TiB  7.74  1.00  185      up
+181    hdd  1.97049   1.00000  2.0 TiB  156 GiB  895 MiB      0 B   367 MiB  1.8 TiB  7.74  1.00  185      up
+191    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB      0 B   464 MiB  1.8 TiB  7.74  1.00  183      up
+201    hdd  1.97049   1.00000  2.0 TiB  156 GiB  930 MiB      0 B   421 MiB  1.8 TiB  7.74  1.00  184      up
+211    hdd  1.97049   1.00000  2.0 TiB  156 GiB  934 MiB    2 KiB   466 MiB  1.8 TiB  7.74  1.00  185      up
+221    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB  105 MiB   914 MiB  1.8 TiB  7.74  1.00  184      up
+232    hdd  1.97049   1.00000  2.0 TiB  156 GiB  940 MiB      0 B   657 MiB  1.8 TiB  7.74  1.00  193      up
+  7    hdd  1.97049   1.00000  2.0 TiB  156 GiB  938 MiB      0 B   435 MiB  1.8 TiB  7.74  1.00  184      up
+ 17    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB      0 B   380 MiB  1.8 TiB  7.74  1.00  179      up
+ 24    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB    1 KiB   371 MiB  1.8 TiB  7.74  1.00  184      up
+ 34    hdd  1.97049   1.00000  2.0 TiB  156 GiB  927 MiB    1 KiB   442 MiB  1.8 TiB  7.74  1.00  190      up
+ 44    hdd  1.97049   1.00000  2.0 TiB  156 GiB  935 MiB    2 KiB   436 MiB  1.8 TiB  7.74  1.00  191      up
+ 54    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB  102 MiB   997 MiB  1.8 TiB  7.74  1.00  193      up
+ 64    hdd  1.97049   1.00000  2.0 TiB  156 GiB  941 MiB    2 KiB   434 MiB  1.8 TiB  7.74  1.00  189      up
+ 74    hdd  1.97049   1.00000  2.0 TiB  156 GiB  887 MiB    2 KiB   355 MiB  1.8 TiB  7.74  1.00  177      up
+ 85    hdd  1.97049   1.00000  2.0 TiB  156 GiB  897 MiB  104 MiB   921 MiB  1.8 TiB  7.74  1.00  190      up
+ 95    hdd  1.97049   1.00000  2.0 TiB  156 GiB  934 MiB    2 KiB   1.1 GiB  1.8 TiB  7.74  1.00  185      up
+105    hdd  1.97049   1.00000  2.0 TiB  156 GiB  891 MiB      0 B   364 MiB  1.8 TiB  7.74  1.00  183      up
+115    hdd  1.97049   1.00000  2.0 TiB  156 GiB  933 MiB      0 B   424 MiB  1.8 TiB  7.74  1.00  198      up
+124    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB    2 KiB   362 MiB  1.8 TiB  7.74  1.00  181      up
+135    hdd  1.97049   1.00000  2.0 TiB  156 GiB  896 MiB      0 B   370 MiB  1.8 TiB  7.74  1.00  176      up
+145    hdd  1.97049   1.00000  2.0 TiB  156 GiB  894 MiB      0 B   426 MiB  1.8 TiB  7.74  1.00  184      up
+154    hdd  1.97049   1.00000  2.0 TiB  156 GiB  890 MiB      0 B   417 MiB  1.8 TiB  7.74  1.00  179      up
+165    hdd  1.97049   1.00000  2.0 TiB  156 GiB  889 MiB      0 B   685 MiB  1.8 TiB  7.74  1.00  182      up
+174    hdd  1.97049   1.00000  2.0 TiB  156 GiB  937 MiB    2 KiB   434 MiB  1.8 TiB  7.74  1.00  190      up
+184    hdd  1.97049   1.00000  2.0 TiB  156 GiB  902 MiB      0 B   379 MiB  1.8 TiB  7.74  1.00  180      up
+194    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB      0 B   363 MiB  1.8 TiB  7.74  1.00  178      up
+204    hdd  1.97049   1.00000  2.0 TiB  156 GiB  893 MiB  104 MiB   924 MiB  1.8 TiB  7.74  1.00  185      up
+214    hdd  1.97049   1.00000  2.0 TiB  156 GiB  932 MiB   99 MiB   1.0 GiB  1.8 TiB  7.74  1.00  193      up
+224    hdd  1.97049   1.00000  2.0 TiB  156 GiB  914 MiB    1 KiB   402 MiB  1.8 TiB  7.74  1.00  183      up
+234    hdd  1.97049   1.00000  2.0 TiB  156 GiB  929 MiB      0 B   437 MiB  1.8 TiB  7.74  1.00  192      up
+                        TOTAL  567 TiB   44 TiB  257 GiB  3.4 GiB   137 GiB  524 TiB  7.74                   
+MIN/MAX VAR: 1.00/1.00  STDDEV: 0
+2022/02/23-11:29:53: \n osd_memory_targets: osd.1: 4294967296
+osd.2: 4294967296
+osd.3: 4294967296
+osd.4: 4294967296
+osd.5: 4294967296
+osd.6: 4294967296
+osd.7: 4294967296
+osd.8: 4294967296
+osd.9: 4294967296
+osd.10: 4294967296
+osd.11: 4294967296
+osd.12: 4294967296
+osd.13: 4294967296
+osd.14: 4294967296
+osd.15: 4294967296
+osd.16: 4294967296
+osd.17: 4294967296
+osd.18: 4294967296
+osd.19: 4294967296
+osd.20: 4294967296
+osd.21: 4294967296
+osd.22: 4294967296
+osd.23: 4294967296
+osd.24: 4294967296
+osd.25: 4294967296
+osd.26: 4294967296
+osd.27: 4294967296
+osd.28: 4294967296
+osd.29: 4294967296
+osd.30: 4294967296
+osd.31: 4294967296
+osd.32: 4294967296
+osd.33: 4294967296
+osd.34: 4294967296
+osd.35: 4294967296
+osd.36: 4294967296
+osd.37: 4294967296
+osd.38: 4294967296
+osd.39: 4294967296
+osd.40: 4294967296
+osd.41: 4294967296
+osd.42: 4294967296
+osd.43: 4294967296
+osd.44: 4294967296
+osd.45: 4294967296
+osd.46: 4294967296
+osd.47: 4294967296
+osd.48: 4294967296
+osd.49: 4294967296
+osd.50: 4294967296
+osd.51: 4294967296
+osd.52: 4294967296
+osd.53: 4294967296
+osd.54: 4294967296
+osd.55: 4294967296
+osd.56: 4294967296
+osd.57: 4294967296
+osd.58: 4294967296
+osd.59: 4294967296
+osd.60: 4294967296
+osd.61: 4294967296
+osd.62: 4294967296
+osd.63: 4294967296
+osd.64: 4294967296
+osd.65: 4294967296
+osd.66: 4294967296
+osd.67: 4294967296
+osd.68: 4294967296
+osd.69: 4294967296
+osd.70: 4294967296
+osd.71: 4294967296
+osd.72: 4294967296
+osd.73: 4294967296
+osd.74: 4294967296
+osd.75: 4294967296
+osd.76: 4294967296
+osd.77: 4294967296
+osd.78: 4294967296
+osd.79: 4294967296
+osd.80: 4294967296
+osd.81: 4294967296
+osd.82: 4294967296
+osd.83: 4294967296
+osd.84: 4294967296
+osd.85: 4294967296
+osd.86: 4294967296
+osd.87: 4294967296
+osd.88: 4294967296
+osd.89: 4294967296
+osd.90: 4294967296
+osd.91: 4294967296
+osd.92: 4294967296
+osd.93: 4294967296
+osd.94: 4294967296
+osd.95: 4294967296
+osd.96: 4294967296
+osd.97: 4294967296
+osd.98: 4294967296
+osd.99: 4294967296
+osd.100: 4294967296
+osd.101: 4294967296
+osd.102: 4294967296
+osd.103: 4294967296
+osd.104: 4294967296
+osd.105: 4294967296
+osd.106: 4294967296
+osd.107: 4294967296
+osd.108: 4294967296
+osd.109: 4294967296
+osd.110: 4294967296
+osd.111: 4294967296
+osd.112: 4294967296
+osd.113: 4294967296
+osd.114: 4294967296
+osd.115: 4294967296
+osd.116: 4294967296
+osd.117: 4294967296
+osd.118: 4294967296
+osd.119: 4294967296
+osd.120: 4294967296
+osd.121: 4294967296
+osd.122: 4294967296
+osd.123: 4294967296
+osd.124: 4294967296
+osd.125: 4294967296
+osd.126: 4294967296
+osd.127: 4294967296
+osd.128: 4294967296
+osd.129: 4294967296
+osd.130: 4294967296
+osd.131: 4294967296
+osd.132: 4294967296
+osd.133: 4294967296
+osd.134: 4294967296
+osd.135: 4294967296
+osd.136: 4294967296
+osd.137: 4294967296
+osd.138: 4294967296
+osd.139: 4294967296
+osd.140: 4294967296
+osd.141: 4294967296
+osd.142: 4294967296
+osd.143: 4294967296
+osd.144: 4294967296
+osd.145: 4294967296
+osd.146: 4294967296
+osd.147: 4294967296
+osd.148: 4294967296
+osd.149: 4294967296
+osd.150: 4294967296
+osd.151: 4294967296
+osd.152: 4294967296
+osd.153: 4294967296
+osd.154: 4294967296
+osd.155: 4294967296
+osd.156: 4294967296
+osd.157: 4294967296
+osd.158: 4294967296
+osd.159: 4294967296
+osd.160: 4294967296
+osd.161: 4294967296
+osd.162: 4294967296
+osd.163: 4294967296
+osd.164: 4294967296
+osd.165: 4294967296
+osd.166: 4294967296
+osd.167: 4294967296
+osd.168: 4294967296
+osd.169: 4294967296
+osd.170: 4294967296
+osd.171: 4294967296
+osd.172: 4294967296
+osd.173: 4294967296
+osd.174: 4294967296
+osd.175: 4294967296
+osd.176: 4294967296
+osd.177: 4294967296
+osd.178: 4294967296
+osd.179: 4294967296
+osd.180: 4294967296
+osd.181: 4294967296
+osd.182: 4294967296
+osd.183: 4294967296
+osd.184: 4294967296
+osd.185: 4294967296
+osd.186: 4294967296
+osd.187: 4294967296
+osd.188: 4294967296
+osd.189: 4294967296
+osd.190: 4294967296
+osd.191: 4294967296
+osd.192: 4294967296
+osd.193: 4294967296
+osd.194: 4294967296
+osd.195: 4294967296
+osd.196: 4294967296
+osd.197: 4294967296
+osd.198: 4294967296
+osd.199: 4294967296
+osd.200: 4294967296
+osd.201: 4294967296
+osd.202: 4294967296
+osd.203: 4294967296
+osd.204: 4294967296
+osd.205: 4294967296
+osd.206: 4294967296
+osd.207: 4294967296
+osd.208: 4294967296
+osd.209: 4294967296
+osd.210: 4294967296
+osd.211: 4294967296
+osd.212: 4294967296
+osd.213: 4294967296
+osd.214: 4294967296
+osd.215: 4294967296
+osd.216: 4294967296
+osd.217: 4294967296
+osd.218: 4294967296
+osd.219: 4294967296
+osd.220: 4294967296
+osd.221: 4294967296
+osd.222: 4294967296
+osd.223: 4294967296
+osd.224: 4294967296
+osd.225: 4294967296
+osd.226: 4294967296
+osd.227: 4294967296
+osd.228: 4294967296
+osd.229: 4294967296
+osd.230: 4294967296
+osd.231: 4294967296
+osd.232: 4294967296
+osd.233: 4294967296
+osd.234: 4294967296
+osd.235: 4294967296
+osd.236: 4294967296
+osd.237: 4294967296
+osd.238: 4294967296
+osd.239: 4294967296
+osd.240: 4294967296
+osd.241: 4294967296
+osd.242: 4294967296
+osd.243: 4294967296
+osd.244: 4294967296
+osd.245: 4294967296
+osd.246: 4294967296
+osd.247: 4294967296
+osd.248: 4294967296
+osd.249: 4294967296
+osd.250: 4294967296
+osd.251: 4294967296
+osd.252: 4294967296
+osd.253: 4294967296
+osd.254: 4294967296
+osd.255: 4294967296
+osd.256: 4294967296
+osd.257: 4294967296
+osd.258: 4294967296
+osd.259: 4294967296
+osd.260: 4294967296
+osd.261: 4294967296
+osd.262: 4294967296
+osd.263: 4294967296
+osd.264: 4294967296
+osd.265: 4294967296
+osd.266: 4294967296
+osd.267: 4294967296
+osd.268: 4294967296
+osd.269: 4294967296
+osd.270: 4294967296
+osd.271: 4294967296
+osd.272: 4294967296
+osd.273: 4294967296
+osd.274: 4294967296
+osd.275: 4294967296
+osd.276: 4294967296
+osd.277: 4294967296
+osd.278: 4294967296
+osd.279: 4294967296
+osd.280: 4294967296
+osd.281: 4294967296
+osd.282: 4294967296
+osd.283: 4294967296
+osd.284: 4294967296
+osd.285: 4294967296
+osd.286: 4294967296
+osd.287: 4294967296
+osd.288: 4294967296
+
+PG Autoscale:
+POOL                         SIZE  TARGET SIZE  RATE  RAW CAPACITY   RATIO  TARGET RATIO  EFFECTIVE RATIO  BIAS  PG_NUM  NEW PG_NUM  AUTOSCALE  
+device_health_metrics       5111k                3.0        567.4T  0.0000                                  1.0       1              on         
+default.rgw.control            0                 3.0        567.4T  0.0000                                  1.0     256              on         
+default.rgw.buckets.data   175.4G                1.5        567.4T  0.0005                                  1.0    8192              on         
+default.rgw.buckets.index   1684M                3.0        567.4T  0.0000                                  1.0     512              on         
+default.rgw.log             4856                 3.0        567.4T  0.0000                                  1.0     256              on         
+default.rgw.meta            1255k                3.0        567.4T  0.0000                                  1.0     256              on         
+.rgw.root                   1323                 3.0        567.4T  0.0000                                  1.0     256              on         
+
+RGW netstat & qlen/qactive ...
+f10-h01-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.220:8080      0.0.0.0:*               LISTEN      2394800/radosgw     
+f10-h05-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.178:8080      0.0.0.0:*               LISTEN      2835936/radosgw     
+        "qlen": 402,
+        "qactive": 402,
+f10-h09-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.213:8080      0.0.0.0:*               LISTEN      2865882/radosgw     
+        "qlen": 165,
+        "qactive": 165,
+f10-h13-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.109:8080      0.0.0.0:*               LISTEN      2888012/radosgw     
+        "qlen": 209,
+        "qactive": 209,
+f10-h17-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.9:8080        0.0.0.0:*               LISTEN      2850199/radosgw     
+f10-h21-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.38.57:8080       0.0.0.0:*               LISTEN      2845780/radosgw     
+        "qlen": 323,
+        "qactive": 323,
+f10-h25-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.180:8080      0.0.0.0:*               LISTEN      2822104/radosgw     
+        "qlen": 292,
+        "qactive": 292,
+f11-h01-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.208:8080      0.0.0.0:*               LISTEN      2897026/radosgw     
+f11-h05-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.190:8080      0.0.0.0:*               LISTEN      2824107/radosgw     
+f11-h09-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.38.145:8080      0.0.0.0:*               LISTEN      2857708/radosgw     
+f11-h13-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.186:8080      0.0.0.0:*               LISTEN      2760117/radosgw     
+f11-h17-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.13:8080       0.0.0.0:*               LISTEN      2840922/radosgw     
+
+--------------------------------------------------------
+
+2022/02/23-11:35:07: RESHARD Queue Length 10
+2022/02/23-11:35:07: RESHARD List [
+    {
+        "time": "2022-02-23T11:34:13.217758Z",
+        "tenant": "",
+        "bucket_name": "mycontainers1",
+        "bucket_id": "9f6c9988-45fd-4aee-9736-97544ae986a2.42010.1",
+        "old_num_shards": 11,
+        "tentative_new_num_shards": 211
+    }
+]
+
+LA: 2022/02/23-11:35:07:   3.45, 7.38, 5.24
+
+RGW stats:          proc   %cpu %mem  vsz    rss     memused       memlimit
+f10-h01-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.4 0.0 5561780 266744   119328075776   9223372036854771712
+f10-h05-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.6 0.0 5664888 303444   127626854400   9223372036854771712
+f10-h09-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.3 0.0 5565868 301044   123805294592   9223372036854771712
+f10-h13-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.5 0.0 5589888 317732   123096768512   9223372036854771712
+f10-h17-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.3 0.0 5490196 226980   119707172864   9223372036854771712
+f10-h21-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.9 0.0 5698460 348404   133609291776   9223372036854771712
+f10-h25-000-6049p.rdu2.scalelab.redhat.com   radosgw 16.6 0.0 5648496 326992   111945789440   9223372036854771712
+f11-h01-000-6049p.rdu2.scalelab.redhat.com   radosgw 18.5 0.0 5567756 295740   125274447872   9223372036854771712
+f11-h05-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.5 0.0 5703584 300444   129175986176   9223372036854771712
+f11-h09-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.5 0.0 5560680 260904   119481495552   9223372036854771712
+f11-h13-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.2 0.0 5523352 225076   116510302208   9223372036854771712
+f11-h17-000-6049p.rdu2.scalelab.redhat.com   radosgw 17.7 0.0 5693352 288072   129119129600   9223372036854771712
+
+OSD: 
+2022/02/23-11:35:13: f10-h01-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 4832760 1929924
+ceph-osd         0.3  0.4 5328240 1694700
+ceph-osd         0.3  0.4 3884396 1684048
+ceph-osd         0.3  0.4 2855152 1960628
+ceph-osd         0.3  0.4 3079540 1740708
+ceph-osd         0.3  0.4 2833776 1920376
+ceph-osd         0.3  0.5 4902252 1997216
+ceph-osd         0.3  0.4 2975092 1632200
+ceph-osd         0.3  0.4 2997624 1676812
+ceph-osd         0.4  0.6 3387384 2475304
+ceph-osd         0.3  0.4 3000836 1621900
+ceph-osd         0.3  0.4 3094012 1773768
+ceph-osd         0.4  0.4 3684720 1757104
+ceph-osd         0.3  0.4 4508020 1815472
+ceph-osd         0.4  0.6 3343332 2401804
+ceph-osd         0.3  0.4 2981120 1640844
+ceph-osd         0.3  0.4 2923888 1948596
+ceph-osd         0.3  0.4 3073536 1775328
+ceph-osd         0.3  0.4 2817528 1947984
+ceph-osd         0.3  0.4 3335536 1773812
+ceph-osd         0.3  0.4 3091828 1792584
+ceph-osd         0.3  0.4 3078520 1796536
+ceph-osd         0.3  0.5 2859376 1975048
+ceph-osd         0.3  0.4 3467632 1775464
+2022/02/23-11:35:13: f10-h05-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 4157144 1735916
+ceph-osd         0.3  0.4 3032036 1847708
+ceph-osd         0.3  0.5 3310828 2036348
+ceph-osd         0.3  0.4 3061308 1690360
+ceph-osd         0.4  0.6 3328448 2395232
+ceph-osd         0.3  0.4 2804832 1922584
+ceph-osd         0.5  0.5 3221596 2276836
+ceph-osd         0.3  0.4 2997284 1688348
+ceph-osd         0.3  0.4 3084528 1750280
+ceph-osd         0.3  0.4 3132776 1936508
+ceph-osd         0.5  0.5 3231120 2252524
+ceph-osd         0.3  0.4 2963828 1676996
+ceph-osd         0.4  0.6 3370872 2415092
+ceph-osd         0.3  0.5 2891124 1990896
+ceph-osd         0.3  0.4 3375476 1795560
+ceph-osd         0.3  0.4 3020152 1724388
+ceph-osd         0.3  0.4 3088760 1828936
+ceph-osd         0.3  0.4 3101104 1741948
+ceph-osd         0.3  0.4 3032432 1750048
+ceph-osd         0.3  0.4 4002300 1806964
+ceph-osd         0.3  0.5 4996464 1991008
+ceph-osd         0.3  0.4 2989424 1657924
+ceph-osd         0.3  0.4 4335988 1824652
+ceph-osd         0.3  0.4 2823536 1930300
+2022/02/23-11:35:13: f10-h09-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 3529444 1778528
+ceph-osd         0.3  0.4 3076040 1822028
+ceph-osd         0.3  0.4 3091692 1797992
+ceph-osd         0.3  0.4 3088760 1779336
+ceph-osd         0.3  0.4 2942424 1651288
+ceph-osd         0.3  0.4 2951072 1631964
+ceph-osd         0.3  0.4 3064312 1760840
+ceph-osd         0.3  0.5 2857944 1980880
+ceph-osd         0.3  0.4 3021332 1773468
+ceph-osd         0.3  0.4 3081384 1853820
+ceph-osd         0.4  0.6 3308912 2370904
+ceph-osd         0.3  0.4 2813296 1935476
+ceph-osd         0.3  0.4 3545456 1771796
+ceph-osd         0.3  0.4 2874736 1627892
+ceph-osd         0.3  0.6 3409764 2455900
+ceph-osd         0.3  0.4 4679024 1801628
+ceph-osd         0.4  0.4 4432240 1723988
+ceph-osd         0.5  0.6 3384148 2406884
+ceph-osd         0.3  0.5 5726712 2006868
+ceph-osd         0.3  0.4 3819000 1717656
+ceph-osd         0.3  0.4 4099640 1640096
+ceph-osd         0.3  0.4 3028472 1622308
+ceph-osd         0.3  0.4 3096960 1798116
+ceph-osd         0.3  0.4 3113336 1770092
+2022/02/23-11:35:14: f10-h13-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.5 3093128 2077424
+ceph-osd         0.3  0.4 3090336 1821800
+ceph-osd         0.3  0.4 3010752 1789596
+ceph-osd         0.3  0.5 3234236 1998876
+ceph-osd         0.3  0.5 3077880 2009740
+ceph-osd         0.3  0.4 6271008 1870752
+ceph-osd         0.3  0.4 2870780 1677376
+ceph-osd         0.3  0.5 2883544 1982160
+ceph-osd         0.3  0.4 2935312 1621408
+ceph-osd         0.3  0.4 2843944 1965996
+ceph-osd         0.3  0.4 3073404 1742732
+ceph-osd         0.4  0.5 3197312 2278304
+ceph-osd         0.3  0.4 2971124 1708708
+ceph-osd         0.3  0.4 2814320 1926552
+ceph-osd         0.3  0.4 3408244 1789080
+ceph-osd         0.3  0.4 3083644 1748160
+ceph-osd         0.3  0.4 3346804 1969832
+ceph-osd         0.3  0.4 3081592 1780688
+ceph-osd         0.3  0.5 2899312 2021896
+ceph-osd         0.3  0.5 3496304 2003764
+ceph-osd         0.3  0.4 3020148 1853240
+ceph-osd         0.7  0.6 3510348 2521912
+ceph-osd         0.3  0.4 3492212 1814588
+ceph-osd         0.3  0.4 2959864 1631452
+2022/02/23-11:35:14: f10-h17-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 3082764 1800292
+ceph-osd         0.3  0.4 2993108 1662132
+ceph-osd         0.3  0.5 3287788 2363812
+ceph-osd         0.3  0.4 2847264 1963784
+ceph-osd         0.3  0.4 2964828 1648504
+ceph-osd         0.3  0.4 3033124 1741892
+ceph-osd         0.3  0.4 3069440 1761348
+ceph-osd         0.3  0.4 3068896 1771060
+ceph-osd         0.3  0.4 3087896 1758724
+ceph-osd         0.3  0.4 4279324 1749844
+ceph-osd         0.3  0.4 5038448 1740100
+ceph-osd         0.3  0.4 3471728 1748068
+ceph-osd         0.4  0.5 3461488 2018952
+ceph-osd         0.3  0.4 3080572 1821784
+ceph-osd         0.3  0.4 3255664 1785628
+ceph-osd         0.3  0.4 3373420 1686036
+ceph-osd         0.3  0.4 3148284 1838524
+ceph-osd         0.3  0.4 3037548 1831352
+ceph-osd         0.3  0.4 2885108 1702152
+ceph-osd         0.3  0.5 6535540 2005752
+ceph-osd         0.3  0.4 3075452 1703012
+ceph-osd         0.4  0.6 4753776 2408076
+ceph-osd         0.4  0.4 2992500 1740604
+ceph-osd         0.3  0.4 3079540 1738608
+2022/02/23-11:35:14: f10-h21-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 4284108 1797312
+ceph-osd         0.3  0.5 2887612 1998496
+ceph-osd         0.3  0.5 3161128 2023436
+ceph-osd         0.3  0.5 3672616 2049432
+ceph-osd         0.3  0.4 4015920 1751212
+ceph-osd         0.3  0.5 3356764 1992144
+ceph-osd         0.5  0.6 3462160 2535684
+ceph-osd         0.3  0.4 3565588 1911332
+ceph-osd         0.3  0.4 2828640 1941124
+ceph-osd         0.3  0.5 3086708 2004892
+ceph-osd         0.3  0.4 2914668 1869104
+ceph-osd         0.4  0.6 3878256 2559724
+ceph-osd         0.4  0.5 2868592 1990352
+ceph-osd         0.3  0.4 3092988 1738020
+ceph-osd         0.3  0.5 2902384 2017620
+ceph-osd         0.4  0.6 3351952 2395552
+ceph-osd         0.3  0.4 3076468 1816844
+ceph-osd         0.3  0.4 3082616 1919528
+ceph-osd         0.3  0.4 2977140 1678660
+ceph-osd         0.4  0.6 4449652 2431436
+ceph-osd         0.3  0.4 3095932 1862284
+ceph-osd         0.5  0.6 3352356 2461536
+ceph-osd         0.3  0.4 3087732 1828800
+ceph-osd         0.3  0.4 3089780 1786112
+2022/02/23-11:35:14: f10-h25-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 2868584 1681512
+ceph-osd         0.3  0.4 3576176 1752156
+ceph-osd         0.3  0.4 3091972 1830872
+ceph-osd         0.3  0.4 3078516 1816544
+ceph-osd         0.3  0.4 3807736 1811008
+ceph-osd         0.3  0.4 3080560 1814676
+ceph-osd         0.4  0.5 4303212 2093208
+ceph-osd         0.3  0.4 4130156 1793188
+ceph-osd         0.3  0.4 2997616 1966784
+ceph-osd         0.3  0.4 2945536 1679384
+ceph-osd         0.3  0.4 3896688 1657748
+ceph-osd         0.3  0.4 5209584 1688660
+ceph-osd         0.3  0.4 2827628 1950292
+ceph-osd         0.3  0.4 3026284 1713376
+ceph-osd         0.3  0.4 3031412 1796864
+ceph-osd         0.3  0.4 2824556 1955472
+ceph-osd         0.3  0.4 2957672 1811220
+ceph-osd         0.3  0.5 2867564 2023396
+ceph-osd         0.3  0.4 2847080 1969312
+ceph-osd         0.3  0.4 5583216 1793424
+ceph-osd         0.3  0.4 3110260 1825104
+ceph-osd         0.3  0.5 4544880 2029076
+ceph-osd         0.3  0.5 3630444 2040616
+ceph-osd         0.3  0.4 3081592 1851968
+2022/02/23-11:35:15: f11-h01-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 5260932 1850536
+ceph-osd         0.3  0.4 3455892 1785004
+ceph-osd         0.4  0.6 3372716 2449312
+ceph-osd         0.5  0.5 3541488 2253232
+ceph-osd         0.3  0.4 2883824 1660116
+ceph-osd         0.3  0.4 2919536 1645056
+ceph-osd         0.4  0.6 3354044 2423676
+ceph-osd         0.3  0.4 2838424 1968760
+ceph-osd         0.3  0.4 2829712 1971192
+ceph-osd         0.3  0.4 3085468 1746424
+ceph-osd         0.3  0.5 4454908 2050372
+ceph-osd         0.3  0.4 2908532 1752132
+ceph-osd         0.3  0.4 6002168 1802184
+ceph-osd         0.3  0.4 5053808 1783300
+ceph-osd         0.3  0.4 3061112 1805840
+ceph-osd         0.3  0.5 3155316 2038680
+ceph-osd         0.3  0.4 3217916 1821672
+ceph-osd         0.3  0.4 4813164 1841320
+ceph-osd         0.3  0.4 2955632 1824452
+ceph-osd         0.3  0.5 2887028 2008624
+ceph-osd         0.3  0.4 2933112 1886232
+ceph-osd         0.3  0.5 3237232 2036820
+ceph-osd         0.3  0.4 2948464 1776988
+ceph-osd         0.3  0.4 3022192 1731088
+2022/02/23-11:35:15: f11-h05-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 3089060 1715684
+ceph-osd         0.3  0.5 3200520 1990588
+ceph-osd         0.4  0.6 3432352 2494516
+ceph-osd         0.3  0.4 2973172 1832380
+ceph-osd         0.3  0.4 3196252 1836284
+ceph-osd         0.3  0.4 3090472 1805908
+ceph-osd         0.3  0.4 3048948 1716124
+ceph-osd         0.3  0.4 2832344 1971740
+ceph-osd         0.5  0.5 3236724 2278568
+ceph-osd         0.3  0.4 3106092 1857968
+ceph-osd         0.3  0.4 2818552 1945828
+ceph-osd         0.3  0.4 3035504 1827076
+ceph-osd         0.5  0.6 3360424 2447900
+ceph-osd         0.3  0.4 3085828 1785132
+ceph-osd         0.3  0.4 4813172 1800048
+ceph-osd         0.3  0.4 3101184 1809624
+ceph-osd         0.3  0.4 2994552 1793188
+ceph-osd         0.4  0.5 3279228 2334052
+ceph-osd         0.3  0.4 3029496 1761888
+ceph-osd         0.3  0.4 4266348 1670292
+ceph-osd         0.3  0.4 3076472 1780708
+ceph-osd         0.3  0.4 2997612 1732976
+ceph-osd         0.3  0.4 5268988 1764924
+ceph-osd         0.3  0.4 2913652 1770800
+2022/02/23-11:35:15: f11-h09-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 3325688 1838932
+ceph-osd         0.3  0.4 3037712 1802904
+ceph-osd         0.4  0.5 3170184 2251264
+ceph-osd         0.3  0.5 2860684 1996012
+ceph-osd         0.3  0.4 3073708 1801568
+ceph-osd         0.3  0.4 3972304 1853732
+ceph-osd         0.3  0.5 4891364 1993520
+ceph-osd         0.3  0.4 2817228 1948224
+ceph-osd         0.3  0.4 3096196 1769716
+ceph-osd         0.3  0.4 2818416 1952392
+ceph-osd         0.3  0.4 3040640 1793644
+ceph-osd         0.4  0.5 3219760 2274256
+ceph-osd         0.3  0.5 3114420 2071112
+ceph-osd         0.3  0.5 3036528 1979376
+ceph-osd         0.3  0.4 2826608 1952112
+ceph-osd         0.3  0.4 3082672 1854116
+ceph-osd         0.3  0.4 3079544 1830632
+ceph-osd         0.3  0.5 2828656 1977356
+ceph-osd         0.3  0.5 3106160 1979060
+ceph-osd         0.3  0.4 2964852 1696056
+ceph-osd         0.3  0.4 6110716 1841760
+ceph-osd         0.3  0.5 3125612 1995500
+ceph-osd         0.3  0.4 3561840 1828996
+ceph-osd         0.3  0.4 3897716 1812284
+2022/02/23-11:35:15: f11-h13-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.4 3033760 1862640
+ceph-osd         0.3  0.4 3070924 1779700
+ceph-osd         0.3  0.5 2836520 1974944
+ceph-osd         0.3  0.5 3056176 2039232
+ceph-osd         0.3  0.4 2970060 1720284
+ceph-osd         0.3  0.4 3092580 1824608
+ceph-osd         0.3  0.4 3008052 1849060
+ceph-osd         0.3  0.4 4405272 1866852
+ceph-osd         0.3  0.4 3068268 1767168
+ceph-osd         0.4  0.4 3884392 1787308
+ceph-osd         0.3  0.4 2820460 1969408
+ceph-osd         0.3  0.4 3031408 1809848
+ceph-osd         0.3  0.4 3084656 1830748
+ceph-osd         0.3  0.4 3242348 1791248
+ceph-osd         0.3  0.4 3032428 1851332
+ceph-osd         0.4  0.5 3177212 2257648
+ceph-osd         0.3  0.4 3186032 1889588
+ceph-osd         0.3  0.5 2854256 1984756
+ceph-osd         0.3  0.4 3006980 1740368
+ceph-osd         0.3  0.4 3113340 1796828
+ceph-osd         0.3  0.4 3074420 1875152
+ceph-osd         0.3  0.4 5241196 1861352
+ceph-osd         0.3  0.5 2852216 1989464
+ceph-osd         0.3  0.4 3036664 1850040
+2022/02/23-11:35:15: f11-h17-000-6049p.rdu2.scalelab.redhat.com ceph-osd         0.3  0.5 3650212 1987528
+ceph-osd         0.3  0.4 3079112 1779184
+ceph-osd         0.3  0.5 2847780 1997860
+ceph-osd         0.3  0.5 3050040 2029536
+ceph-osd         0.3  0.4 2936632 1664956
+ceph-osd         0.3  0.5 3049712 2010636
+ceph-osd         0.3  0.4 2753076 1702772
+ceph-osd         0.3  0.4 3088348 1705284
+ceph-osd         0.3  0.4 3766692 1828960
+ceph-osd         0.3  0.5 2889068 2023148
+ceph-osd         0.3  0.5 2853228 2002536
+ceph-osd         0.5  0.5 3233140 2306248
+ceph-osd         0.4  0.6 6416892 2526616
+ceph-osd         0.3  0.4 3424628 1751352
+ceph-osd         0.3  0.4 3081588 1917908
+ceph-osd         0.3  0.4 3018096 1748504
+ceph-osd         0.3  0.4 3004928 1806340
+ceph-osd         0.3  0.4 3082620 1801592
+ceph-osd         0.4  0.6 5107060 2430352
+ceph-osd         0.3  0.4 3550576 1878120
+ceph-osd         0.3  0.4 3071484 1876500
+ceph-osd         0.3  0.5 2874736 2007816
+ceph-osd         0.5  0.6 3359148 2378072
+ceph-osd         0.4  0.4 4871536 1858752
+
+Site2 buckets (rgw):
+2022/02/23-11:35:17:         "bucket": "mycontainers1",
+        "num_shards": 163,
+                "num_objects": 10215427
+        "bucket": "mycontainers3",
+        "num_shards": 11,
+        "bucket": "mycontainers4",
+        "num_shards": 11,
+        "bucket": "mycontainers2",
+        "num_shards": 11,
+        "bucket": "mycontainers5",
+        "num_shards": 11,
+
+Cluster status
+  cluster:
+    id:     dbaa9de4-900a-11ec-9bec-ac1f6b2d5d2a
+    health: HEALTH_OK
+ 
+  services:
+    mon: 3 daemons, quorum f13-h26-b04-5039ms.rdu2.scalelab.redhat.com,f13-h26-b08-5039ms,f13-h26-b07-5039ms (age 5d)
+    mgr: f13-h26-b04-5039ms.rdu2.scalelab.redhat.com.sfcijj(active, since 5d), standbys: f13-h26-b07-5039ms.htnyxh, f13-h26-b08-5039ms.wtoans
+    osd: 288 osds: 288 up (since 5d), 288 in (since 5d)
+    rgw: 12 daemons active (12 hosts, 1 zones)
+ 
+  data:
+    pools:   7 pools, 9729 pgs
+    objects: 10.12M objects, 141 GiB
+    usage:   44 TiB used, 523 TiB / 567 TiB avail
+    pgs:     9729 active+clean
+ 
+  io:
+    client:   66 MiB/s rd, 206 MiB/s wr, 39.94k op/s rd, 173.97k op/s wr
+ 
+2022/02/23-11:35:18: ceph df detail --- RAW STORAGE ---
+CLASS     SIZE    AVAIL    USED  RAW USED  %RAW USED
+hdd    567 TiB  523 TiB  44 TiB    44 TiB       7.77
+TOTAL  567 TiB  523 TiB  44 TiB    44 TiB       7.77
+ 
+--- POOLS ---
+POOL                       ID   PGS   STORED   (DATA)   (OMAP)  OBJECTS     USED   (DATA)   (OMAP)  %USED  MAX AVAIL  QUOTA OBJECTS  QUOTA BYTES   DIRTY  USED COMPR  UNDER COMPR
+device_health_metrics       1     1  5.0 MiB      0 B  5.0 MiB      315   15 MiB      0 B   15 MiB      0    165 TiB            N/A          N/A     315         0 B          0 B
+default.rgw.control        17   256      0 B      0 B      0 B        8      0 B      0 B      0 B      0    165 TiB            N/A          N/A       8         0 B          0 B
+default.rgw.buckets.data   18  8192  259 GiB  259 GiB      0 B   10.12M  389 GiB  389 GiB      0 B   0.08    330 TiB            N/A          N/A  10.12M         0 B          0 B
+default.rgw.buckets.index  19   512  2.2 GiB      0 B  2.2 GiB      207  6.7 GiB      0 B  6.7 GiB      0    165 TiB            N/A          N/A     207         0 B          0 B
+default.rgw.log            20   256  9.6 KiB  8.4 KiB  1.1 KiB      199  675 KiB  672 KiB  3.4 KiB      0    165 TiB            N/A          N/A     199         0 B          0 B
+default.rgw.meta           21   256  254 KiB  3.2 KiB  251 KiB       15  922 KiB  168 KiB  754 KiB      0    165 TiB            N/A          N/A      15         0 B          0 B
+.rgw.root                  22   256  1.3 KiB  1.3 KiB      0 B        4   48 KiB   48 KiB      0 B      0    165 TiB            N/A          N/A       4         0 B          0 B
+
+Site2 pool PG counts:
+pool 1 'device_health_metrics' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 1 pgp_num 1 autoscale_mode on last_change 2252 flags hashpspool stripe_width 0 pg_num_min 1 application mgr_devicehealth,rgw
+pool 17 'default.rgw.control' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2253 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 18 'default.rgw.buckets.data' erasure profile myprofile size 6 min_size 5 crush_rule 1 object_hash rjenkins pg_num 8192 pgp_num 8192 autoscale_mode on last_change 2278 lfor 0/0/2276 flags hashpspool stripe_width 16384 pg_num_min 8192 application rgw
+pool 19 'default.rgw.buckets.index' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 512 pgp_num 512 autoscale_mode on last_change 2255 flags hashpspool stripe_width 0 pg_num_min 512 application rgw
+pool 20 'default.rgw.log' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2256 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 21 'default.rgw.meta' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2257 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+pool 22 '.rgw.root' replicated size 3 min_size 2 crush_rule 0 object_hash rjenkins pg_num 256 pgp_num 256 autoscale_mode on last_change 2258 flags hashpspool stripe_width 0 pg_num_min 256 application rgw
+
+
+Site2 buckets df
+2022/02/23-11:35:18: POOL                       ID   PGS   STORED  OBJECTS     USED  %USED  MAX AVAIL
+default.rgw.control        17   256      0 B        8      0 B      0    165 TiB
+default.rgw.buckets.data   18  8192  259 GiB   10.12M  389 GiB   0.08    330 TiB
+default.rgw.buckets.index  19   512  2.2 GiB      207  6.7 GiB      0    165 TiB
+default.rgw.log            20   256  9.6 KiB      199  675 KiB      0    165 TiB
+default.rgw.meta           21   256  254 KiB       15  922 KiB      0    165 TiB
+
+OSD/RGW free:
+2022/02/23-11:35:19: f10-h01-000-6049p.rdu2.scalelab.redhat.com                total        used        free      shared  buff/cache   available
+Mem:          376Gi        46Gi       254Gi       4.1Gi        74Gi       322Gi
+Swap:            0B          0B          0B
+
+Ceph osd df:
+2022/02/23-11:35:19: ID   CLASS  WEIGHT   REWEIGHT  SIZE     RAW USE  DATA     OMAP     META      AVAIL    %USE  VAR   PGS  STATUS
+264    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.1 GiB  1.8 TiB  7.76  1.00  180      up
+265    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   610 MiB  1.8 TiB  7.76  1.00  181      up
+266    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   571 MiB  1.8 TiB  7.76  1.00  179      up
+267    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  180      up
+268    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   669 MiB  1.8 TiB  7.77  1.00  195      up
+269    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  178      up
+270    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   616 MiB  1.8 TiB  7.76  1.00  187      up
+271    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   548 MiB  1.8 TiB  7.76  1.00  182      up
+272    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   635 MiB  1.8 TiB  7.77  1.00  186      up
+273    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  202 MiB   1.1 GiB  1.8 TiB  7.77  1.00  186      up
+274    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   544 MiB  1.8 TiB  7.76  1.00  182      up
+275    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   670 MiB  1.8 TiB  7.77  1.00  195      up
+276    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   639 MiB  1.8 TiB  7.77  1.00  190      up
+277    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   647 MiB  1.8 TiB  7.77  1.00  193      up
+278    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.0 GiB  1.8 TiB  7.77  1.00  195      up
+279    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   547 MiB  1.8 TiB  7.76  1.00  181      up
+280    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  185      up
+281    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   673 MiB  1.8 TiB  7.77  1.00  187      up
+282    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  184      up
+283    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   659 MiB  1.8 TiB  7.77  1.00  198      up
+284    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   682 MiB  1.8 TiB  7.77  1.00  187      up
+285    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   695 MiB  1.8 TiB  7.77  1.00  188      up
+286    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+287    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   649 MiB  1.8 TiB  7.77  1.00  194      up
+  5    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   606 MiB  1.8 TiB  7.77  1.00  191      up
+ 16    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   990 MiB  1.8 TiB  7.76  1.00  186      up
+ 27    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   632 MiB  1.8 TiB  7.77  1.00  191      up
+ 38    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   693 MiB  1.8 TiB  7.77  1.00  189      up
+ 48    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   619 MiB  1.8 TiB  7.77  1.00  197      up
+ 58    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   687 MiB  1.8 TiB  7.77  1.00  193      up
+ 67    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+ 77    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   573 MiB  1.8 TiB  7.76  1.00  185      up
+ 87    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    3 KiB   639 MiB  1.8 TiB  7.77  1.00  192      up
+ 99    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  187      up
+109    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   618 MiB  1.8 TiB  7.77  1.00  195      up
+119    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   686 MiB  1.8 TiB  7.77  1.00  191      up
+129    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   615 MiB  1.8 TiB  7.77  1.00  186      up
+139    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   613 MiB  1.8 TiB  7.76  1.00  184      up
+149    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  207 MiB   1.0 GiB  1.8 TiB  7.77  1.00  183      up
+158    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+168    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   582 MiB  1.8 TiB  7.77  1.00  187      up
+179    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   639 MiB  1.8 TiB  7.77  1.00  189      up
+189    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  177      up
+199    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   975 MiB  1.8 TiB  7.76  1.00  180      up
+209    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   573 MiB  1.8 TiB  7.76  1.00  186      up
+219    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.0 GiB  1.8 TiB  7.77  1.00  191      up
+228    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.2 GiB  1.8 TiB  7.76  1.00  183      up
+239    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   694 MiB  1.8 TiB  7.77  1.00  188      up
+  8    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   559 MiB  1.8 TiB  7.77  1.00  185      up
+ 18    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   627 MiB  1.8 TiB  7.77  1.00  187      up
+ 28    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    3 KiB   714 MiB  1.8 TiB  7.77  1.00  189      up
+ 37    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   569 MiB  1.8 TiB  7.76  1.00  186      up
+ 47    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  207 MiB   1.0 GiB  1.8 TiB  7.77  1.00  185      up
+ 57    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.4 GiB  1.8 TiB  7.76  1.00  188      up
+ 69    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   617 MiB  1.8 TiB  7.76  1.00  187      up
+ 79    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   574 MiB  1.8 TiB  7.76  1.00  183      up
+ 89    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   722 MiB  1.8 TiB  7.77  1.00  189      up
+ 98    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   699 MiB  1.8 TiB  7.77  1.00  185      up
+108    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   655 MiB  1.8 TiB  7.77  1.00  193      up
+118    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   734 MiB  1.8 TiB  7.77  1.00  196      up
+128    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   699 MiB  1.8 TiB  7.77  1.00  187      up
+137    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   669 MiB  1.8 TiB  7.77  1.00  185      up
+147    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   581 MiB  1.8 TiB  7.76  1.00  181      up
+157    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   539 MiB  1.8 TiB  7.76  1.00  184      up
+167    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   670 MiB  1.8 TiB  7.77  1.00  190      up
+177    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  179      up
+187    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   729 MiB  1.8 TiB  7.77  1.00  198      up
+196    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  207 MiB  1013 MiB  1.8 TiB  7.77  1.00  183      up
+205    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  179      up
+215    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   645 MiB  1.8 TiB  7.77  1.00  189      up
+227    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   496 MiB  1.8 TiB  7.76  1.00  184      up
+237    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.1 GiB  1.8 TiB  7.77  1.00  189      up
+  2    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  210 MiB   974 MiB  1.8 TiB  7.76  1.00  187      up
+ 11    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   705 MiB  1.8 TiB  7.77  1.00  190      up
+ 21    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  178      up
+ 31    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   653 MiB  1.8 TiB  7.77  1.00  195      up
+ 40    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+ 50    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+ 60    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   653 MiB  1.8 TiB  7.77  1.00  187      up
+ 70    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  462 MiB   786 MiB  1.8 TiB  7.76  1.00  190      up
+ 80    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   666 MiB  1.8 TiB  7.77  1.00  197      up
+ 90    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   530 MiB  1.8 TiB  7.76  1.00  183      up
+100    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   623 MiB  1.8 TiB  7.77  1.00  186      up
+110    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   653 MiB  1.8 TiB  7.77  1.00  189      up
+120    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  186      up
+130    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.4 GiB  1.8 TiB  7.76  1.00  176      up
+140    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   691 MiB  1.8 TiB  7.77  1.00  193      up
+150    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   542 MiB  1.8 TiB  7.76  1.00  187      up
+160    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  185      up
+170    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   534 MiB  1.8 TiB  7.76  1.00  179      up
+180    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  178      up
+190    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   639 MiB  1.8 TiB  7.77  1.00  188      up
+200    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   581 MiB  1.8 TiB  7.76  1.00  186      up
+210    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   644 MiB  1.8 TiB  7.77  1.00  192      up
+220    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   621 MiB  1.8 TiB  7.77  1.00  189      up
+230    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  182      up
+  4    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   680 MiB  1.8 TiB  7.77  1.00  192      up
+ 14    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   525 MiB  1.8 TiB  7.76  1.00  184      up
+ 25    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   613 MiB  1.8 TiB  7.77  1.00  182      up
+ 35    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   724 MiB  1.8 TiB  7.77  1.00  195      up
+ 46    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   563 MiB  1.8 TiB  7.77  1.00  183      up
+ 56    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  184      up
+ 66    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   623 MiB  1.8 TiB  7.76  1.00  186      up
+ 76    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.0 GiB  1.8 TiB  7.77  1.00  189      up
+ 86    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   628 MiB  1.8 TiB  7.77  1.00  187      up
+ 96    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   639 MiB  1.8 TiB  7.77  1.00  189      up
+106    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   654 MiB  1.8 TiB  7.77  1.00  197      up
+116    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   608 MiB  1.8 TiB  7.76  1.00  180      up
+126    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  207 MiB   1.0 GiB  1.8 TiB  7.77  1.00  191      up
+136    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  182      up
+146    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   617 MiB  1.8 TiB  7.77  1.00  186      up
+156    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   645 MiB  1.8 TiB  7.77  1.00  193      up
+166    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   654 MiB  1.8 TiB  7.77  1.00  183      up
+176    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   624 MiB  1.8 TiB  7.77  1.00  191      up
+186    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   626 MiB  1.8 TiB  7.77  1.00  192      up
+197    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   630 MiB  1.8 TiB  7.77  1.00  194      up
+207    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  3.1 MiB   681 MiB  1.8 TiB  7.77  1.00  187      up
+217    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  185      up
+226    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   677 MiB  1.8 TiB  7.77  1.00  193      up
+235    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  5.0 MiB   690 MiB  1.8 TiB  7.77  1.00  191      up
+  6    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.1 GiB  1.8 TiB  7.77  1.00  191      up
+ 15    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+ 26    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  208 MiB   1.0 GiB  1.8 TiB  7.77  1.00  195      up
+ 36    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   617 MiB  1.8 TiB  7.76  1.00  181      up
+ 45    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   780 MiB  1.8 TiB  7.77  1.00  188      up
+ 55    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   551 MiB  1.8 TiB  7.76  1.00  187      up
+ 65    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   727 MiB  1.8 TiB  7.77  1.00  188      up
+ 75    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.1 GiB  1.8 TiB  7.77  1.00  186      up
+ 84    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   725 MiB  1.8 TiB  7.77  1.00  188      up
+ 94    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   674 MiB  1.8 TiB  7.77  1.00  193      up
+104    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   643 MiB  1.8 TiB  7.77  1.00  194      up
+114    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   606 MiB  1.8 TiB  7.77  1.00  188      up
+125    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   614 MiB  1.8 TiB  7.76  1.00  186      up
+134    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   620 MiB  1.8 TiB  7.77  1.00  186      up
+144    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   657 MiB  1.8 TiB  7.77  1.00  192      up
+155    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  201 MiB   1.1 GiB  1.8 TiB  7.77  1.00  194      up
+164    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   728 MiB  1.8 TiB  7.77  1.00  187      up
+175    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  184      up
+185    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.3 GiB  1.8 TiB  7.76  1.00  188      up
+195    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   635 MiB  1.8 TiB  7.77  1.00  191      up
+206    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  199 MiB   1.2 GiB  1.8 TiB  7.77  1.00  189      up
+216    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+225    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   636 MiB  1.8 TiB  7.77  1.00  186      up
+236    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+240    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   525 MiB  1.8 TiB  7.76  1.00  182      up
+241    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   1.3 GiB  1.8 TiB  7.77  1.00  196      up
+242    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   652 MiB  1.8 TiB  7.77  1.00  194      up
+243    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   667 MiB  1.8 TiB  7.77  1.00  187      up
+244    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   606 MiB  1.8 TiB  7.77  1.00  187      up
+245    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   673 MiB  1.8 TiB  7.77  1.00  197      up
+246    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   1.2 GiB  1.8 TiB  7.77  1.00  196      up
+247    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   637 MiB  1.8 TiB  7.77  1.00  195      up
+248    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+249    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   571 MiB  1.8 TiB  7.76  1.00  188      up
+250    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   544 MiB  1.8 TiB  7.76  1.00  183      up
+251    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   545 MiB  1.8 TiB  7.76  1.00  182      up
+252    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  180      up
+253    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   604 MiB  1.8 TiB  7.76  1.00  188      up
+254    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   640 MiB  1.8 TiB  7.77  1.00  191      up
+255    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.1 GiB  1.8 TiB  7.76  1.00  180      up
+256    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   651 MiB  1.8 TiB  7.77  1.00  188      up
+257    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.77  1.00  194      up
+258    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+259    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   673 MiB  1.8 TiB  7.77  1.00  183      up
+260    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB   13 MiB   683 MiB  1.8 TiB  7.77  1.00  185      up
+261    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.2 GiB  1.8 TiB  7.76  1.00  182      up
+262    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+263    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   721 MiB  1.8 TiB  7.77  1.00  202      up
+  1    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   718 MiB  1.8 TiB  7.77  1.00  194      up
+ 12    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   929 MiB  1.8 TiB  7.76  1.00  181      up
+ 22    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    3 KiB   675 MiB  1.8 TiB  7.77  1.00  191      up
+ 32    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   668 MiB  1.8 TiB  7.77  1.00  194      up
+ 42    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   601 MiB  1.8 TiB  7.77  1.00  194      up
+ 52    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.77  1.00  181      up
+ 62    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   648 MiB  1.8 TiB  7.77  1.00  188      up
+ 73    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.4 GiB  1.8 TiB  7.77  1.00  181      up
+ 83    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   632 MiB  1.8 TiB  7.77  1.00  186      up
+ 93    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   652 MiB  1.8 TiB  7.77  1.00  190      up
+103    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   666 MiB  1.8 TiB  7.77  1.00  190      up
+113    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  207 MiB   1.1 GiB  1.8 TiB  7.77  1.00  193      up
+123    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   511 MiB  1.8 TiB  7.76  1.00  183      up
+133    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   533 MiB  1.8 TiB  7.76  1.00  173      up
+143    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.0 GiB  1.8 TiB  7.77  1.00  195      up
+153    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.1 GiB  1.8 TiB  7.76  1.00  176      up
+163    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  182      up
+173    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   650 MiB  1.8 TiB  7.77  1.00  182      up
+183    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   628 MiB  1.8 TiB  7.76  1.00  178      up
+193    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   626 MiB  1.8 TiB  7.76  1.00  175      up
+203    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   631 MiB  1.8 TiB  7.77  1.00  191      up
+212    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   647 MiB  1.8 TiB  7.77  1.00  191      up
+222    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  177      up
+231    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  5.0 MiB   661 MiB  1.8 TiB  7.77  1.00  188      up
+  3    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   637 MiB  1.8 TiB  7.77  1.00  190      up
+ 13    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   629 MiB  1.8 TiB  7.77  1.00  189      up
+ 23    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   677 MiB  1.8 TiB  7.77  1.00  192      up
+ 33    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   1.0 GiB  1.8 TiB  7.76  1.00  183      up
+ 43    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   637 MiB  1.8 TiB  7.77  1.00  181      up
+ 53    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   538 MiB  1.8 TiB  7.76  1.00  184      up
+ 63    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   659 MiB  1.8 TiB  7.77  1.00  188      up
+ 72    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   618 MiB  1.8 TiB  7.76  1.00  185      up
+ 82    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   645 MiB  1.8 TiB  7.77  1.00  184      up
+ 92    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   602 MiB  1.8 TiB  7.77  1.00  187      up
+102    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  188      up
+112    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  179      up
+122    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.1 GiB  1.8 TiB  7.77  1.00  191      up
+132    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   685 MiB  1.8 TiB  7.77  1.00  188      up
+142    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   672 MiB  1.8 TiB  7.77  1.00  193      up
+152    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   609 MiB  1.8 TiB  7.76  1.00  177      up
+162    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  181      up
+172    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   960 MiB  1.8 TiB  7.76  1.00  186      up
+182    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   683 MiB  1.8 TiB  7.77  1.00  186      up
+192    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  179      up
+202    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   691 MiB  1.8 TiB  7.77  1.00  199      up
+213    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  206 MiB   1.0 GiB  1.8 TiB  7.77  1.00  190      up
+223    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   632 MiB  1.8 TiB  7.77  1.00  189      up
+233    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   692 MiB  1.8 TiB  7.77  1.00  190      up
+  9    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   701 MiB  1.8 TiB  7.77  1.00  189      up
+ 19    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  178      up
+ 29    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   693 MiB  1.8 TiB  7.77  1.00  189      up
+ 39    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   687 MiB  1.8 TiB  7.77  1.00  198      up
+ 49    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.1 GiB  1.8 TiB  7.76  1.00  186      up
+ 59    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.1 GiB  1.8 TiB  7.76  1.00  179      up
+ 68    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   588 MiB  1.8 TiB  7.76  1.00  189      up
+ 78    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   680 MiB  1.8 TiB  7.77  1.00  189      up
+ 88    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+ 97    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   635 MiB  1.8 TiB  7.77  1.00  187      up
+107    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    3 KiB   1.0 GiB  1.8 TiB  7.77  1.00  194      up
+117    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   652 MiB  1.8 TiB  7.76  1.00  183      up
+127    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   951 MiB  1.8 TiB  7.76  1.00  186      up
+138    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  178      up
+148    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   654 MiB  1.8 TiB  7.77  1.00  192      up
+159    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   690 MiB  1.8 TiB  7.77  1.00  194      up
+169    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  186      up
+178    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   1.1 GiB  1.8 TiB  7.76  1.00  188      up
+188    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   626 MiB  1.8 TiB  7.77  1.00  192      up
+198    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   652 MiB  1.8 TiB  7.77  1.00  187      up
+208    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   949 MiB  1.8 TiB  7.76  1.00  179      up
+218    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  185      up
+229    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.1 GiB  1.8 TiB  7.76  1.00  180      up
+238    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  178      up
+  0    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   660 MiB  1.8 TiB  7.77  1.00  192      up
+ 10    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   675 MiB  1.8 TiB  7.77  1.00  188      up
+ 20    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   686 MiB  1.8 TiB  7.77  1.00  191      up
+ 30    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+ 41    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   636 MiB  1.8 TiB  7.77  1.00  184      up
+ 51    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   689 MiB  1.8 TiB  7.77  1.00  196      up
+ 61    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   730 MiB  1.8 TiB  7.77  1.00  193      up
+ 71    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   650 MiB  1.8 TiB  7.77  1.00  182      up
+ 81    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.77  1.00  181      up
+ 91    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   674 MiB  1.8 TiB  7.77  1.00  187      up
+101    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  5.0 MiB   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+111    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  184      up
+121    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   590 MiB  1.8 TiB  7.76  1.00  184      up
+131    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   685 MiB  1.8 TiB  7.77  1.00  194      up
+141    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   651 MiB  1.8 TiB  7.77  1.00  192      up
+151    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   671 MiB  1.8 TiB  7.77  1.00  192      up
+161    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   649 MiB  1.8 TiB  7.77  1.00  186      up
+171    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   677 MiB  1.8 TiB  7.76  1.00  185      up
+181    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  185      up
+191    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   636 MiB  1.8 TiB  7.77  1.00  183      up
+201    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   650 MiB  1.8 TiB  7.77  1.00  184      up
+211    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   682 MiB  1.8 TiB  7.77  1.00  185      up
+221    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  212 MiB   963 MiB  1.8 TiB  7.76  1.00  184      up
+232    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   642 MiB  1.8 TiB  7.77  1.00  193      up
+  7    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   731 MiB  1.8 TiB  7.77  1.00  184      up
+ 17    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   627 MiB  1.8 TiB  7.76  1.00  179      up
+ 24    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    1 KiB   604 MiB  1.8 TiB  7.76  1.00  184      up
+ 34    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   669 MiB  1.8 TiB  7.77  1.00  190      up
+ 44    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   669 MiB  1.8 TiB  7.77  1.00  191      up
+ 54    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  207 MiB   1.0 GiB  1.8 TiB  7.77  1.00  193      up
+ 64    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   720 MiB  1.8 TiB  7.77  1.00  189      up
+ 74    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  177      up
+ 85    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB  1015 MiB  1.8 TiB  7.76  1.00  190      up
+ 95    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    3 KiB   1.1 GiB  1.8 TiB  7.77  1.00  185      up
+105    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.1 GiB  1.8 TiB  7.76  1.00  183      up
+115    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   631 MiB  1.8 TiB  7.77  1.00  198      up
+124    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB    2 KiB   1.2 GiB  1.8 TiB  7.76  1.00  181      up
+135    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  176      up
+145    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   568 MiB  1.8 TiB  7.76  1.00  184      up
+154    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.4 GiB  1.8 TiB  7.76  1.00  179      up
+165    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   635 MiB  1.8 TiB  7.76  1.00  182      up
+174    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    2 KiB   673 MiB  1.8 TiB  7.77  1.00  190      up
+184    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  180      up
+194    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB      0 B   1.2 GiB  1.8 TiB  7.76  1.00  178      up
+204    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.4 GiB  211 MiB   984 MiB  1.8 TiB  7.76  1.00  185      up
+214    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB  204 MiB   1.1 GiB  1.8 TiB  7.77  1.00  193      up
+224    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB    1 KiB   624 MiB  1.8 TiB  7.77  1.00  183      up
+234    hdd  1.97049   1.00000  2.0 TiB  157 GiB  1.5 GiB      0 B   729 MiB  1.8 TiB  7.77  1.00  192      up
+                        TOTAL  567 TiB   44 TiB  416 GiB  6.8 GiB   232 GiB  523 TiB  7.77                   
+MIN/MAX VAR: 1.00/1.00  STDDEV: 0.00
+2022/02/23-11:36:23: \n osd_memory_targets: osd.1: 4294967296
+osd.2: 4294967296
+osd.3: 4294967296
+osd.4: 4294967296
+osd.5: 4294967296
+osd.6: 4294967296
+osd.7: 4294967296
+osd.8: 4294967296
+osd.9: 4294967296
+osd.10: 4294967296
+osd.11: 4294967296
+osd.12: 4294967296
+osd.13: 4294967296
+osd.14: 4294967296
+osd.15: 4294967296
+osd.16: 4294967296
+osd.17: 4294967296
+osd.18: 4294967296
+osd.19: 4294967296
+osd.20: 4294967296
+osd.21: 4294967296
+osd.22: 4294967296
+osd.23: 4294967296
+osd.24: 4294967296
+osd.25: 4294967296
+osd.26: 4294967296
+osd.27: 4294967296
+osd.28: 4294967296
+osd.29: 4294967296
+osd.30: 4294967296
+osd.31: 4294967296
+osd.32: 4294967296
+osd.33: 4294967296
+osd.34: 4294967296
+osd.35: 4294967296
+osd.36: 4294967296
+osd.37: 4294967296
+osd.38: 4294967296
+osd.39: 4294967296
+osd.40: 4294967296
+osd.41: 4294967296
+osd.42: 4294967296
+osd.43: 4294967296
+osd.44: 4294967296
+osd.45: 4294967296
+osd.46: 4294967296
+osd.47: 4294967296
+osd.48: 4294967296
+osd.49: 4294967296
+osd.50: 4294967296
+osd.51: 4294967296
+osd.52: 4294967296
+osd.53: 4294967296
+osd.54: 4294967296
+osd.55: 4294967296
+osd.56: 4294967296
+osd.57: 4294967296
+osd.58: 4294967296
+osd.59: 4294967296
+osd.60: 4294967296
+osd.61: 4294967296
+osd.62: 4294967296
+osd.63: 4294967296
+osd.64: 4294967296
+osd.65: 4294967296
+osd.66: 4294967296
+osd.67: 4294967296
+osd.68: 4294967296
+osd.69: 4294967296
+osd.70: 4294967296
+osd.71: 4294967296
+osd.72: 4294967296
+osd.73: 4294967296
+osd.74: 4294967296
+osd.75: 4294967296
+osd.76: 4294967296
+osd.77: 4294967296
+osd.78: 4294967296
+osd.79: 4294967296
+osd.80: 4294967296
+osd.81: 4294967296
+osd.82: 4294967296
+osd.83: 4294967296
+osd.84: 4294967296
+osd.85: 4294967296
+osd.86: 4294967296
+osd.87: 4294967296
+osd.88: 4294967296
+osd.89: 4294967296
+osd.90: 4294967296
+osd.91: 4294967296
+osd.92: 4294967296
+osd.93: 4294967296
+osd.94: 4294967296
+osd.95: 4294967296
+osd.96: 4294967296
+osd.97: 4294967296
+osd.98: 4294967296
+osd.99: 4294967296
+osd.100: 4294967296
+osd.101: 4294967296
+osd.102: 4294967296
+osd.103: 4294967296
+osd.104: 4294967296
+osd.105: 4294967296
+osd.106: 4294967296
+osd.107: 4294967296
+osd.108: 4294967296
+osd.109: 4294967296
+osd.110: 4294967296
+osd.111: 4294967296
+osd.112: 4294967296
+osd.113: 4294967296
+osd.114: 4294967296
+osd.115: 4294967296
+osd.116: 4294967296
+osd.117: 4294967296
+osd.118: 4294967296
+osd.119: 4294967296
+osd.120: 4294967296
+osd.121: 4294967296
+osd.122: 4294967296
+osd.123: 4294967296
+osd.124: 4294967296
+osd.125: 4294967296
+osd.126: 4294967296
+osd.127: 4294967296
+osd.128: 4294967296
+osd.129: 4294967296
+osd.130: 4294967296
+osd.131: 4294967296
+osd.132: 4294967296
+osd.133: 4294967296
+osd.134: 4294967296
+osd.135: 4294967296
+osd.136: 4294967296
+osd.137: 4294967296
+osd.138: 4294967296
+osd.139: 4294967296
+osd.140: 4294967296
+osd.141: 4294967296
+osd.142: 4294967296
+osd.143: 4294967296
+osd.144: 4294967296
+osd.145: 4294967296
+osd.146: 4294967296
+osd.147: 4294967296
+osd.148: 4294967296
+osd.149: 4294967296
+osd.150: 4294967296
+osd.151: 4294967296
+osd.152: 4294967296
+osd.153: 4294967296
+osd.154: 4294967296
+osd.155: 4294967296
+osd.156: 4294967296
+osd.157: 4294967296
+osd.158: 4294967296
+osd.159: 4294967296
+osd.160: 4294967296
+osd.161: 4294967296
+osd.162: 4294967296
+osd.163: 4294967296
+osd.164: 4294967296
+osd.165: 4294967296
+osd.166: 4294967296
+osd.167: 4294967296
+osd.168: 4294967296
+osd.169: 4294967296
+osd.170: 4294967296
+osd.171: 4294967296
+osd.172: 4294967296
+osd.173: 4294967296
+osd.174: 4294967296
+osd.175: 4294967296
+osd.176: 4294967296
+osd.177: 4294967296
+osd.178: 4294967296
+osd.179: 4294967296
+osd.180: 4294967296
+osd.181: 4294967296
+osd.182: 4294967296
+osd.183: 4294967296
+osd.184: 4294967296
+osd.185: 4294967296
+osd.186: 4294967296
+osd.187: 4294967296
+osd.188: 4294967296
+osd.189: 4294967296
+osd.190: 4294967296
+osd.191: 4294967296
+osd.192: 4294967296
+osd.193: 4294967296
+osd.194: 4294967296
+osd.195: 4294967296
+osd.196: 4294967296
+osd.197: 4294967296
+osd.198: 4294967296
+osd.199: 4294967296
+osd.200: 4294967296
+osd.201: 4294967296
+osd.202: 4294967296
+osd.203: 4294967296
+osd.204: 4294967296
+osd.205: 4294967296
+osd.206: 4294967296
+osd.207: 4294967296
+osd.208: 4294967296
+osd.209: 4294967296
+osd.210: 4294967296
+osd.211: 4294967296
+osd.212: 4294967296
+osd.213: 4294967296
+osd.214: 4294967296
+osd.215: 4294967296
+osd.216: 4294967296
+osd.217: 4294967296
+osd.218: 4294967296
+osd.219: 4294967296
+osd.220: 4294967296
+osd.221: 4294967296
+osd.222: 4294967296
+osd.223: 4294967296
+osd.224: 4294967296
+osd.225: 4294967296
+osd.226: 4294967296
+osd.227: 4294967296
+osd.228: 4294967296
+osd.229: 4294967296
+osd.230: 4294967296
+osd.231: 4294967296
+osd.232: 4294967296
+osd.233: 4294967296
+osd.234: 4294967296
+osd.235: 4294967296
+osd.236: 4294967296
+osd.237: 4294967296
+osd.238: 4294967296
+osd.239: 4294967296
+osd.240: 4294967296
+osd.241: 4294967296
+osd.242: 4294967296
+osd.243: 4294967296
+osd.244: 4294967296
+osd.245: 4294967296
+osd.246: 4294967296
+osd.247: 4294967296
+osd.248: 4294967296
+osd.249: 4294967296
+osd.250: 4294967296
+osd.251: 4294967296
+osd.252: 4294967296
+osd.253: 4294967296
+osd.254: 4294967296
+osd.255: 4294967296
+osd.256: 4294967296
+osd.257: 4294967296
+osd.258: 4294967296
+osd.259: 4294967296
+osd.260: 4294967296
+osd.261: 4294967296
+osd.262: 4294967296
+osd.263: 4294967296
+osd.264: 4294967296
+osd.265: 4294967296
+osd.266: 4294967296
+osd.267: 4294967296
+osd.268: 4294967296
+osd.269: 4294967296
+osd.270: 4294967296
+osd.271: 4294967296
+osd.272: 4294967296
+osd.273: 4294967296
+osd.274: 4294967296
+osd.275: 4294967296
+osd.276: 4294967296
+osd.277: 4294967296
+osd.278: 4294967296
+osd.279: 4294967296
+osd.280: 4294967296
+osd.281: 4294967296
+osd.282: 4294967296
+osd.283: 4294967296
+osd.284: 4294967296
+osd.285: 4294967296
+osd.286: 4294967296
+osd.287: 4294967296
+osd.288: 4294967296
+
+PG Autoscale:
+POOL                         SIZE  TARGET SIZE  RATE  RAW CAPACITY   RATIO  TARGET RATIO  EFFECTIVE RATIO  BIAS  PG_NUM  NEW PG_NUM  AUTOSCALE  
+device_health_metrics       5111k                3.0        567.4T  0.0000                                  1.0       1              on         
+default.rgw.control            0                 3.0        567.4T  0.0000                                  1.0     256              on         
+default.rgw.buckets.data   346.7G                1.5        567.4T  0.0009                                  1.0    8192              on         
+default.rgw.buckets.index   1791M                3.0        567.4T  0.0000                                  1.0     512              on         
+default.rgw.log            307.0k                3.0        567.4T  0.0000                                  1.0     256              on         
+default.rgw.meta           287.7k                3.0        567.4T  0.0000                                  1.0     256              on         
+.rgw.root                   1323                 3.0        567.4T  0.0000                                  1.0     256              on         
+
+RGW netstat & qlen/qactive ...
+f10-h01-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.220:8080      0.0.0.0:*               LISTEN      2394800/radosgw     
+f10-h05-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.178:8080      0.0.0.0:*               LISTEN      2835936/radosgw     
+        "qlen": 86,
+        "qactive": 86,
+f10-h09-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.213:8080      0.0.0.0:*               LISTEN      2865882/radosgw     
+        "qlen": 65,
+        "qactive": 65,
+f10-h13-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        1      0 172.17.39.109:8080      0.0.0.0:*               LISTEN      2888012/radosgw     
+        "qlen": 341,
+        "qactive": 341,
+f10-h17-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        1      0 172.17.36.9:8080        0.0.0.0:*               LISTEN      2850199/radosgw     
+f10-h21-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.38.57:8080       0.0.0.0:*               LISTEN      2845780/radosgw     
+        "qlen": 118,
+        "qactive": 118,
+f10-h25-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.180:8080      0.0.0.0:*               LISTEN      2822104/radosgw     
+        "qlen": 438,
+        "qactive": 438,
+f11-h01-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.208:8080      0.0.0.0:*               LISTEN      2897026/radosgw     
+f11-h05-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.39.190:8080      0.0.0.0:*               LISTEN      2824107/radosgw     
+f11-h09-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.38.145:8080      0.0.0.0:*               LISTEN      2857708/radosgw     
+f11-h13-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 172.17.36.186:8080      0.0.0.0:*               LISTEN      2760117/radosgw     
+f11-h17-000-6049p.rdu2.scalelab.redhat.com
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        1      0 172.17.36.13:8080       0.0.0.0:*               LISTEN      2840922/radosgw     

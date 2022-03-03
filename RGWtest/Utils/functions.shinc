@@ -66,6 +66,9 @@ function get_rawUsed() {
     pacific)
       rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $10}'`
       ;;
+    quincy)
+      rawUsed=`ceph df | head -n 3 | tail -n 1 | awk '{print $10}'`
+      ;;
     *)
       error_exit "unable to gather %RAW USED stats, exit..."
       ;;
@@ -108,26 +111,12 @@ function get_buckets_df() {
 }
 
 function get_pendingGC() {
-  # get this stat when running RHCS 3.x builds
-  if echo $CEPH_VERSION | grep -q "10.2." ; then
-      # Skip get_pendingGC for 2.5 versions
-      pendingGC="N/A"
-  else
-      #pendingGC=`$execRGW radosgw-admin gc list --include-all | wc -l`
-      pendingGC=`radosgw-admin gc list --include-all | wc -l`
-  fi
+  pendingGC=`radosgw-admin gc list --include-all | wc -l`
 }
 
 function get_pendingRESHARD() {
-  # get this stat when running RHCS 3.x builds
-  if echo $CEPH_VERSION | grep -q "10.2." ; then
-      # Skip get_pendingRESHARD for 2.5 versions
-      pendingRESHARD="N/A"
-  else
-      #pendingRESHARD=`$execRGW radosgw-admin reshard list --include-all | wc -l`
-      pendingRESHARD=`radosgw-admin reshard list --include-all | wc -l`
-      reshardList=`radosgw-admin reshard list`
-  fi
+  pendingRESHARD=`radosgw-admin reshard list --include-all | wc -l`
+  reshardList=`radosgw-admin reshard list`
 }
 
 function get_tuning() {
@@ -139,12 +128,19 @@ function get_tuning() {
       ;;
     nautilus)
       osdtuning=$(ssh $RGWhostname 'ceph daemon `ls /var/run/ceph/ceph-osd.*.asok|tail -1` config show' | egrep 'osd_memory_target|bluefs_buff|debug_objclass|osd_delete_sleep|cache_trim_max_skip_pinned|bluestore_rocksdb_options|osd_crush_initial_weight|osd_deep_scrub_interval|omap_object_key_threshold|osd_max_backfills|osd_max_scrubs|osd_op_thread_timeout|osd_recovery_max_omap_entries_per_chunk|osd_recovery_threads|osd_remove_threads|osd_scrub_auto_repair|osd_scrub_begin_hour|osd_scrub_during_recovery|osd_scrub_end_hour|osd_scrub_max_interval|osd_scrub_sleep|rocksdb_cache_size|log_to_file')
-      rgwtuning=$(ssh $RGWhostname 'ceph daemon `ls /var/run/ceph/ceph-client.rgw*.asok|tail -1` config show' |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file')
+      rgwtuning=$(ssh $RGWhostname 'ceph daemon `ls /var/run/ceph/ceph-client.rgw*.asok|tail -1` config show' |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file|rgw_max_concurrent_requests')
       ;;
     pacific)
       osdtuning=`ceph tell osd.1 config show | egrep 'osd_memory_target|bluefs_buff|debug_objclass|osd_delete_sleep|cache_trim_max_skip_pinned|bluestore_rocksdb_options|osd_crush_initial_weight|osd_deep_scrub_interval|omap_object_key_threshold|osd_max_backfills|osd_max_scrubs|osd_op_thread_timeout|osd_recovery_max_omap_entries_per_chunk|osd_recovery_threads|osd_remove_threads|osd_scrub_auto_repair|osd_scrub_begin_hour|osd_scrub_during_recovery|osd_scrub_end_hour|osd_scrub_max_interval|osd_scrub_sleep|rocksdb_cache_size|log_to_file|target_size_ratio'`
       fsid=`ceph status |grep id: |awk '{print$2}'`
-      rgwtuning=$(ssh $RGWhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-client.rgw.rgws.*.asok config show |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|debug_ms|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file|rgw_thread_pool_size'")
+      rgwtuning=$(ssh $RGWhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-client.rgw.rgws.*.asok config show |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|debug_ms|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file|rgw_thread_pool_size|rgw_max_concurrent_requests'")
+      rgwdiff=$(ssh $RGWhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-client.rgw.rgws.*.asok config diff")
+      mondiff=$(ssh $MONhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-mon*.asok config diff")
+      ;;
+    quincy)
+      osdtuning=`ceph tell osd.1 config show | egrep 'osd_memory_target|bluefs_buff|debug_objclass|osd_delete_sleep|cache_trim_max_skip_pinned|bluestore_rocksdb_options|osd_crush_initial_weight|osd_deep_scrub_interval|omap_object_key_threshold|osd_max_backfills|osd_max_scrubs|osd_op_thread_timeout|osd_recovery_max_omap_entries_per_chunk|osd_recovery_threads|osd_remove_threads|osd_scrub_auto_repair|osd_scrub_begin_hour|osd_scrub_during_recovery|osd_scrub_end_hour|osd_scrub_max_interval|osd_scrub_sleep|rocksdb_cache_size|log_to_file|target_size_ratio'`
+      fsid=`ceph status |grep id: |awk '{print$2}'`
+      rgwtuning=$(ssh $RGWhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-client.rgw.rgws.*.asok config show |egrep 'index_max_shards|gc_max_deferred|rgw_gc_obj_min_wait|rgw_gc_max|debug_rgw|debug_ms|rgw_gc_processor|rgw_dynamic_resharding|rgw_run_sync_thread|frontend|log_to_file|rgw_thread_pool_size|rgw_max_concurrent_requests'")
       rgwdiff=$(ssh $RGWhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-client.rgw.rgws.*.asok config diff")
       mondiff=$(ssh $MONhostname "cd /var/run/ceph/$fsid && ceph --admin-daemon ceph-mon*.asok config diff")
       ;;
@@ -152,6 +148,11 @@ function get_tuning() {
       error_exit "unable to gather daemon socket stats ... exit"
       ;;
   esac
+}
+
+function get_osd_memory_targets() {
+  osds=$(ceph status |grep osd:|awk '{print$2}')
+  targets=$(for i in `seq ${osds}` ; do echo -n "osd.${i}: " ; ceph config get osd.$i osd_memory_target ; done)
 }
 
 function get_dataLog() {
@@ -183,11 +184,11 @@ function get_bucketStats() {
 
 function get_syncStatus() {
   syncStatus=`ssh $MONhostname2 radosgw-admin sync status`
-  bucketSyncStatus=`ssh $MONhostname2 'for i in 1 2 3 4 5 6 ; do radosgw-admin bucket sync status --bucket=mycontainers${i} ; done'`
+  bucketSyncStatus=`ssh $MONhostname2 'for i in 1 2 3 4 5 6 ; do radosgw-admin bucket sync status --bucket=bucket${i} ; done'`
 }
 
 function get_SyncStats() {
-  zone="site1"
+  zone="site2"
   ts=`date +%Y-%m-%d_%H-%M-%S`
   echo "${ts} *******"
   RES1=$(ceph -s)
@@ -210,6 +211,10 @@ function get_SyncStats() {
           RES3=$(ssh $rgw "ceph daemon ${asokpath} perf dump data-sync-from-${zone}")
           ;;
         pacific)
+          fsid2=$(ssh $rgw "ceph status |grep id:" |awk '{print$2}')
+          RES3=$(ssh $rgw "cd /var/run/ceph/${fsid2} && ceph --admin-daemon ceph-client.rgw*.asok perf dump data-sync-from-${zone}")
+          ;;
+        quincy)
           fsid2=$(ssh $rgw "ceph status |grep id:" |awk '{print$2}')
           RES3=$(ssh $rgw "cd /var/run/ceph/${fsid2} && ceph --admin-daemon ceph-client.rgw*.asok perf dump data-sync-from-${zone}")
           ;;
@@ -261,7 +266,7 @@ function write_Hostscripts() {
   thecmd=$1
 
   if [ $runmode == "containerized" ]; then
-     error_exit â€œ${FUNCNAME}: does not support runmode=containerizedâ€
+     error_exit “${FUNCNAME}: does not support runmode=containerized”
   fi
 
 # Remove spaces from $thecmd (part of hostscript file name)
@@ -311,7 +316,7 @@ function get_OSDstats() {
   logfn=$3
 
   if [ $runmode == "containerized" ]; then
-     error_exit â€œ${FUNCNAME}: does not support runmode=containerizedâ€
+     error_exit “${FUNCNAME}: does not support runmode=containerized”
   fi
 # Create logdir
   if [ ! -d $logdir ]; then

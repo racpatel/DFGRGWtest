@@ -1,0 +1,81 @@
+{
+    "diff": {
+        "cluster_network": {
+            "default": "",
+            "mon": "172.18.0.0/16",
+            "final": "172.18.0.0/16"
+        },
+        "container_image": {
+            "default": "docker.io/ceph/daemon-base:latest-pacific-devel",
+            "mon": "registry.redhat.io/rhceph/rhceph-5-rhel8@sha256:2296c19fbd3a0be84d6030dff789ce3e79b38cc30c39f45913aec97967b65cce",
+            "final": "registry.redhat.io/rhceph/rhceph-5-rhel8@sha256:2296c19fbd3a0be84d6030dff789ce3e79b38cc30c39f45913aec97967b65cce"
+        },
+        "daemonize": {
+            "default": true,
+            "override": false,
+            "final": false
+        },
+        "fsid": {
+            "default": "00000000-0000-0000-0000-000000000000",
+            "file": "259f4a8e-8a30-11ec-b380-ac1f6b2d5d2a",
+            "override": "259f4a8e-8a30-11ec-b380-ac1f6b2d5d2a",
+            "final": "259f4a8e-8a30-11ec-b380-ac1f6b2d5d2a"
+        },
+        "keyring": {
+            "default": "$mgr_data/keyring",
+            "final": "/var/lib/ceph/mgr/ceph-f13-h26-b04-5039ms.rdu2.scalelab.redhat.com.gggmog/keyring"
+        },
+        "log_stderr_prefix": {
+            "default": "debug ",
+            "final": "debug "
+        },
+        "log_to_file": {
+            "default": false,
+            "mon": true,
+            "final": true
+        },
+        "log_to_stderr": {
+            "default": true,
+            "final": true
+        },
+        "mon_cluster_log_to_file": {
+            "default": true,
+            "mon": true,
+            "final": true
+        },
+        "mon_host": {
+            "default": "",
+            "file": "[v2:172.16.38.101:3300/0,v1:172.16.38.101:6789/0] [v2:172.16.36.26:3300/0,v1:172.16.36.26:6789/0] [v2:172.16.37.42:3300/0,v1:172.16.37.42:6789/0]",
+            "final": "[v2:172.16.38.101:3300/0,v1:172.16.38.101:6789/0] [v2:172.16.36.26:3300/0,v1:172.16.36.26:6789/0] [v2:172.16.37.42:3300/0,v1:172.16.37.42:6789/0]"
+        },
+        "no_config_file": {
+            "default": false,
+            "override": false,
+            "final": false
+        },
+        "rbd_default_features": {
+            "default": "61",
+            "final": "61"
+        },
+        "rgw_max_concurrent_requests": {
+            "default": 1024,
+            "mon": 2048,
+            "final": 2048
+        },
+        "rgw_thread_pool_size": {
+            "default": 512,
+            "mon": 1024,
+            "final": 1024
+        },
+        "setgroup": {
+            "default": "",
+            "cmdline": "ceph",
+            "final": "ceph"
+        },
+        "setuser": {
+            "default": "",
+            "cmdline": "ceph",
+            "final": "ceph"
+        }
+    }
+}

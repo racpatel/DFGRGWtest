@@ -1,0 +1,100 @@
+{
+    "diff": {
+        "admin_socket": {
+            "default": "$run_dir/$cluster-$name.$pid.$cctid.asok",
+            "final": "/var/run/ceph/ceph-client.rgw.rgws.f10-h01-000-6049p.chmlge.7.94331538216256.asok"
+        },
+        "auth_client_required": {
+            "default": "cephx",
+            "final": "cephx"
+        },
+        "cluster_network": {
+            "default": "",
+            "mon": "172.18.0.0/16",
+            "final": "172.18.0.0/16"
+        },
+        "container_image": {
+            "default": "docker.io/ceph/daemon-base:latest-pacific-devel",
+            "mon": "registry.redhat.io/rhceph/rhceph-5-rhel8@sha256:2296c19fbd3a0be84d6030dff789ce3e79b38cc30c39f45913aec97967b65cce",
+            "final": "registry.redhat.io/rhceph/rhceph-5-rhel8@sha256:2296c19fbd3a0be84d6030dff789ce3e79b38cc30c39f45913aec97967b65cce"
+        },
+        "daemonize": {
+            "default": true,
+            "override": false,
+            "final": false
+        },
+        "debug_rgw": {
+            "default": "1/5",
+            "final": "1/5"
+        },
+        "fsid": {
+            "default": "00000000-0000-0000-0000-000000000000",
+            "file": "dbaa9de4-900a-11ec-9bec-ac1f6b2d5d2a",
+            "override": "dbaa9de4-900a-11ec-9bec-ac1f6b2d5d2a",
+            "final": "dbaa9de4-900a-11ec-9bec-ac1f6b2d5d2a"
+        },
+        "keyring": {
+            "default": "$rgw_data/keyring",
+            "final": "/var/lib/ceph/radosgw/ceph-rgw.rgws.f10-h01-000-6049p.chmlge/keyring"
+        },
+        "log_stderr_prefix": {
+            "default": "debug ",
+            "final": "debug "
+        },
+        "log_to_file": {
+            "default": false,
+            "final": false
+        },
+        "log_to_stderr": {
+            "default": true,
+            "final": true
+        },
+        "mon_host": {
+            "default": "",
+            "file": "[v2:172.16.38.101:3300/0,v1:172.16.38.101:6789/0] [v2:172.16.36.26:3300/0,v1:172.16.36.26:6789/0] [v2:172.16.37.42:3300/0,v1:172.16.37.42:6789/0]",
+            "final": "[v2:172.16.38.101:3300/0,v1:172.16.38.101:6789/0] [v2:172.16.36.26:3300/0,v1:172.16.36.26:6789/0] [v2:172.16.37.42:3300/0,v1:172.16.37.42:6789/0]"
+        },
+        "ms_mon_client_mode": {
+            "default": "secure",
+            "final": "secure"
+        },
+        "no_config_file": {
+            "default": false,
+            "override": false,
+            "final": false
+        },
+        "objecter_inflight_ops": {
+            "default": 24576,
+            "final": 24576
+        },
+        "rbd_default_features": {
+            "default": "61",
+            "final": "61"
+        },
+        "rgw_frontends": {
+            "default": "beast port=7480",
+            "mon": "beast endpoint=172.17.36.220:8080",
+            "final": "beast endpoint=172.17.36.220:8080"
+        },
+        "rgw_realm": {
+            "default": "",
+            "mon": "default",
+            "final": "default"
+        },
+        "rgw_zone": {
+            "default": "",
+            "mon": "default",
+            "final": "default"
+        },
+        "setgroup": {
+            "default": "",
+            "cmdline": "ceph",
+            "final": "ceph"
+        },
+        "setuser": {
+            "default": "",
+            "cmdline": "ceph",
+            "final": "ceph"
+        }
+    }
+}
