@@ -131,9 +131,10 @@ $execMON ceph config set global rgw_thread_pool_size 1024
 echo "rgw_max_concurrent_requests, rgw_thread_pool_size is set"
 
 $execMON ceph config set mon mon_config_key_max_entry_size 1048576
-$execMON ceph config set osd osd_memory_target_autotune true
+$execMON ceph config set osd osd_memory_target_autotune false
+$execMON ceph config set osd osd_memory_target 11683794359
 
-echo "mon_config_key_max_entry_size, osd_memory_target_autotune is set"
+echo "mon_config_key_max_entry_size, osd_memory_target is set"
 
 echo "*******************Manual step alert**********************"
 echo "Identify swap device with lsblk"

@@ -173,13 +173,52 @@ function get_rgwMem() {
   rgwMemLimit=`ssh $RGWhostname cat /sys/fs/cgroup/memory/memory.limit_in_bytes`
 }
 
+#function get_bucketStats() {
+#  #site1bucketsrgw=`ssh $RGWhostname "radosgw-admin bucket stats |egrep 'bucket\"|num_objects'"`
+#  site1bucketsrgw=`radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+#  multisite=`echo "${multisite,,}"`       # force lowercase
+#  if [[ $multisite == "true" ]]; then
+#    site2bucketsrgw=`ssh $MONhostname2 "radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'"`
+#  fi
+#}
 function get_bucketStats() {
-  #site1bucketsrgw=`ssh $RGWhostname "radosgw-admin bucket stats |egrep 'bucket\"|num_objects'"`
-  site1bucketsrgw=`radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
-  multisite=`echo "${multisite,,}"`       # force lowercase
-  if [[ $multisite == "true" ]]; then
-    site2bucketsrgw=`ssh $MONhostname2 "radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'"`
-  fi
+    case $CEPHVER in
+        luminous)
+          site1bucketsrgw=`radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+          if [[ $multisite == "true" ]]; then
+            site2bucketsrgw=`ssh $MONhostname2 "radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'"`
+          fi
+          ;;
+        nautilus)
+          site1bucketsrgw=`radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+          if [[ $multisite == "true" ]]; then
+            site2bucketsrgw=`ssh $MONhostname2 "radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'"`
+          fi
+          ;;
+        pacific)
+          if [[ $cephadmshell != "true" ]]; then
+            site1bucketsrgw=`radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+          else
+            site1bucketsrgw=`cephadm shell radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+          fi
+          if [[ $multisite == "true" ]]; then
+            site2bucketsrgw=`ssh $MONhostname2 "cephadm shell radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'"`
+          fi
+          ;;
+        quincy)
+          if [[ $cephadmshell != "true" ]]; then
+            site1bucketsrgw=`radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+          else
+            site1bucketsrgw=`cephadm shell radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'`
+          fi
+          if [[ $multisite == "true" ]]; then
+            site2bucketsrgw=`ssh $MONhostname2 "cephadm shell radosgw-admin bucket stats |egrep 'bucket\"|num_objects|num_shards'"`
+          fi
+          ;;
+        *)
+          error_exit "unable to gather data-sync-from-${zone} stats, exit..."
+          ;;
+      esac
 }
 
 function get_syncStatus() {

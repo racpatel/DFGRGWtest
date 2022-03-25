@@ -2,7 +2,7 @@
 <workload name="fillCluster" description="RGW testing">
 
 <!-- Initialization -->
-  <storage type="s3" config="timeout=900000;accesskey=QYLQY42BVR4ZNDFXV2Z9;secretkey=bxkNdZPUdQAkT3nApFL5QBAtOQ6ywtGl2UaE0vnk;endpoint=http://localhost:5000;path_style_access=true"/>
+    <storage type="s3" config="timeout=900000;accesskey=O7QWGSMT1N7JJQ12VXCZ;secretkey=NDY5eYrSjNK9yoQcON7rRhXoI50zuKAhmJl8MDIS;endpoint=http://localhost:5000;path_style_access=true"/>
   <auth type="none"/>
 
 

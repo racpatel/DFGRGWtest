@@ -183,25 +183,25 @@ while (( $(echo "${rawUsed} < ${threshold}" | bc -l) )); do
 
 # get bucket stats
     get_bucketStats
-    #echo -e "\nSite2 buckets (swift):" >> $log
-    #echo -e "\nSite2 buckets (swift):"
+    #echo -e "\nSite1 buckets (swift):" >> $log
+    #echo -e "\nSite1 buckets (swift):"
     #updatelog "${site1bucketsswift}" $log
-    echo -e "\nSite2 buckets (rgw):" >> $log
-    echo -e "\nSite2 buckets (rgw):"
+    echo -e "\nSite1 buckets (rgw):" >> $log
+    echo -e "\nSite1 buckets (rgw):"
     updatelog "${site1bucketsrgw}" $log
 
     if [[ $multisite == "true" ]]; then
-        #echo -e "\nSite1 buckets (swift):" >> $log 
-        #echo -e "\nSite1 buckets (swift):"
+        #echo -e "\nSite2 buckets (swift):" >> $log 
+        #echo -e "\nSite2 buckets (swift):"
         #updatelog "${site2bucketsswift}" $log
-        echo -e "\nSite1 buckets (rgw):" >> $log 
+        echo -e "\nSite2 buckets (rgw):" >> $log 
         updatelog "${site2bucketsrgw}" $log
         get_syncStatus
-        echo -e "\nSite1 sync status:" >> $log       
-        echo -e "\nSite1 sync status:" 
+        echo -e "\nSite2 sync status:" >> $log       
+        echo -e "\nSite2 sync status:" 
         updatelog "${syncStatus}" $log
-        echo -e "\nSite1 buckets sync status:" >> $log
-        echo -e "\nSite1 buckets sync status:"
+        echo -e "\nSite2 buckets sync status:" >> $log
+        echo -e "\nSite2 buckets sync status:"
         updatelog "${bucketSyncStatus}" $log
     fi
 
@@ -230,18 +230,18 @@ while (( $(echo "${rawUsed} < ${threshold}" | bc -l) )); do
     updatelog "ceph df detail ${dfdetail}" $log
 
     # Record specific pool stats
-#    echo -e "\nSite2 pool PG counts:" >> $log
+#    echo -e "\nSite1 pool PG counts:" >> $log
 #    for i in `rados lspools` ; do echo -ne $i"\t" >> $log ; ceph osd pool get $i pg_num >> $log ; done
-    echo -e "\nSite2 pool PG counts:"
-    echo -e "\nSite2 pool PG counts:" >> $log
+    echo -e "\nSite1 pool PG counts:"
+    echo -e "\nSite1 pool PG counts:" >> $log
     ceph osd pool ls detail >> $log
     get_buckets_df
-    echo -e "\nSite2 buckets df"
-    echo -e "\nSite2 buckets df" >> $log
+    echo -e "\nSite1 buckets df"
+    echo -e "\nSite1 buckets df" >> $log
     updatelog "${buckets_df}" $log
     if [[ $multisite == "true" ]]; then
-        echo -e "\nSite1 buckets df"
-        echo -e "\nSite1 buckets df" >> $log
+        echo -e "\nSite2 buckets df"
+        echo -e "\nSite2 buckets df" >> $log
         updatelog "${buckets_df2}" $log
     fi
 

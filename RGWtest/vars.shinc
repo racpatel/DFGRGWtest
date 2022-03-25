@@ -12,6 +12,7 @@ RGWhosts2=""
 
 multisite=false         # enable/disable multisite monitoring
 syncPolling=false       # enable/disable sync monitoring
+cephadmshell=false      # expects to execute within a cephadm shell env
 dataLogPolling=false       # enable/disable data log list poll
 bsV2Polling=false       # enable/disable bluestore-V2 perf polling
 disabledeepscrubs=false # disable deep-scrubs during workload & part of post-poll

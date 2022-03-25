@@ -3,7 +3,7 @@
 
 
 <!-- Initialization -->
-  <storage type="s3" config="timeout=900000;accesskey=J5R44SUNTK94AB7KRL2S;secretkey=mxgvXdh9v8VDQVtMhkIehUIrcco1apQyxGBR0BfS;endpoint=http://localhost:5000;path_style_access=true"/>
+  <storage type="s3" config="timeout=900000;accesskey=W9ABUUVT9ELGCEODRROS;secretkey=3FSC6yeUC5OwBb3BAq0Y8SZA0Z3ICArDOSyMlDdH;endpoint=http://localhost:5000;path_style_access=true"/>
   <auth type="none"/>
 
   <workflow>
